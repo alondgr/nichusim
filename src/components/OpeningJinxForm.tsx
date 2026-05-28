@@ -74,10 +74,10 @@ export default function OpeningJinxForm() {
               <input
                 type="number"
                 min="0"
-                max="20"
+                max="10"
                 required
                 value={mexicoScore}
-                onChange={(e) => setMexicoScore(e.target.value === '' ? '' : Number(e.target.value))}
+                onChange={(e) => setMexicoScore(e.target.value === '' ? '' : Math.min(10, Math.max(0, Number(e.target.value))))}
                 className="w-16 h-16 text-center text-2xl font-bold bg-zinc-950 border border-zinc-700 rounded-xl focus:ring-2 focus:ring-evileye-500 outline-none text-slate-100"
                 dir="ltr"
               />
@@ -94,10 +94,10 @@ export default function OpeningJinxForm() {
               <input
                 type="number"
                 min="0"
-                max="20"
+                max="10"
                 required
                 value={saScore}
-                onChange={(e) => setSaScore(e.target.value === '' ? '' : Number(e.target.value))}
+                onChange={(e) => setSaScore(e.target.value === '' ? '' : Math.min(10, Math.max(0, Number(e.target.value))))}
                 className="w-16 h-16 text-center text-2xl font-bold bg-zinc-950 border border-zinc-700 rounded-xl focus:ring-2 focus:ring-evileye-500 outline-none text-slate-100"
                 dir="ltr"
               />
