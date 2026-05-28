@@ -124,17 +124,14 @@ export default function GoalDroughtForm() {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: 'spring', bounce: 0.5 }}
-          className="p-1.5 bg-zinc-900 border border-orange-500/30 rounded-full shadow-2xl shadow-orange-500/20"
+          className="p-1.5 bg-zinc-900 border border-orange-500/30 rounded-full shadow-lg shadow-orange-500/20"
         >
-          <PlayerAvatar player={player} size="lg" />
+          <PlayerAvatar player={player} size="md" />
         </motion.div>
-        <h2 className="text-3xl font-extrabold text-slate-100 tracking-tight">הנאחס ננעל!</h2>
+        <h2 className="text-2xl font-extrabold text-slate-100 tracking-tight">הנאחס ננעל!</h2>
         <div className="flex flex-col items-center space-y-3 bg-zinc-900/60 backdrop-blur border border-zinc-800 rounded-3xl p-6 w-full shadow-xl">
-          <div className="inline-flex items-center justify-center p-2.5 bg-orange-600/10 rounded-xl mb-1">
-            <span className="text-2xl">🌵</span>
-          </div>
-          <span className="text-2xl font-bold text-slate-200">{player.name}</span>
-          <p className="text-slate-400 text-base leading-relaxed">
+          <span className="text-xl font-bold text-slate-200">{player.name}</span>
+          <p className="text-slate-400 text-sm leading-relaxed">
             ההימור שלך שחלוץ נבחרת {player.team} ישכח איך לכבוש ויסיים בבצורת שערים מוחלטת נרשם במערכת! 🎯
           </p>
         </div>
