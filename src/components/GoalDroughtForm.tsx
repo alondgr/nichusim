@@ -119,7 +119,7 @@ export default function GoalDroughtForm() {
 
   if (submitted && player) {
     return (
-      <div className="w-full max-w-md p-4 sm:p-6 z-10 flex flex-col items-center justify-center space-y-6 text-center">
+      <div className="w-full max-w-md p-2 sm:p-6 z-10 flex flex-col items-center justify-center space-y-6 text-center">
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -143,12 +143,12 @@ export default function GoalDroughtForm() {
   }
 
   return (
-    <div className="w-full max-w-md p-4 sm:p-6 z-10">
+    <div className="w-full max-w-md p-2 sm:p-6 z-10">
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="flex flex-col p-6 sm:p-8 rounded-[2rem] bg-zinc-950/80 backdrop-blur-xl border border-orange-600/30 shadow-2xl shadow-orange-900/20"
+        className="flex flex-col p-4 sm:p-8 rounded-3xl sm:rounded-[2rem] bg-zinc-950/80 backdrop-blur-xl border border-orange-600/30 shadow-2xl shadow-orange-900/20"
       >
         <div className="text-center space-y-2 mb-8">
           <div className="inline-flex items-center justify-center p-3 bg-orange-600/10 rounded-2xl mb-2">

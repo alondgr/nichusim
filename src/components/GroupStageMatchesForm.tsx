@@ -146,24 +146,24 @@ export default function GroupStageMatchesForm() {
 
   if (submitted) {
     return (
-      <div className="w-full max-w-lg p-4 sm:p-6 z-10 flex flex-col items-center justify-center space-y-6 text-center">
+      <div className="w-full max-w-lg p-2 sm:p-6 z-10 flex flex-col items-center justify-center space-y-6 text-center">
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: 'spring', bounce: 0.5 }}
-          className="p-6 bg-indigo-500/20 rounded-full border border-indigo-500/50 flex items-center justify-center shadow-lg shadow-indigo-500/25"
+          className="p-5 sm:p-6 bg-indigo-500/20 rounded-full border border-indigo-500/50 flex items-center justify-center shadow-lg shadow-indigo-500/25"
         >
-          <Trophy className="w-16 h-16 text-indigo-500" />
+          <Trophy className="w-12 h-12 sm:w-16 sm:h-16 text-indigo-500" />
         </motion.div>
-        <h2 className="text-3xl font-extrabold text-slate-100 tracking-tight">שלב הבתים ננעל! 🔒</h2>
-        <div className="flex flex-col items-center space-y-4 bg-zinc-900/60 backdrop-blur border border-zinc-800 rounded-3xl p-6 w-full shadow-xl">
-          <div className="inline-flex items-center justify-center p-3 bg-indigo-600/10 rounded-2xl">
-            <ShieldCheck className="w-8 h-8 text-indigo-500" />
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-100 tracking-tight">שלב הבתים ננעל! 🔒</h2>
+        <div className="flex flex-col items-center space-y-4 bg-zinc-900/60 backdrop-blur border border-zinc-800 rounded-2xl sm:rounded-3xl p-5 sm:p-6 w-full shadow-xl">
+          <div className="inline-flex items-center justify-center p-2.5 bg-indigo-600/10 rounded-xl">
+            <ShieldCheck className="w-7 h-7 sm:w-8 sm:h-8 text-indigo-500" />
           </div>
-          <p className="text-slate-400 text-lg leading-relaxed">
+          <p className="text-slate-400 text-sm sm:text-lg leading-relaxed">
             כל 72 המשחקים של שלב הבתים של מונדיאל 2026 נוחשו וננעלו במערכת! 
           </p>
-          <p className="text-zinc-500 text-sm">
+          <p className="text-zinc-500 text-xs sm:text-sm">
             ניתן להמשיך להציץ בניחושים שלך ישירות מתוך זיכרון הדפדפן.
           </p>
           
@@ -175,7 +175,7 @@ export default function GroupStageMatchesForm() {
                 localStorage.removeItem('nichusim_group_stage_submitted');
               }
             }}
-            className="text-indigo-400 hover:text-indigo-300 font-semibold text-sm underline transition-colors pt-2"
+            className="text-indigo-400 hover:text-indigo-300 font-semibold text-xs sm:text-sm underline transition-colors pt-2"
           >
             פתח מחדש לעריכה 🔓
           </button>
@@ -185,22 +185,22 @@ export default function GroupStageMatchesForm() {
   }
 
   return (
-    <div className="w-full max-w-xl p-4 sm:p-6 z-10">
+    <div className="w-full max-w-xl p-2 sm:p-6 z-10">
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="flex flex-col p-6 sm:p-8 rounded-[2.5rem] bg-zinc-950/80 backdrop-blur-xl border border-indigo-600/30 shadow-2xl shadow-indigo-900/20"
+        className="flex flex-col p-4 sm:p-8 rounded-3xl sm:rounded-[2.5rem] bg-zinc-950/80 backdrop-blur-xl border border-indigo-600/30 shadow-2xl shadow-indigo-900/20"
       >
         {/* Header */}
-        <div className="text-center space-y-2 mb-6">
-          <div className="inline-flex items-center justify-center p-3 bg-indigo-600/10 rounded-2xl mb-2">
-            <Trophy className="w-8 h-8 text-indigo-500 animate-pulse" />
+        <div className="text-center space-y-1 sm:space-y-2 mb-5 sm:mb-6">
+          <div className="inline-flex items-center justify-center p-2.5 sm:p-3 bg-indigo-600/10 rounded-xl sm:rounded-2xl mb-1">
+            <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-indigo-500 animate-pulse" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-100 tracking-tight">
+          <h2 className="text-xl sm:text-3xl font-extrabold text-slate-100 tracking-tight">
             ניחוש שלב הבתים
           </h2>
-          <p className="text-xs sm:text-sm text-slate-400">
+          <p className="text-[11px] sm:text-sm text-slate-400">
             נחש את התוצאות המדויקות לכל 72 המשחקים ב-12 הבתים
           </p>
         </div>
@@ -210,38 +210,38 @@ export default function GroupStageMatchesForm() {
           <button
             type="button"
             onClick={() => setShowDiagram(!showDiagram)}
-            className={`w-full py-3 px-4 rounded-2xl flex items-center justify-between text-xs sm:text-sm font-semibold border transition-all ${
+            className={`w-full py-2.5 px-3.5 rounded-xl sm:rounded-2xl flex items-center justify-between text-xs sm:text-sm font-semibold border transition-all ${
               showDiagram 
                 ? 'bg-indigo-600/10 border-indigo-500/50 text-indigo-300' 
                 : 'bg-zinc-900/40 hover:bg-zinc-900/80 border-zinc-800 text-slate-300'
             }`}
           >
             <div className="flex items-center gap-2">
-              <ImageIcon className={`w-4.5 h-4.5 ${showDiagram ? 'text-indigo-400' : 'text-zinc-500'}`} />
+              <ImageIcon className={`w-4 h-4 sm:w-4.5 sm:h-4.5 ${showDiagram ? 'text-indigo-400' : 'text-zinc-500'}`} />
               <span>🗺️ תרשים הבתים הרשמי של מונדיאל 2026</span>
             </div>
-            <span className="text-zinc-500 text-xs font-bold">{showDiagram ? 'הסתר ▲' : 'הצג תרשים ▼'}</span>
+            <span className="text-zinc-500 text-[10px] sm:text-xs font-bold">{showDiagram ? 'הסתר ▲' : 'הצג תרשים ▼'}</span>
           </button>
           
           <AnimatePresence>
             {showDiagram && (
               <motion.div
                 initial={{ height: 0, opacity: 0, marginTop: 0 }}
-                animate={{ height: 'auto', opacity: 1, marginTop: 12 }}
+                animate={{ height: 'auto', opacity: 1, marginTop: 10 }}
                 exit={{ height: 0, opacity: 0, marginTop: 0 }}
                 transition={{ duration: 0.25, ease: 'easeInOut' }}
                 className="overflow-hidden"
               >
-                <div className="bg-zinc-900/80 border border-zinc-800 rounded-2xl p-2.5 flex flex-col items-center">
+                <div className="bg-zinc-900/80 border border-zinc-800 rounded-xl sm:rounded-2xl p-2 flex flex-col items-center">
                   <img 
                     src="/images/world-cup-groups.jpg" 
                     alt="תרשים הבתים הרשמי של פיפ''א 2026"
-                    className="w-full rounded-xl border border-zinc-800 shadow-md object-contain hover:scale-[1.01] transition-transform duration-300 cursor-zoom-in"
+                    className="w-full rounded-lg sm:rounded-xl border border-zinc-800 shadow-md object-contain hover:scale-[1.01] transition-transform duration-300 cursor-zoom-in"
                     onClick={() => {
                       window.open('/images/world-cup-groups.jpg', '_blank');
                     }}
                   />
-                  <p className="text-[10px] text-zinc-500 mt-2 text-center font-bold">
+                  <p className="text-[9px] sm:text-[10px] text-zinc-500 mt-2 text-center font-bold">
                     💡 לחץ על התרשים לפתיחה ברזולוציה מלאה בחלון חדש
                   </p>
                 </div>
@@ -251,13 +251,13 @@ export default function GroupStageMatchesForm() {
         </div>
 
         {/* Progress Bar & Actions */}
-        <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-4 mb-6 space-y-4">
-          <div className="flex justify-between items-center text-sm font-bold">
+        <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-3.5 sm:p-4 mb-5 sm:mb-6 space-y-3.5 sm:space-y-4">
+          <div className="flex justify-between items-center text-xs sm:text-sm font-bold">
             <span className="text-slate-300">התקדמות הניחוש הכללית:</span>
-            <span className="text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded-full border border-indigo-500/20">{totalCompleted} / 72 משחקים</span>
+            <span className="text-indigo-400 bg-indigo-500/10 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full border border-indigo-500/20">{totalCompleted} / 72 משחקים</span>
           </div>
           
-          <div className="w-full bg-zinc-950 rounded-full h-3 overflow-hidden border border-zinc-800">
+          <div className="w-full bg-zinc-950 rounded-full h-2.5 sm:h-3 overflow-hidden border border-zinc-800">
             <motion.div 
               className="bg-gradient-to-r from-indigo-600 to-violet-500 h-full rounded-full"
               initial={{ width: 0 }}
@@ -266,29 +266,29 @@ export default function GroupStageMatchesForm() {
             />
           </div>
 
-          <div className="flex gap-3 pt-1">
+          <div className="flex gap-2.5 pt-0.5">
             <button
               type="button"
               onClick={handleAutoFillAll}
-              className="flex-1 flex items-center justify-center gap-2 py-2 px-3 bg-indigo-600/10 border border-indigo-500/30 hover:bg-indigo-600/20 text-indigo-300 font-bold rounded-xl text-xs sm:text-sm transition-all"
+              className="flex-1 flex items-center justify-center gap-1.5 py-2 px-2.5 bg-indigo-600/10 border border-indigo-500/30 hover:bg-indigo-600/20 text-indigo-300 font-bold rounded-xl text-[11px] sm:text-sm transition-all"
             >
-              <Sparkles className="w-4 h-4" />
+              <Sparkles className="w-3.5 h-3.5" />
               🔮 מילוי אקראי מהיר
             </button>
             <button
               type="button"
               onClick={handleClearAll}
-              className="flex items-center justify-center gap-2 py-2 px-4 bg-zinc-950 border border-zinc-800 hover:bg-red-500/10 hover:border-red-500/30 text-zinc-400 hover:text-red-400 font-medium rounded-xl text-xs sm:text-sm transition-all"
+              className="flex items-center justify-center gap-1.5 py-2 px-3 bg-zinc-950 border border-zinc-800 hover:bg-red-500/10 hover:border-red-500/30 text-zinc-400 hover:text-red-400 font-medium rounded-xl text-[11px] sm:text-sm transition-all"
             >
-              <Trash2 className="w-4 h-4" />
+              <Trash2 className="w-3.5 h-3.5" />
               נקה
             </button>
           </div>
         </div>
 
         {/* Group Tabs Selector */}
-        <div className="mb-6">
-          <div className="flex overflow-x-auto gap-2 py-2 pr-1 pl-1 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent select-none" dir="rtl">
+        <div className="mb-5 sm:mb-6">
+          <div className="flex overflow-x-auto gap-1.5 py-1 pr-0.5 pl-0.5 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent select-none" dir="rtl">
             {GROUPS.map((g) => {
               const isActive = g === activeGroup;
               const count = getGroupCompletedCount(g);
@@ -299,7 +299,7 @@ export default function GroupStageMatchesForm() {
                   key={g}
                   type="button"
                   onClick={() => setActiveGroup(g)}
-                  className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-extrabold border transition-all ${
+                  className={`flex-shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs sm:text-sm font-extrabold border transition-all ${
                     isActive
                       ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/20'
                       : isGroupDone
@@ -308,7 +308,7 @@ export default function GroupStageMatchesForm() {
                   }`}
                 >
                   <span>{GROUP_HEBREW[g]}</span>
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                  <span className={`text-[9px] px-1 py-0.2 rounded-full ${
                     isActive 
                       ? 'bg-white/20 text-white' 
                       : isGroupDone 
@@ -325,7 +325,7 @@ export default function GroupStageMatchesForm() {
 
         {/* Matches Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-3.5 max-h-[380px] overflow-y-auto pr-1 pl-1 scrollbar-thin scrollbar-thumb-zinc-800">
+          <div className="space-y-3 max-h-[380px] overflow-y-auto pr-0.5 pl-0.5 scrollbar-thin scrollbar-thumb-zinc-800">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeGroup}
@@ -333,21 +333,21 @@ export default function GroupStageMatchesForm() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 10 }}
                 transition={{ duration: 0.15 }}
-                className="space-y-3.5"
+                className="space-y-3"
               >
-                {currentGroupMatches.map((m, index) => {
+                {currentGroupMatches.map((m) => {
                   const p = predictions[m.id] || { homeScore: '', awayScore: '' };
                   return (
                     <div 
                       key={m.id}
-                      className="flex items-center justify-between bg-zinc-900/40 border border-zinc-800/80 rounded-2xl p-3 sm:p-4 hover:border-zinc-700/60 transition-colors"
+                      className="flex items-center justify-between gap-1 w-full bg-zinc-900/40 border border-zinc-800/80 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 hover:border-zinc-700/60 transition-colors"
                     >
                       {/* Home Team */}
-                      <div className="flex items-center space-x-2 space-x-reverse w-[38%]">
+                      <div className="flex items-center gap-1.5 min-w-0 flex-1 justify-start">
                         <img
                           src={`https://flagcdn.com/w40/${m.home.iso}.png`}
                           alt={m.home.name}
-                          className="w-6 sm:w-7 h-4 sm:h-5 object-cover rounded shadow-sm border border-zinc-800 bg-zinc-950"
+                          className="w-5.5 sm:w-7 h-3.5 sm:h-5 object-cover rounded-sm shadow-sm border border-zinc-800 bg-zinc-950 flex-shrink-0"
                           onError={(e) => {
                             e.currentTarget.style.display = 'none';
                           }}
@@ -356,7 +356,7 @@ export default function GroupStageMatchesForm() {
                       </div>
 
                       {/* Scores inputs */}
-                      <div className="flex items-center justify-center gap-1.5 w-[24%]">
+                      <div className="flex items-center justify-center gap-1 flex-shrink-0 mx-1 sm:mx-2">
                         <input
                           type="number"
                           min="0"
@@ -365,10 +365,10 @@ export default function GroupStageMatchesForm() {
                           placeholder="-"
                           value={p.homeScore}
                           onChange={(e) => handleScoreChange(m.id, 'home', e.target.value)}
-                          className="w-10 sm:w-12 h-10 sm:h-12 text-center text-base sm:text-lg font-black bg-zinc-950 border border-zinc-800 rounded-xl focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-slate-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                          className="w-8.5 sm:w-12 h-8.5 sm:h-12 text-center text-sm sm:text-lg font-black bg-zinc-950 border border-zinc-800 rounded-lg sm:rounded-xl focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-slate-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                           dir="ltr"
                         />
-                        <span className="text-zinc-600 font-extrabold text-sm sm:text-base">-</span>
+                        <span className="text-zinc-600 font-extrabold text-xs sm:text-base">-</span>
                         <input
                           type="number"
                           min="0"
@@ -377,18 +377,18 @@ export default function GroupStageMatchesForm() {
                           placeholder="-"
                           value={p.awayScore}
                           onChange={(e) => handleScoreChange(m.id, 'away', e.target.value)}
-                          className="w-10 sm:w-12 h-10 sm:h-12 text-center text-base sm:text-lg font-black bg-zinc-950 border border-zinc-800 rounded-xl focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-slate-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                          className="w-8.5 sm:w-12 h-8.5 sm:h-12 text-center text-sm sm:text-lg font-black bg-zinc-950 border border-zinc-800 rounded-lg sm:rounded-xl focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-slate-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                           dir="ltr"
                         />
                       </div>
 
                       {/* Away Team */}
-                      <div className="flex items-center justify-end space-x-2 space-x-reverse w-[38%] text-left">
+                      <div className="flex items-center gap-1.5 min-w-0 flex-1 justify-end text-left">
                         <span className="text-xs sm:text-sm font-bold text-slate-200 truncate order-2 sm:order-1">{m.away.name}</span>
                         <img
                           src={`https://flagcdn.com/w40/${m.away.iso}.png`}
                           alt={m.away.name}
-                          className="w-6 sm:w-7 h-4 sm:h-5 object-cover rounded shadow-sm border border-zinc-800 bg-zinc-950 order-1 sm:order-2 ml-2 sm:ml-0"
+                          className="w-5.5 sm:w-7 h-3.5 sm:h-5 object-cover rounded-sm shadow-sm border border-zinc-800 bg-zinc-950 flex-shrink-0 order-1 sm:order-2 ml-1.5 sm:ml-0"
                           onError={(e) => {
                             e.currentTarget.style.display = 'none';
                           }}
@@ -437,7 +437,7 @@ export default function GroupStageMatchesForm() {
             >
               <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-violet-500 rounded-xl transition-all duration-300 group-hover:scale-[1.02]" />
               <div className="absolute -inset-1 bg-indigo-500/50 blur-lg opacity-40 group-hover:opacity-100 transition duration-300" />
-              <div className="relative flex items-center justify-center py-3.5 text-lg font-bold text-white bg-transparent gap-2">
+              <div className="relative flex items-center justify-center py-3 sm:py-3.5 text-base sm:text-lg font-bold text-white bg-transparent gap-2">
                 <CheckCircle2 className="w-5 h-5" />
                 נעל ניחוש בתים 🔒
               </div>
