@@ -46,29 +46,22 @@ const getGroupMatches = (group: string, teams: Team[]) => {
   ];
 };
 
-export default function GroupStageMatchesForm() {
+interface GroupStageMatchesFormProps {
+  predictions: PredictionsState;
+  savePredictions: (preds: PredictionsState) => void;
+  submitted: boolean;
+  setSubmitted: (val: boolean) => void;
+}
+
+export default function GroupStageMatchesForm({ predictions, savePredictions, submitted, setSubmitted }: GroupStageMatchesFormProps) {
   const [activeGroup, setActiveGroup] = useState<string>('A');
-  const [predictions, setPredictions] = useState<PredictionsState>({});
-  const [submitted, setSubmitted] = useState(false);
   const [showDiagram, setShowDiagram] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // Load predictions from LocalStorage on mount
+  // Set mounted on mount
   useEffect(() => {
     setMounted(true);
-    const saved = localStorage.getItem('nichusim_group_stage_predictions');
-    if (saved) {
-      try {
-        setPredictions(JSON.parse(saved));
-      } catch (e) {
-        console.error('Error loading predictions', e);
-      }
-    }
-    const wasSubmitted = localStorage.getItem('nichusim_group_stage_submitted');
-    if (wasSubmitted === 'true') {
-      setSubmitted(true);
-    }
   }, []);
 
   // Lock body scrolling when modal is open to prevent underlying page scrolls
@@ -82,12 +75,6 @@ export default function GroupStageMatchesForm() {
       document.body.style.overflow = '';
     };
   }, [isModalOpen]);
-
-  // Save to LocalStorage on changes
-  const savePredictions = (newPreds: PredictionsState) => {
-    setPredictions(newPreds);
-    localStorage.setItem('nichusim_group_stage_predictions', JSON.stringify(newPreds));
-  };
 
   const handleScoreChange = (matchId: string, side: 'home' | 'away', val: string) => {
     const numVal = val === '' ? '' : Math.min(10, Math.max(0, Number(val)));
@@ -132,7 +119,6 @@ export default function GroupStageMatchesForm() {
     if (totalCompleted === 72) {
       setSubmitted(true);
       setIsModalOpen(false);
-      localStorage.setItem('nichusim_group_stage_submitted', 'true');
     }
   };
 

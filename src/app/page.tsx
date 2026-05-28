@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Show, SignUp, UserButton } from '@clerk/nextjs';
 import JinxIntroHome from '@/components/JinxIntroHome';
 import UsersList from '@/components/UsersList';
@@ -8,9 +8,46 @@ import OpeningJinxForm from '@/components/OpeningJinxForm';
 import FlopTeamForm from '@/components/FlopTeamForm';
 import GoalDroughtForm from '@/components/GoalDroughtForm';
 import GroupStageMatchesForm from '@/components/GroupStageMatchesForm';
+import { PredictionsState } from '@/data/worldCupData';
 
 export default function Home() {
   const [started, setStarted] = useState(false);
+  const [predictions, setPredictions] = useState<PredictionsState>({});
+  const [submitted, setSubmitted] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Load predictions and submission status from LocalStorage
+  useEffect(() => {
+    setMounted(true);
+    const saved = localStorage.getItem('nichusim_group_stage_predictions');
+    if (saved) {
+      try {
+        setPredictions(JSON.parse(saved));
+      } catch (e) {
+        console.error('Error loading predictions', e);
+      }
+    }
+    const wasSubmitted = localStorage.getItem('nichusim_group_stage_submitted');
+    if (wasSubmitted === 'true') {
+      setSubmitted(true);
+    }
+  }, []);
+
+  const savePredictions = (newPreds: PredictionsState) => {
+    setPredictions(newPreds);
+    localStorage.setItem('nichusim_group_stage_predictions', JSON.stringify(newPreds));
+  };
+
+  const handleSubmittedChange = (val: boolean) => {
+    setSubmitted(val);
+    if (val) {
+      localStorage.setItem('nichusim_group_stage_submitted', 'true');
+    } else {
+      localStorage.removeItem('nichusim_group_stage_submitted');
+    }
+  };
+
+  if (!mounted) return null;
 
   return (
     <main className="flex min-h-[100svh] flex-col items-center justify-center bg-zinc-950 selection:bg-evileye-500/30 relative">
@@ -32,10 +69,20 @@ export default function Home() {
         </div>
         <div className="flex flex-col space-y-8 w-full max-w-xl my-12 items-center px-4">
           <UsersList />
-          <OpeningJinxForm />
+          <OpeningJinxForm 
+            predictions={predictions}
+            savePredictions={savePredictions}
+            submitted={submitted}
+            setSubmitted={handleSubmittedChange}
+          />
           <FlopTeamForm />
           <GoalDroughtForm />
-          <GroupStageMatchesForm />
+          <GroupStageMatchesForm 
+            predictions={predictions}
+            savePredictions={savePredictions}
+            submitted={submitted}
+            setSubmitted={handleSubmittedChange}
+          />
         </div>
       </Show>
     </main>

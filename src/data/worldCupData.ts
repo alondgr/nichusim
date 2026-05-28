@@ -15,6 +15,14 @@ export interface Player {
   imageUrl: string;
 }
 
+export interface MatchPrediction {
+  homeScore: number | '';
+  awayScore: number | '';
+}
+
+export type PredictionsState = Record<string, MatchPrediction>;
+
+
 export const TEAMS: Team[] = [
   // Group A
   { id: 'mex', name: 'מקסיקו', flag: '🇲🇽', iso: 'mx', group: 'A' },
