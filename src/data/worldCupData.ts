@@ -17,76 +17,76 @@ export interface Player {
 
 export const TEAMS: Team[] = [
   // Group A
-  { id: 'usa', name: 'ארה"ב', flag: '🇺🇸', iso: 'us', group: 'A' },
-  { id: 'ita', name: 'איטליה', flag: '🇮🇹', iso: 'it', group: 'A' },
-  { id: 'mar', name: 'מרוקו', flag: '🇲🇦', iso: 'ma', group: 'A' },
-  { id: 'jpn', name: 'יפן', flag: '🇯🇵', iso: 'jp', group: 'A' },
+  { id: 'mex', name: 'מקסיקו', flag: '🇲🇽', iso: 'mx', group: 'A' },
+  { id: 'rsa', name: 'דרום אפריקה', flag: '🇿🇦', iso: 'za', group: 'A' },
+  { id: 'kor', name: 'דרום קוריאה', flag: '🇰🇷', iso: 'kr', group: 'A' },
+  { id: 'cze', name: 'צ\'כיה', flag: '🇨🇿', iso: 'cz', group: 'A' },
   
   // Group B
-  { id: 'mex', name: 'מקסיקו', flag: '🇲🇽', iso: 'mx', group: 'B' },
-  { id: 'swe', name: 'שוודיה', flag: '🇸🇪', iso: 'se', group: 'B' },
-  { id: 'egy', name: 'מצרים', flag: '🇪🇬', iso: 'eg', group: 'B' },
-  { id: 'kor', name: 'דרום קוריאה', flag: '🇰🇷', iso: 'kr', group: 'B' },
+  { id: 'can', name: 'קנדה', flag: '🇨🇦', iso: 'ca', group: 'B' },
+  { id: 'bih', name: 'בוסניה והרצגובינה', flag: '🇧🇦', iso: 'ba', group: 'B' },
+  { id: 'qat', name: 'קטר', flag: '🇶🇦', iso: 'qa', group: 'B' },
+  { id: 'sui', name: 'שווייץ', flag: '🇨🇭', iso: 'ch', group: 'B' },
   
   // Group C
-  { id: 'can', name: 'קנדה', flag: '🇨🇦', iso: 'ca', group: 'C' },
-  { id: 'cro', name: 'קרואטיה', flag: '🇭🇷', iso: 'hr', group: 'C' },
-  { id: 'sen', name: 'סנגל', flag: '🇸🇳', iso: 'sn', group: 'C' },
-  { id: 'irn', name: 'איראן', flag: '🇮🇷', iso: 'ir', group: 'C' },
+  { id: 'bra', name: 'ברזיל', flag: '🇧🇷', iso: 'br', group: 'C' },
+  { id: 'mar', name: 'מרוקו', flag: '🇲🇦', iso: 'ma', group: 'C' },
+  { id: 'hai', name: 'האיטי', flag: '🇭🇹', iso: 'ht', group: 'C' },
+  { id: 'sco', name: 'סקוטלנד', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', iso: 'gb-sct', group: 'C' },
   
   // Group D
-  { id: 'fra', name: 'צרפת', flag: '🇫🇷', iso: 'fr', group: 'D' },
-  { id: 'ecu', name: 'אקוודור', flag: '🇪🇨', iso: 'ec', group: 'D' },
-  { id: 'ksa', name: 'ערב הסעודית', flag: '🇸🇦', iso: 'sa', group: 'D' },
-  { id: 'aut', name: 'אוסטריה', flag: '🇦🇹', iso: 'at', group: 'D' },
+  { id: 'usa', name: 'ארה"ב', flag: '🇺🇸', iso: 'us', group: 'D' },
+  { id: 'par', name: 'פרגוואי', flag: '🇵🇾', iso: 'py', group: 'D' },
+  { id: 'aus', name: 'אוסטרליה', flag: '🇦🇺', iso: 'au', group: 'D' },
+  { id: 'tur', name: 'טורקיה', flag: '🇹🇷', iso: 'tr', group: 'D' },
   
   // Group E
-  { id: 'arg', name: 'ארגנטינה', flag: '🇦🇷', iso: 'ar', group: 'E' },
-  { id: 'den', name: 'דנמרק', flag: '🇩🇰', iso: 'dk', group: 'E' },
-  { id: 'alg', name: 'אלג\'יריה', flag: '🇩🇿', iso: 'dz', group: 'E' },
-  { id: 'uzb', name: 'אוזבקיסטן', flag: '🇺🇿', iso: 'uz', group: 'E' },
+  { id: 'ger', name: 'גרמניה', flag: '🇩🇪', iso: 'de', group: 'E' },
+  { id: 'cur', name: 'קוראסאו', flag: '🇨🇼', iso: 'cw', group: 'E' },
+  { id: 'civ', name: 'חוף השנהב', flag: '🇨🇮', iso: 'ci', group: 'E' },
+  { id: 'ecu', name: 'אקוודור', flag: '🇪🇨', iso: 'ec', group: 'E' },
   
   // Group F
-  { id: 'bra', name: 'ברזיל', flag: '🇧🇷', iso: 'br', group: 'F' },
-  { id: 'sui', name: 'שוויץ', flag: '🇨🇭', iso: 'ch', group: 'F' },
-  { id: 'nga', name: 'ניגריה', flag: '🇳🇬', iso: 'ng', group: 'F' },
-  { id: 'irq', name: 'עיראק', flag: '🇮🇶', iso: 'iq', group: 'F' },
+  { id: 'ned', name: 'הולנד', flag: '🇳🇱', iso: 'nl', group: 'F' },
+  { id: 'jpn', name: 'יפן', flag: '🇯🇵', iso: 'jp', group: 'F' },
+  { id: 'swe', name: 'שוודיה', flag: '🇸🇪', iso: 'se', group: 'F' },
+  { id: 'tun', name: 'תוניסיה', flag: '🇹🇳', iso: 'tn', group: 'F' },
   
   // Group G
-  { id: 'eng', name: 'אנגליה', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', iso: 'gb-eng', group: 'G' },
-  { id: 'col', name: 'קולומביה', flag: '🇨🇴', iso: 'co', group: 'G' },
-  { id: 'tun', name: 'תוניסיה', flag: '🇹🇳', iso: 'tn', group: 'G' },
+  { id: 'bel', name: 'בלגיה', flag: '🇧🇪', iso: 'be', group: 'G' },
+  { id: 'egy', name: 'מצרים', flag: '🇪🇬', iso: 'eg', group: 'G' },
+  { id: 'irn', name: 'איראן', flag: '🇮🇷', iso: 'ir', group: 'G' },
   { id: 'nzl', name: 'ניו זילנד', flag: '🇳🇿', iso: 'nz', group: 'G' },
   
   // Group H
   { id: 'esp', name: 'ספרד', flag: '🇪🇸', iso: 'es', group: 'H' },
-  { id: 'ven', name: 'ונצואלה', flag: '🇻🇪', iso: 've', group: 'H' },
-  { id: 'civ', name: 'חוף השנהב', flag: '🇨🇮', iso: 'ci', group: 'H' },
-  { id: 'aus', name: 'אוסטרליה', flag: '🇦🇺', iso: 'au', group: 'H' },
+  { id: 'cpv', name: 'כף ורדה', flag: '🇨🇻', iso: 'cv', group: 'H' },
+  { id: 'ksa', name: 'ערב הסעודית', flag: '🇸🇦', iso: 'sa', group: 'H' },
+  { id: 'uru', name: 'אורוגוואי', flag: '🇺🇾', iso: 'uy', group: 'H' },
   
   // Group I
-  { id: 'ger', name: 'גרמניה', flag: '🇩🇪', iso: 'de', group: 'I' },
-  { id: 'uru', name: 'אורוגוואי', flag: '🇺🇾', iso: 'uy', group: 'I' },
-  { id: 'cmr', name: 'קמרון', flag: '🇨🇲', iso: 'cm', group: 'I' },
-  { id: 'pan', name: 'פנמה', flag: '🇵🇦', iso: 'pa', group: 'I' },
+  { id: 'fra', name: 'צרפת', flag: '🇫🇷', iso: 'fr', group: 'I' },
+  { id: 'sen', name: 'סנגל', flag: '🇸🇳', iso: 'sn', group: 'I' },
+  { id: 'irq', name: 'עיראק', flag: '🇮🇶', iso: 'iq', group: 'I' },
+  { id: 'nor', name: 'נורווגיה', flag: '🇳🇴', iso: 'no', group: 'I' },
   
   // Group J
-  { id: 'por', name: 'פורטוגל', flag: '🇵🇹', iso: 'pt', group: 'J' },
-  { id: 'bel', name: 'בלגיה', flag: '🇧🇪', iso: 'be', group: 'J' },
-  { id: 'mli', name: 'מאלי', flag: '🇲🇱', iso: 'ml', group: 'J' },
-  { id: 'crc', name: 'קוסטה ריקה', flag: '🇨🇷', iso: 'cr', group: 'J' },
+  { id: 'arg', name: 'ארגנטינה', flag: '🇦🇷', iso: 'ar', group: 'J' },
+  { id: 'alg', name: 'אלג\'יריה', flag: '🇩🇿', iso: 'dz', group: 'J' },
+  { id: 'aut', name: 'אוסטריה', flag: '🇦🇹', iso: 'at', group: 'J' },
+  { id: 'jor', name: 'ירדן', flag: '🇯🇴', iso: 'jo', group: 'J' },
   
   // Group K
-  { id: 'ned', name: 'הולנד', flag: '🇳🇱', iso: 'nl', group: 'K' },
-  { id: 'srb', name: 'סרביה', flag: '🇷🇸', iso: 'rs', group: 'K' },
-  { id: 'jam', name: 'ג\'מייקה', flag: '🇯🇲', iso: 'jm', group: 'K' },
-  { id: 'per', name: 'פרו', flag: '🇵🇪', iso: 'pe', group: 'K' },
+  { id: 'por', name: 'פורטוגל', flag: '🇵🇹', iso: 'pt', group: 'K' },
+  { id: 'cod', name: 'קונגו הדמוקרטית', flag: '🇨🇩', iso: 'cd', group: 'K' },
+  { id: 'uzb', name: 'אוזבקיסטן', flag: '🇺🇿', iso: 'uz', group: 'K' },
+  { id: 'col', name: 'קולומביה', flag: '🇨🇴', iso: 'co', group: 'K' },
   
   // Group L
-  { id: 'pol', name: 'פולין', flag: '🇵🇱', iso: 'pl', group: 'L' },
-  { id: 'sco', name: 'סקוטלנד', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', iso: 'gb-sct', group: 'L' },
-  { id: 'qat', name: 'קטר', flag: '🇶🇦', iso: 'qa', group: 'L' },
-  { id: 'chi', name: 'צ\'ילה', flag: '🇨🇱', iso: 'cl', group: 'L' }
+  { id: 'eng', name: 'אנגליה', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', iso: 'gb-eng', group: 'L' },
+  { id: 'cro', name: 'קרואטיה', flag: '🇭🇷', iso: 'hr', group: 'L' },
+  { id: 'gha', name: 'גאנה', flag: '🇬🇭', iso: 'gh', group: 'L' },
+  { id: 'pan', name: 'פנמה', flag: '🇵🇦', iso: 'pa', group: 'L' }
 ];
 
 export const TOP_SCORERS: Player[] = [
