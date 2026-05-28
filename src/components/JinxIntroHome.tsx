@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { Eye, Flame, AlertOctagon } from 'lucide-react';
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 }
 
 export default function JinxIntroHome({ onStart }: Props) {
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
@@ -16,7 +16,7 @@ export default function JinxIntroHome({ onStart }: Props) {
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } },
   };

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { Target, Trophy } from 'lucide-react';
 
 export default function OpeningJinxForm() {
@@ -17,7 +17,7 @@ export default function OpeningJinxForm() {
     }
   };
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0, scale: 0.95, y: 20 },
     show: { opacity: 1, scale: 1, y: 0, transition: { type: 'spring', stiffness: 100 } },
   };
