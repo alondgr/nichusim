@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { Search, ChevronDown, Check, UserMinus } from 'lucide-react';
+import { Search, ChevronDown, Check } from 'lucide-react';
 import { TOP_SCORERS, Player } from '@/data/worldCupData';
 
 // Helper to extract player initials in Hebrew/English
@@ -42,6 +42,7 @@ function PlayerAvatar({ player, size = 'md' }: AvatarProps) {
           <img
             src={player.imageUrl}
             alt={player.name}
+            referrerPolicy="no-referrer"
             onError={() => setImgError(true)}
             className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-200"
           />
@@ -248,6 +249,28 @@ export default function GoalDroughtForm() {
                 )}
               </AnimatePresence>
             </div>
+            
+            {/* Immersive Player Preview Card (Visible when selected but not locked) */}
+            <AnimatePresence>
+              {player && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                  animate={{ opacity: 1, height: 'auto', marginTop: 12 }}
+                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="overflow-hidden"
+                >
+                  <div className="p-3 bg-zinc-950 border border-zinc-800 rounded-xl flex items-center gap-3.5 shadow-inner">
+                    <PlayerAvatar player={player} size="md" />
+                    <div className="flex flex-col text-right min-w-0">
+                      <span className="text-sm font-black text-slate-200 truncate">{player.name}</span>
+                      <span className="text-[10px] text-zinc-400 mt-1 font-bold">חלוץ נבחרת {player.team} {player.flag}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
           </div>
 
           <div className="pt-2">
