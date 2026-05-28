@@ -35,14 +35,19 @@ function PlayerAvatar({ player, size = 'md' }: AvatarProps) {
     lg: 'w-9 h-6.5 -bottom-1 -left-1'
   };
 
+  // Wrap the Wikipedia URL in the Weserv.nl Cloudflare Image Proxy
+  // This resizes, optimizes, crops to cover, and serves the image with 100% CORS-free & referer-free headers.
+  const proxyUrl = player.imageUrl 
+    ? `https://images.weserv.nl/?url=${encodeURIComponent(player.imageUrl)}&w=150&h=150&fit=cover&a=top`
+    : '';
+
   return (
     <div className={`relative rounded-full flex-shrink-0 ${sizeClasses[size]} overflow-visible`}>
       <div className="w-full h-full rounded-full overflow-hidden border border-zinc-700 bg-zinc-900 flex items-center justify-center shadow-inner">
-        {!imgError && player.imageUrl ? (
+        {!imgError && proxyUrl ? (
           <img
-            src={player.imageUrl}
+            src={proxyUrl}
             alt={player.name}
-            referrerPolicy="no-referrer"
             onError={() => setImgError(true)}
             className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-200"
           />
