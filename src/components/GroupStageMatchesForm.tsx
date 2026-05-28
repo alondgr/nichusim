@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { Trophy, ShieldCheck, Sparkles, Trash2, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Trophy, ShieldCheck, Sparkles, Trash2, CheckCircle2, ChevronLeft, ChevronRight, Image as ImageIcon } from 'lucide-react';
 import { TEAMS, Team } from '@/data/worldCupData';
 
 // Realistic soccer score generator
@@ -50,6 +50,7 @@ export default function GroupStageMatchesForm() {
   const [activeGroup, setActiveGroup] = useState<string>('A');
   const [predictions, setPredictions] = useState<PredictionsState>({});
   const [submitted, setSubmitted] = useState(false);
+  const [showDiagram, setShowDiagram] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   // Load predictions from LocalStorage on mount
@@ -202,6 +203,51 @@ export default function GroupStageMatchesForm() {
           <p className="text-xs sm:text-sm text-slate-400">
             נחש את התוצאות המדויקות לכל 72 המשחקים ב-12 הבתים
           </p>
+        </div>
+
+        {/* Collapsible FIFA Draw Diagram */}
+        <div className="mb-4">
+          <button
+            type="button"
+            onClick={() => setShowDiagram(!showDiagram)}
+            className={`w-full py-3 px-4 rounded-2xl flex items-center justify-between text-xs sm:text-sm font-semibold border transition-all ${
+              showDiagram 
+                ? 'bg-indigo-600/10 border-indigo-500/50 text-indigo-300' 
+                : 'bg-zinc-900/40 hover:bg-zinc-900/80 border-zinc-800 text-slate-300'
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <ImageIcon className={`w-4.5 h-4.5 ${showDiagram ? 'text-indigo-400' : 'text-zinc-500'}`} />
+              <span>🗺️ תרשים הבתים הרשמי של מונדיאל 2026</span>
+            </div>
+            <span className="text-zinc-500 text-xs font-bold">{showDiagram ? 'הסתר ▲' : 'הצג תרשים ▼'}</span>
+          </button>
+          
+          <AnimatePresence>
+            {showDiagram && (
+              <motion.div
+                initial={{ height: 0, opacity: 0, marginTop: 0 }}
+                animate={{ height: 'auto', opacity: 1, marginTop: 12 }}
+                exit={{ height: 0, opacity: 0, marginTop: 0 }}
+                transition={{ duration: 0.25, ease: 'easeInOut' }}
+                className="overflow-hidden"
+              >
+                <div className="bg-zinc-900/80 border border-zinc-800 rounded-2xl p-2.5 flex flex-col items-center">
+                  <img 
+                    src="/images/world-cup-groups.jpg" 
+                    alt="תרשים הבתים הרשמי של פיפ''א 2026"
+                    className="w-full rounded-xl border border-zinc-800 shadow-md object-contain hover:scale-[1.01] transition-transform duration-300 cursor-zoom-in"
+                    onClick={() => {
+                      window.open('/images/world-cup-groups.jpg', '_blank');
+                    }}
+                  />
+                  <p className="text-[10px] text-zinc-500 mt-2 text-center font-bold">
+                    💡 לחץ על התרשים לפתיחה ברזולוציה מלאה בחלון חדש
+                  </p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Progress Bar & Actions */}
@@ -391,7 +437,7 @@ export default function GroupStageMatchesForm() {
             >
               <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-violet-500 rounded-xl transition-all duration-300 group-hover:scale-[1.02]" />
               <div className="absolute -inset-1 bg-indigo-500/50 blur-lg opacity-40 group-hover:opacity-100 transition duration-300" />
-              <div className="relative flex items-center justify-center py-3.5 text-base sm:text-lg font-bold text-white bg-transparent gap-2">
+              <div className="relative flex items-center justify-center py-3.5 text-lg font-bold text-white bg-transparent gap-2">
                 <CheckCircle2 className="w-5 h-5" />
                 נעל ניחוש בתים 🔒
               </div>
