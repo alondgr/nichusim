@@ -35,10 +35,11 @@ function PlayerAvatar({ player, size = 'md' }: AvatarProps) {
     lg: 'w-9 h-6.5 -bottom-1 -left-1'
   };
 
-  // Wrap the Wikipedia URL in the Weserv.nl Cloudflare Image Proxy
+  // Decode first to prevent double-encoding, then safely encode once!
   // This resizes, optimizes, crops to cover, and serves the image with 100% CORS-free & referer-free headers.
-  const proxyUrl = player.imageUrl 
-    ? `https://images.weserv.nl/?url=${encodeURIComponent(player.imageUrl)}&w=150&h=150&fit=cover&a=top`
+  const decodedUrl = player.imageUrl ? decodeURIComponent(player.imageUrl) : '';
+  const proxyUrl = decodedUrl 
+    ? `https://images.weserv.nl/?url=${encodeURIComponent(decodedUrl)}&w=150&h=150&fit=cover&a=top`
     : '';
 
   return (

@@ -55,9 +55,7 @@ export const TEAMS: Team[] = [
   // Group G
   { id: 'eng', name: 'אנגליה', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', iso: 'gb-eng', group: 'G' },
   { id: 'col', name: 'קולומביה', flag: '🇨🇴', iso: 'co', group: 'G' },
-  { id: 'tun', name: 'תוניסיה', flag: '🇹🇳', iso: 'tun', group: 'G' }, // Note: tn or tun (tun matches standard or flagcdn. Let's make sure it is tn as flagcdn uses tn!)
-  
-  // Wait, let's fix Tunisia to tn to match standard flagcdn!
+  { id: 'tun', name: 'תוניסיה', flag: '🇹🇳', iso: 'tn', group: 'G' },
   { id: 'nzl', name: 'ניו זילנד', flag: '🇳🇿', iso: 'nz', group: 'G' },
   
   // Group H
@@ -91,9 +89,6 @@ export const TEAMS: Team[] = [
   { id: 'chi', name: 'צ\'ילה', flag: '🇨🇱', iso: 'cl', group: 'L' }
 ];
 
-// Let's modify the G/Tunisia line to use 'tn' for the flag to match flagcdn perfectly.
-TEAMS.find(t => t.id === 'tun')!.iso = 'tn';
-
 export const TOP_SCORERS: Player[] = [
   { 
     id: 'mbappe', 
@@ -101,7 +96,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'צרפת', 
     flag: '🇫🇷', 
     iso: 'fr',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Kylian_Mbapp%C3%A9_2020.jpg/240px-Kylian_Mbapp%C3%A9_2020.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/57/Kylian_Mbapp%C3%A9_2020.jpg' 
   },
   { 
     id: 'kane', 
@@ -109,7 +104,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'אנגליה', 
     flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', 
     iso: 'gb-eng',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Harry_Kane_2018.jpg/240px-Harry_Kane_2018.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/cc/Harry_Kane_2018.jpg' 
   },
   { 
     id: 'haaland', 
@@ -117,7 +112,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'נורווגיה', 
     flag: '🇳🇴', 
     iso: 'no',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Erling_Haaland_2023_%28cropped%29.jpg/240px-Erling_Haaland_2023_%28cropped%29.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/33/Erling_Haaland_2023_%28cropped%29.jpg' 
   },
   { 
     id: 'messi', 
@@ -125,7 +120,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'ארגנטינה', 
     flag: '🇦🇷', 
     iso: 'ar',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Lionel_Messi_2018.jpg/240px-Lionel_Messi_2018.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_2018.jpg' 
   },
   { 
     id: 'yamal', 
@@ -133,7 +128,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'ספרד', 
     flag: '🇪🇸', 
     iso: 'es',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Lamine_Yamal_Euro_2024_%28cropped%29.jpg/240px-Lamine_Yamal_Euro_2024_%28cropped%29.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/f6/Lamine_Yamal_Euro_2024_%28cropped%29.jpg' 
   },
   { 
     id: 'vinicius', 
@@ -141,7 +136,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'ברזיל', 
     flag: '🇧🇷', 
     iso: 'br',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Vinicius_Jr_2021.jpg/240px-Vinicius_Jr_2021.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/f3/Vinicius_Jr_2021.jpg' 
   },
   { 
     id: 'lautaro', 
@@ -149,7 +144,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'ארגנטינה', 
     flag: '🇦🇷', 
     iso: 'ar',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Lautaro_Mart%C3%ADnez_Argentina_2022.jpg/240px-Lautaro_Mart%C3%ADnez_Argentina_2022.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/d4/Lautaro_Mart%C3%ADnez_Argentina_2022.jpg' 
   },
   { 
     id: 'ronaldo', 
@@ -157,7 +152,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'פורטוגל', 
     flag: '🇵🇹', 
     iso: 'pt',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Cristiano_Ronaldo_playing_for_Al_Nassr_FC_against_Persepolis_FC%2C_September_2023_%28cropped%29.jpg/240px-Cristiano_Ronaldo_playing_for_Al_Nassr_FC_against_Persepolis_FC%2C_September_2023_%28cropped%29.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/d7/Cristiano_Ronaldo_playing_for_Al_Nassr_FC_against_Persepolis_FC%2C_September_2023_%28cropped%29.jpg' 
   },
   { 
     id: 'lewandowski', 
@@ -165,7 +160,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'פולין', 
     flag: '🇵🇱', 
     iso: 'pl',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Robert_Lewandowski%2C_Poland-de_2023_%28cropped%29.jpg/240px-Robert_Lewandowski%2C_Poland-de_2023_%28cropped%29.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/03/Robert_Lewandowski%2C_Poland-de_2023_%28cropped%29.jpg' 
   },
   { 
     id: 'morata', 
@@ -173,7 +168,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'ספרד', 
     flag: '🇪🇸', 
     iso: 'es',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/%C3%81lvaro_Morata_Euro_2024_%28cropped%29.jpg/240px-%C3%81lvaro_Morata_Euro_2024_%28cropped%29.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/41/%C3%81lvaro_Morata_Euro_2024_%28cropped%29.jpg' 
   },
   { 
     id: 'alvarez', 
@@ -181,7 +176,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'ארגנטינה', 
     flag: '🇦🇷', 
     iso: 'ar',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Juli%C3%A1n_%C3%81lvarez_2022.jpg/240px-Juli%C3%A1n_%C3%81lvarez_2022.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Juli%C3%A1n_%C3%81lvarez_2022.jpg' 
   },
   { 
     id: 'osimhen', 
@@ -189,7 +184,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'ניגריה', 
     flag: '🇳🇬', 
     iso: 'ng',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Victor_Osimhen_2021_%28cropped%29.jpg/240px-Victor_Osimhen_2021_%28cropped%29.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/52/Victor_Osimhen_2021_%28cropped%29.jpg' 
   },
   { 
     id: 'bellingham', 
@@ -197,7 +192,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'אנגליה', 
     flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', 
     iso: 'gb-eng',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Jude_Bellingham_2023_%28cropped%29.jpg/240px-Jude_Bellingham_2023_%28cropped%29.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Jude_Bellingham_2023_%28cropped%29.jpg' 
   },
   { 
     id: 'saka', 
@@ -205,7 +200,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'אנגליה', 
     flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', 
     iso: 'gb-eng',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Bukayo_Saka_2022.jpg/240px-Bukayo_Saka_2022.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/00/Bukayo_Saka_2022.jpg' 
   },
   { 
     id: 'foden', 
@@ -213,7 +208,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'אנגליה', 
     flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', 
     iso: 'gb-eng',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Phil_Foden_2022.jpg/240px-Phil_Foden_2022.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/9f/Phil_Foden_2022.jpg' 
   },
   { 
     id: 'son', 
@@ -221,6 +216,6 @@ export const TOP_SCORERS: Player[] = [
     team: 'דרום קוריאה', 
     flag: '🇰🇷', 
     iso: 'kr',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Son_Heung-min_2022.jpg/240px-Son_Heung-min_2022.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Son_Heung-min_2022.jpg' 
   }
-].sort((a, b) => a.name.localeCompare(b.name, 'he'));
+];
