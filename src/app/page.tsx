@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Show, SignUp, UserButton } from '@clerk/nextjs';
 import JinxIntroHome from '@/components/JinxIntroHome';
+import UsersList from '@/components/UsersList';
 import OpeningJinxForm from '@/components/OpeningJinxForm';
 import FlopTeamForm from '@/components/FlopTeamForm';
 import GoalDroughtForm from '@/components/GoalDroughtForm';
@@ -29,7 +30,8 @@ export default function Home() {
         <div className="absolute top-4 left-4 z-50">
           <UserButton />
         </div>
-        <div className="flex flex-col space-y-12 w-full max-w-xl my-12 items-center px-4">
+        <div className="flex flex-col space-y-8 w-full max-w-xl my-12 items-center px-4">
+          <UsersList />
           <OpeningJinxForm />
           <FlopTeamForm />
           <GoalDroughtForm />
