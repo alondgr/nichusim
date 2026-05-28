@@ -96,7 +96,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'צרפת', 
     flag: '🇫🇷', 
     iso: 'fr',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/57/Kylian_Mbapp%C3%A9_2020.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/6/66/Picture_with_Mbapp%C3%A9_%28cropped_and_rotated%29.jpg' 
   },
   { 
     id: 'kane', 
@@ -104,7 +104,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'אנגליה', 
     flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', 
     iso: 'gb-eng',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/cc/Harry_Kane_2018.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/91/Harry_Kane_on_October_10%2C_2023.jpg' 
   },
   { 
     id: 'haaland', 
@@ -112,7 +112,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'נורווגיה', 
     flag: '🇳🇴', 
     iso: 'no',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/33/Erling_Haaland_2023_%28cropped%29.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/7/71/Erling_Haaland_June_2025.jpg' 
   },
   { 
     id: 'messi', 
@@ -120,7 +120,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'ארגנטינה', 
     flag: '🇦🇷', 
     iso: 'ar',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_2018.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/6/6b/Lionel_Messi_White_House_2026_%283x4_cropped%29.jpg' 
   },
   { 
     id: 'yamal', 
@@ -128,7 +128,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'ספרד', 
     flag: '🇪🇸', 
     iso: 'es',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/f6/Lamine_Yamal_Euro_2024_%28cropped%29.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e3/Lamine_Yamal_in_2025.jpg' 
   },
   { 
     id: 'vinicius', 
@@ -136,7 +136,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'ברזיל', 
     flag: '🇧🇷', 
     iso: 'br',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/f3/Vinicius_Jr_2021.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c6/2023_05_06_Final_de_la_Copa_del_Rey_-_52879242230_%28cropped%29.jpg' 
   },
   { 
     id: 'lautaro', 
@@ -144,7 +144,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'ארגנטינה', 
     flag: '🇦🇷', 
     iso: 'ar',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/d4/Lautaro_Mart%C3%ADnez_Argentina_2022.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/Lautaro_Martinez_ARGENTINA_VS_VENEZUELA_2017.jpg' 
   },
   { 
     id: 'ronaldo', 
@@ -152,7 +152,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'פורטוגל', 
     flag: '🇵🇹', 
     iso: 'pt',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/d7/Cristiano_Ronaldo_playing_for_Al_Nassr_FC_against_Persepolis_FC%2C_September_2023_%28cropped%29.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/9c/President_Donald_Trump_meets_with_Cristiano_Ronaldo_in_the_Oval_Office_%2854933344262%29_%28cropped_and_rotated%29.jpg' 
   },
   { 
     id: 'lewandowski', 
@@ -160,7 +160,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'פולין', 
     flag: '🇵🇱', 
     iso: 'pl',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/03/Robert_Lewandowski%2C_Poland-de_2023_%28cropped%29.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/26/2019147183134_2019-05-27_Fussball_1.FC_Kaiserslautern_vs_FC_Bayern_M%C3%BCnchen_-_Sven_-_1D_X_MK_II_-_0228_-_B70I8527_%28cropped%29.jpg' 
   },
   { 
     id: 'morata', 
@@ -168,7 +168,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'ספרד', 
     flag: '🇪🇸', 
     iso: 'es',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/41/%C3%81lvaro_Morata_Euro_2024_%28cropped%29.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/6/62/%C3%81lvaro_Morata_in_2025.jpg' 
   },
   { 
     id: 'alvarez', 
@@ -176,7 +176,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'ארגנטינה', 
     flag: '🇦🇷', 
     iso: 'ar',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Juli%C3%A1n_%C3%81lvarez_2022.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/03/Argentina_national_football_team_-_2_-_2022_%28Juli%C3%A1n_%C3%81lvarez%29.jpg' 
   },
   { 
     id: 'osimhen', 
@@ -184,7 +184,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'ניגריה', 
     flag: '🇳🇬', 
     iso: 'ng',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/52/Victor_Osimhen_2021_%28cropped%29.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/3/34/Victor-osimhen-nigeria-2024-3-4.jpg' 
   },
   { 
     id: 'bellingham', 
@@ -192,7 +192,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'אנגליה', 
     flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', 
     iso: 'gb-eng',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/23/Jude_Bellingham_2023_%28cropped%29.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/f9/25th_Laureus_World_Sports_Awards_-_Red_Carpet_-_Jude_Bellingham_-_240422_190551-2_%28cropped%29.jpg' 
   },
   { 
     id: 'saka', 
@@ -200,7 +200,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'אנגליה', 
     flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', 
     iso: 'gb-eng',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/00/Bukayo_Saka_2022.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/cd/1_bukayo_saka_arsenal_2025_%28cropped%29.jpg' 
   },
   { 
     id: 'foden', 
@@ -208,7 +208,7 @@ export const TOP_SCORERS: Player[] = [
     team: 'אנגליה', 
     flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', 
     iso: 'gb-eng',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/9f/Phil_Foden_2022.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/53/2023-10-04_Fu%C3%9Fball%2C_M%C3%A4nner%2C_UEFA_Champions_League%2C_RB_Leipzig_-_Manchester_City_FC_1DX_2613%2C_Phil_Foden.jpg' 
   },
   { 
     id: 'son', 
@@ -216,6 +216,6 @@ export const TOP_SCORERS: Player[] = [
     team: 'דרום קוריאה', 
     flag: '🇰🇷', 
     iso: 'kr',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Son_Heung-min_2022.jpg' 
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/b/b0/BFA_2023_-2_Heung-Min_Son_%28cropped%29.jpg' 
   }
 ];
