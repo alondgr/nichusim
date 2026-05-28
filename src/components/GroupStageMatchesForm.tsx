@@ -90,7 +90,7 @@ export default function GroupStageMatchesForm() {
   };
 
   const handleScoreChange = (matchId: string, side: 'home' | 'away', val: string) => {
-    const numVal = val === '' ? '' : Math.min(20, Math.max(0, Number(val)));
+    const numVal = val === '' ? '' : Math.min(10, Math.max(0, Number(val)));
     const current = predictions[matchId] || { homeScore: '', awayScore: '' };
     
     const updated = {
@@ -449,7 +449,7 @@ export default function GroupStageMatchesForm() {
                         <input
                           type="number"
                           min="0"
-                          max="20"
+                          max="10"
                           required
                           placeholder="-"
                           value={p.homeScore}
@@ -461,7 +461,7 @@ export default function GroupStageMatchesForm() {
                         <input
                           type="number"
                           min="0"
-                          max="20"
+                          max="10"
                           required
                           placeholder="-"
                           value={p.awayScore}
