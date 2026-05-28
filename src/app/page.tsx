@@ -6,6 +6,7 @@ import JinxIntroHome from '@/components/JinxIntroHome';
 import OpeningJinxForm from '@/components/OpeningJinxForm';
 import FlopTeamForm from '@/components/FlopTeamForm';
 import GoalDroughtForm from '@/components/GoalDroughtForm';
+import GroupStageMatchesForm from '@/components/GroupStageMatchesForm';
 
 export default function Home() {
   const [started, setStarted] = useState(false);
@@ -28,10 +29,11 @@ export default function Home() {
         <div className="absolute top-4 left-4 z-50">
           <UserButton />
         </div>
-        <div className="flex flex-col space-y-12 w-full max-w-md my-12 items-center">
+        <div className="flex flex-col space-y-12 w-full max-w-xl my-12 items-center px-4">
           <OpeningJinxForm />
           <FlopTeamForm />
           <GoalDroughtForm />
+          <GroupStageMatchesForm />
         </div>
       </Show>
     </main>

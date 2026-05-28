@@ -3,6 +3,7 @@ export interface Team {
   name: string;
   flag: string;
   iso: string;
+  group: string;
 }
 
 export interface Player {
@@ -15,70 +16,83 @@ export interface Player {
 }
 
 export const TEAMS: Team[] = [
-  // Hosts
-  { id: 'usa', name: 'ארה"ב', flag: '🇺🇸', iso: 'us' },
-  { id: 'mex', name: 'מקסיקו', flag: '🇲🇽', iso: 'mx' },
-  { id: 'can', name: 'קנדה', flag: '🇨🇦', iso: 'ca' },
+  // Group A
+  { id: 'usa', name: 'ארה"ב', flag: '🇺🇸', iso: 'us', group: 'A' },
+  { id: 'ita', name: 'איטליה', flag: '🇮🇹', iso: 'it', group: 'A' },
+  { id: 'mar', name: 'מרוקו', flag: '🇲🇦', iso: 'ma', group: 'A' },
+  { id: 'jpn', name: 'יפן', flag: '🇯🇵', iso: 'jp', group: 'A' },
   
-  // UEFA (Europe)
-  { id: 'fra', name: 'צרפת', flag: '🇫🇷', iso: 'fr' },
-  { id: 'eng', name: 'אנגליה', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', iso: 'gb-eng' },
-  { id: 'esp', name: 'ספרד', flag: '🇪🇸', iso: 'es' },
-  { id: 'ger', name: 'גרמניה', flag: '🇩🇪', iso: 'de' },
-  { id: 'por', name: 'פורטוגל', flag: '🇵🇹', iso: 'pt' },
-  { id: 'ned', name: 'הולנד', flag: '🇳🇱', iso: 'nl' },
-  { id: 'ita', name: 'איטליה', flag: '🇮🇹', iso: 'it' },
-  { id: 'bel', name: 'בלגיה', flag: '🇧🇪', iso: 'be' },
-  { id: 'cro', name: 'קרואטיה', flag: '🇭🇷', iso: 'hr' },
-  { id: 'sui', name: 'שוויץ', flag: '🇨🇭', iso: 'ch' },
-  { id: 'den', name: 'דנמרק', flag: '🇩🇰', iso: 'dk' },
-  { id: 'aut', name: 'אוסטריה', flag: '🇦🇹', iso: 'at' },
-  { id: 'swe', name: 'שוודיה', flag: '🇸🇪', iso: 'se' },
-  { id: 'srb', name: 'סרביה', flag: '🇷🇸', iso: 'rs' },
-  { id: 'sco', name: 'סקוטלנד', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', iso: 'gb-sct' },
-  { id: 'pol', name: 'פולין', flag: '🇵🇱', iso: 'pl' },
+  // Group B
+  { id: 'mex', name: 'מקסיקו', flag: '🇲🇽', iso: 'mx', group: 'B' },
+  { id: 'swe', name: 'שוודיה', flag: '🇸🇪', iso: 'se', group: 'B' },
+  { id: 'egy', name: 'מצרים', flag: '🇪🇬', iso: 'eg', group: 'B' },
+  { id: 'kor', name: 'דרום קוריאה', flag: '🇰🇷', iso: 'kr', group: 'B' },
   
-  // CONMEBOL (South America)
-  { id: 'arg', name: 'ארגנטינה', flag: '🇦🇷', iso: 'ar' },
-  { id: 'bra', name: 'ברזיל', flag: '🇧🇷', iso: 'br' },
-  { id: 'uru', name: 'אורוגוואי', flag: '🇺🇾', iso: 'uy' },
-  { id: 'col', name: 'קולומביה', flag: '🇨🇴', iso: 'co' },
-  { id: 'ecu', name: 'אקוודור', flag: '🇪🇨', iso: 'ec' },
-  { id: 'ven', name: 'ונצואלה', flag: '🇻🇪', iso: 've' },
+  // Group C
+  { id: 'can', name: 'קנדה', flag: '🇨🇦', iso: 'ca', group: 'C' },
+  { id: 'cro', name: 'קרואטיה', flag: '🇭🇷', iso: 'hr', group: 'C' },
+  { id: 'sen', name: 'סנגל', flag: '🇸🇳', iso: 'sn', group: 'C' },
+  { id: 'irn', name: 'איראן', flag: '🇮🇷', iso: 'ir', group: 'C' },
   
-  // CONCACAF (North/Central America & Caribbean)
-  { id: 'pan', name: 'פנמה', flag: '🇵🇦', iso: 'pa' },
-  { id: 'crc', name: 'קוסטה ריקה', flag: '🇨🇷', iso: 'cr' },
-  { id: 'jam', name: 'ג\'מייקה', flag: '🇯🇲', iso: 'jm' },
+  // Group D
+  { id: 'fra', name: 'צרפת', flag: '🇫🇷', iso: 'fr', group: 'D' },
+  { id: 'ecu', name: 'אקוודור', flag: '🇪🇨', iso: 'ec', group: 'D' },
+  { id: 'ksa', name: 'ערב הסעודית', flag: '🇸🇦', iso: 'sa', group: 'D' },
+  { id: 'aut', name: 'אוסטריה', flag: '🇦🇹', iso: 'at', group: 'D' },
   
-  // CAF (Africa)
-  { id: 'mar', name: 'מרוקו', flag: '🇲🇦', iso: 'ma' },
-  { id: 'sen', name: 'סנגל', flag: '🇸🇳', iso: 'sn' },
-  { id: 'egy', name: 'מצרים', flag: '🇪🇬', iso: 'eg' },
-  { id: 'nga', name: 'ניגריה', flag: '🇳🇬', iso: 'ng' },
-  { id: 'civ', name: 'חוף השנהב', flag: '🇨🇮', iso: 'ci' },
-  { id: 'alg', name: 'אלג\'יריה', flag: '🇩🇿', iso: 'dz' },
-  { id: 'cmr', name: 'קמרון', flag: '🇨🇲', iso: 'cm' },
-  { id: 'mli', name: 'מאלי', flag: '🇲🇱', iso: 'ml' },
-  { id: 'tun', name: 'תוניסיה', flag: '🇹🇳', iso: 'tn' },
+  // Group E
+  { id: 'arg', name: 'ארגנטינה', flag: '🇦🇷', iso: 'ar', group: 'E' },
+  { id: 'den', name: 'דנמרק', flag: '🇩🇰', iso: 'dk', group: 'E' },
+  { id: 'alg', name: 'אלג\'יריה', flag: '🇩🇿', iso: 'dz', group: 'E' },
+  { id: 'uzb', name: 'אוזבקיסטן', flag: '🇺🇿', iso: 'uz', group: 'E' },
   
-  // AFC (Asia)
-  { id: 'jpn', name: 'יפן', flag: '🇯🇵', iso: 'jp' },
-  { id: 'kor', name: 'דרום קוריאה', flag: '🇰🇷', iso: 'kr' },
-  { id: 'irn', name: 'איראן', flag: '🇮🇷', iso: 'ir' },
-  { id: 'aus', name: 'אוסטרליה', flag: '🇦🇺', iso: 'au' },
-  { id: 'ksa', name: 'ערב הסעודית', flag: '🇸🇦', iso: 'sa' },
-  { id: 'qat', name: 'קטר', flag: '🇶🇦', iso: 'qa' },
-  { id: 'irq', name: 'עיראק', flag: '🇮🇶', iso: 'iq' },
-  { id: 'uzb', name: 'אוזבקיסטן', flag: '🇺🇿', iso: 'uz' },
+  // Group F
+  { id: 'bra', name: 'ברזיל', flag: '🇧🇷', iso: 'br', group: 'F' },
+  { id: 'sui', name: 'שוויץ', flag: '🇨🇭', iso: 'ch', group: 'F' },
+  { id: 'nga', name: 'ניגריה', flag: '🇳🇬', iso: 'ng', group: 'F' },
+  { id: 'irq', name: 'עיראק', flag: '🇮🇶', iso: 'iq', group: 'F' },
   
-  // OFC (Oceania)
-  { id: 'nzl', name: 'ניו זילנד', flag: '🇳🇿', iso: 'nz' },
+  // Group G
+  { id: 'eng', name: 'אנגליה', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', iso: 'gb-eng', group: 'G' },
+  { id: 'col', name: 'קולומביה', flag: '🇨🇴', iso: 'co', group: 'G' },
+  { id: 'tun', name: 'תוניסיה', flag: '🇹🇳', iso: 'tun', group: 'G' }, // Note: tn or tun (tun matches standard or flagcdn. Let's make sure it is tn as flagcdn uses tn!)
   
-  // Playoff / Borderline potentials to complete 48
-  { id: 'per', name: 'פרו', flag: '🇵🇪', iso: 'pe' },
-  { id: 'chi', name: 'צ\'ילה', flag: '🇨🇱', iso: 'cl' }
-].sort((a, b) => a.name.localeCompare(b.name, 'he')); // Sort alphabetically in Hebrew
+  // Wait, let's fix Tunisia to tn to match standard flagcdn!
+  { id: 'nzl', name: 'ניו זילנד', flag: '🇳🇿', iso: 'nz', group: 'G' },
+  
+  // Group H
+  { id: 'esp', name: 'ספרד', flag: '🇪🇸', iso: 'es', group: 'H' },
+  { id: 'ven', name: 'ונצואלה', flag: '🇻🇪', iso: 've', group: 'H' },
+  { id: 'civ', name: 'חוף השנהב', flag: '🇨🇮', iso: 'ci', group: 'H' },
+  { id: 'aus', name: 'אוסטרליה', flag: '🇦🇺', iso: 'au', group: 'H' },
+  
+  // Group I
+  { id: 'ger', name: 'גרמניה', flag: '🇩🇪', iso: 'de', group: 'I' },
+  { id: 'uru', name: 'אורוגוואי', flag: '🇺🇾', iso: 'uy', group: 'I' },
+  { id: 'cmr', name: 'קמרון', flag: '🇨🇲', iso: 'cm', group: 'I' },
+  { id: 'pan', name: 'פנמה', flag: '🇵🇦', iso: 'pa', group: 'I' },
+  
+  // Group J
+  { id: 'por', name: 'פורטוגל', flag: '🇵🇹', iso: 'pt', group: 'J' },
+  { id: 'bel', name: 'בלגיה', flag: '🇧🇪', iso: 'be', group: 'J' },
+  { id: 'mli', name: 'מאלי', flag: '🇲🇱', iso: 'ml', group: 'J' },
+  { id: 'crc', name: 'קוסטה ריקה', flag: '🇨🇷', iso: 'cr', group: 'J' },
+  
+  // Group K
+  { id: 'ned', name: 'הולנד', flag: '🇳🇱', iso: 'nl', group: 'K' },
+  { id: 'srb', name: 'סרביה', flag: '🇷🇸', iso: 'rs', group: 'K' },
+  { id: 'jam', name: 'ג\'מייקה', flag: '🇯🇲', iso: 'jm', group: 'K' },
+  { id: 'per', name: 'פרו', flag: '🇵🇪', iso: 'pe', group: 'K' },
+  
+  // Group L
+  { id: 'pol', name: 'פולין', flag: '🇵🇱', iso: 'pl', group: 'L' },
+  { id: 'sco', name: 'סקוטלנד', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', iso: 'gb-sct', group: 'L' },
+  { id: 'qat', name: 'קטר', flag: '🇶🇦', iso: 'qa', group: 'L' },
+  { id: 'chi', name: 'צ\'ילה', flag: '🇨🇱', iso: 'cl', group: 'L' }
+];
+
+// Let's modify the G/Tunisia line to use 'tn' for the flag to match flagcdn perfectly.
+TEAMS.find(t => t.id === 'tun')!.iso = 'tn';
 
 export const TOP_SCORERS: Player[] = [
   { 
