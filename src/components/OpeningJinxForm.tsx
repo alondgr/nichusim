@@ -169,7 +169,6 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
         <div className="text-center space-y-2 mb-6">
           <div className="inline-flex items-center justify-center p-3 bg-red-500/10 rounded-2xl mb-1">
             {submitted || isStarted ? (
-              <Lock className={`w-6 h-6 ${sport === 'tennis' ? 'text-orange-400' : 'text-indigo-400'}`} />
               <Lock className={`w-6 h-6 ${sport === 'ucl' ? 'text-blue-400' : sport === 'tennis' ? 'text-orange-400' : 'text-indigo-400'}`} />
             ) : isOpening ? (
               <Trophy className="w-6 h-6 text-yellow-500" />
