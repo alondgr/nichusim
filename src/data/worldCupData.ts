@@ -627,14 +627,14 @@ export const UCL_MATCHES: Match[] = [
     
     // Prop Bet fields (Backwards compatible)
     has_prop_bet: true,
-    prop_question: 'מי יבקיע את השער הראשון במשחק מחר?',
+    prop_question: 'מי יבקיע את השער הראשון במשחק?',
     prop_options: ['ח. קווארצחליה', 'ב. סאקה', 'ג. מרטינלי', 'א. דמבלה', 'אחר/אין שער'],
 
     // Multi-prop bets questions list
     prop_bets: [
       {
         id: 'top_scorer',
-        question: 'מי יהיה מלך השערים מחר?',
+        question: 'מי יהיה מלך השערים?',
         options: [
           'ח. קווארצחליה', 'א. דמבלה', 'ו. ברקולה', 'ו. ויטיניה', 'ר. קולו מואני',
           'ב. סאקה', 'ק. האברץ', 'מ. אודגור', 'ג. מרטינלי', 'ל. טרוסאר'
@@ -642,7 +642,7 @@ export const UCL_MATCHES: Match[] = [
       },
       {
         id: 'first_goalscorer',
-        question: 'מי יבקיע את השער הראשון במשחק מחר?',
+        question: 'מי יבקיע את השער הראשון במשחק?',
         options: [
           'ח. קווארצחליה', 'א. דמבלה', 'ו. ברקולה', 'ו. ויטיניה', 'ר. קולו מואני',
           'ב. סאקה', 'ק. האברץ', 'מ. אודגור', 'ג. מרטינלי', 'ל. טרוסאר'
@@ -650,7 +650,7 @@ export const UCL_MATCHES: Match[] = [
       },
       {
         id: 'last_goalscorer',
-        question: 'מי יהיה מבקיע השער האחרון במשחק מחר?',
+        question: 'מי יהיה מבקיע השער האחרון במשחק?',
         options: [
           'ח. קווארצחליה', 'א. דמבלה', 'ו. ברקולה', 'ו. ויטיניה', 'ר. קולו מואני',
           'ב. סאקה', 'ק. האברץ', 'מ. אודגור', 'ג. מרטינלי', 'ל. טרוסאר'
@@ -658,7 +658,7 @@ export const UCL_MATCHES: Match[] = [
       },
       {
         id: 'total_corners',
-        question: 'כמה קרנות סך הכל יהיו בכל המשחק מחר?',
+        question: 'כמה קרנות סך הכל יהיו בכל המשחק?',
         options: [] // Free input of numbers
       },
       {
