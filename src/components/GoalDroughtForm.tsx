@@ -168,6 +168,11 @@ export default function GoalDroughtForm() {
         <h2 className="text-3xl font-extrabold text-slate-100 tracking-tight">👟 נעל הזהב ננעלה!</h2>
         <div className="flex flex-col items-center space-y-4 bg-zinc-900/60 backdrop-blur border border-zinc-800 rounded-3xl p-6 w-full shadow-xl">
           <span className="text-xl font-bold text-slate-200">{player.name}</span>
+          
+          <div className="inline-flex items-center gap-1 bg-amber-500/10 px-3.5 py-1.5 rounded-full border border-amber-500/20 shadow-sm mt-0.5 select-none animate-pulse">
+            <span className="text-amber-400 text-xs font-black">שווה 10 נקודות במקרה של זכייה ⭐️</span>
+          </div>
+
           <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
             הניחוש שלך ש-**{player.name}** מנבחרת **{player.team}** יזכה בתואר מלך השערים של מונדיאל 2026 נשמר וננעל בהצלחה! 👑⚽
           </p>

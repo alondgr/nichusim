@@ -121,6 +121,11 @@ export default function FlopTeamForm() {
             <TeamFlag iso={selectedTeamData.iso} flag={selectedTeamData.flag} name={selectedTeamData.name} />
             <span className="text-2xl font-bold text-slate-200">{selectedTeamData.name}</span>
           </div>
+          
+          <div className="inline-flex items-center gap-1 bg-amber-500/10 px-3.5 py-1.5 rounded-full border border-amber-500/20 shadow-sm mt-1 select-none animate-pulse">
+            <span className="text-amber-400 text-xs font-black">שווה 10 נקודות במקרה של זכייה ⭐️</span>
+          </div>
+
           <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
             הניחוש שלך ש-**{selectedTeamData.name}** תניף את גביע העולם במונדיאל 2026 נשמר וננעל בהצלחה! 🥇👑
           </p>

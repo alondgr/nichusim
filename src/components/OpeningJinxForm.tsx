@@ -199,6 +199,10 @@ export default function OpeningJinxForm({ predictions, savePredictions, submitte
                     <span>📺</span>
                     <span>שידור ישיר: {match.channel}</span>
                   </div>
+                  <div className="text-[9px] font-extrabold text-amber-400 flex items-center gap-1 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/15 mt-0.5">
+                    <span>🎯</span>
+                    <span>ניחוש בול: 3 נק&apos; | כיוון (ניצחון/תיקו): 1 נק&apos;</span>
+                  </div>
                 </div>
 
                 <div className="flex items-center justify-between">
