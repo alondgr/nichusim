@@ -11,12 +11,38 @@ const GROUP_HEBREW: Record<string, string> = {
   I: 'בית ט\'', J: 'בית י\'', K: 'בית י"א', L: 'בית י"ב'
 };
 
-const TeamFlag = ({ iso, flag, name, size = 'large' }: { iso: string, flag: string, name: string, size?: 'small' | 'large' }) => {
+const TeamFlag = ({ iso, flag, name, logo, size = 'large' }: { iso: string, flag: string, name: string, logo?: string, size?: 'small' | 'large' }) => {
   const [error, setError] = useState(false);
   
   useEffect(() => {
     setError(false);
-  }, [iso]);
+  }, [iso, logo]);
+
+  if (logo && !error) {
+    return (
+      <div className={`flex items-center justify-center bg-zinc-900 rounded-full border border-zinc-800 flex-shrink-0 shadow-md ${
+        size === 'small' ? 'w-10 h-10 p-1.5' : 'w-12 h-12 sm:w-14 sm:h-14 p-2'
+      }`}>
+        <img
+          src={logo}
+          alt={name}
+          className="w-full h-full object-contain"
+          onError={() => setError(true)}
+        />
+      </div>
+    );
+  }
+
+  if (error && logo) {
+    const firstLetter = name ? name.charAt(0).toUpperCase() : '';
+    return (
+      <div className={`flex items-center justify-center bg-zinc-800 rounded-full border border-zinc-700 flex-shrink-0 font-black text-slate-200 shadow-inner select-none ${
+        size === 'small' ? 'w-10 h-10 text-sm' : 'w-12 h-12 sm:w-14 sm:h-14 text-lg'
+      }`} title={name}>
+        {firstLetter || '?'}
+      </div>
+    );
+  }
 
   if (error) {
     return (
@@ -250,7 +276,7 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
 
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col items-center space-y-3 flex-1 min-w-0">
-                    <TeamFlag iso={match.home.iso} flag={match.home.flag} name={match.home.name} />
+                    <TeamFlag iso={match.home.iso} flag={match.home.flag} name={match.home.name} logo={match.home.logo} />
                     <span className="font-bold text-xs sm:text-sm text-slate-200 truncate w-full text-center">{match.home.name}</span>
                     <input
                       type="number"
@@ -268,7 +294,7 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
                   <div className={`text-xl font-black mb-6 px-3 flex-shrink-0 ${sport === 'ucl' ? 'text-blue-600/50' : sport === 'tennis' ? 'text-orange-600/50' : 'text-slate-600'}`}>-</div>
 
                   <div className="flex flex-col items-center space-y-3 flex-1 min-w-0">
-                    <TeamFlag iso={match.away.iso} flag={match.away.flag} name={match.away.name} />
+                    <TeamFlag iso={match.away.iso} flag={match.away.flag} name={match.away.name} logo={match.away.logo} />
                     <span className="font-bold text-xs sm:text-sm text-slate-200 truncate w-full text-center">{match.away.name}</span>
                     <input
                       type="number"

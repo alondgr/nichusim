@@ -4,6 +4,7 @@ export interface Team {
   flag: string;
   iso: string;
   group?: string;
+  logo?: string;
 }
 
 export interface Player {
@@ -243,6 +244,14 @@ export interface Match {
   bestOf?: 3 | 5;      // Tennis sets rules
   actualHomeScore?: number;
   actualAwayScore?: number;
+
+  // Champions League specific fields
+  league?: string;
+  team_a?: string;
+  team_a_logo?: string;
+  team_b?: string;
+  team_b_logo?: string;
+  match_time?: string;
 }
 
 // Deterministic helper to retrieve the official Israel Hayom World Cup 2026 schedule info
@@ -592,12 +601,20 @@ export const UCL_MATCHES: Match[] = [
   {
     id: 'ucl_2026_final',
     sport: 'ucl',
-    home: { id: 'psg', name: 'פריז סן ז\'רמן', flag: '🇫🇷', iso: 'fr' },
-    away: { id: 'ars', name: 'ארסנל', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', iso: 'gb-eng' },
-    stage: 'גמר',
+    league: 'champions_league',
+    team_a: 'Paris Saint-Germain',
+    team_a_logo: 'https://crests.football-data.org/524.svg',
+    team_b: 'Arsenal',
+    team_b_logo: 'https://crests.football-data.org/57.svg',
+    stage: 'Final',
     status: 'upcoming',
+    match_time: '19:00 IDT',
+    
+    // Existing fields for frontend compatibility
+    home: { id: 'psg', name: 'Paris Saint-Germain', flag: '🇫🇷', iso: 'fr', logo: 'https://crests.football-data.org/524.svg' },
+    away: { id: 'ars', name: 'Arsenal', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', iso: 'gb-eng', logo: 'https://crests.football-data.org/57.svg' },
     dateStr: 'יום שבת, 30/05/2026',
-    timeStr: '19:00',
+    timeStr: '19:00 IDT',
     channel: 'ספורט 5',
     timestamp: new Date('2026-05-30T19:00:00+03:00').getTime()
   }

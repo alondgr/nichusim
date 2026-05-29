@@ -11,12 +11,38 @@ const GROUP_HEBREW: Record<string, string> = {
   I: 'בית ט\'', J: 'בית י\'', K: 'בית י"א', L: 'בית י"ב'
 };
 
-const TeamFlag = ({ iso, flag, name, size = 'large' }: { iso: string, flag: string, name: string, size?: 'small' | 'large' }) => {
+const TeamFlag = ({ iso, flag, name, logo, size = 'large' }: { iso: string, flag: string, name: string, logo?: string, size?: 'small' | 'large' }) => {
   const [error, setError] = useState(false);
   
   useEffect(() => {
     setError(false);
-  }, [iso]);
+  }, [iso, logo]);
+
+  if (logo && !error) {
+    return (
+      <div className={`flex items-center justify-center bg-zinc-900 rounded-full border border-zinc-800 flex-shrink-0 shadow-md ${
+        size === 'small' ? 'w-8 h-8 p-1' : 'w-12 h-12 sm:w-14 sm:h-14 p-2'
+      }`}>
+        <img
+          src={logo}
+          alt={name}
+          className="w-full h-full object-contain"
+          onError={() => setError(true)}
+        />
+      </div>
+    );
+  }
+
+  if (error && logo) {
+    const firstLetter = name ? name.charAt(0).toUpperCase() : '';
+    return (
+      <div className={`flex items-center justify-center bg-zinc-800 rounded-full border border-zinc-700 flex-shrink-0 font-black text-slate-200 shadow-inner select-none ${
+        size === 'small' ? 'w-8 h-8 text-[10px]' : 'w-12 h-12 sm:w-14 sm:h-14 text-lg'
+      }`} title={name}>
+        {firstLetter || '?'}
+      </div>
+    );
+  }
 
   if (error) {
     return (
@@ -483,7 +509,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                       <div className="flex items-center justify-between w-full">
                         {/* Home Team */}
                         <div className="flex items-center gap-1.5 min-w-0 flex-1 justify-start">
-                          <TeamFlag iso={m.home.iso} flag={m.home.flag} name={m.home.name} size="small" />
+                          <TeamFlag iso={m.home.iso} flag={m.home.flag} name={m.home.name} logo={m.home.logo} size="small" />
                           <span className="text-xs font-bold text-slate-200 truncate">{m.home.name}</span>
                         </div>
 
@@ -520,7 +546,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                         <div className="flex items-center gap-1.5 min-w-0 flex-1 justify-end text-left">
                           <span className="text-xs font-bold text-slate-200 truncate order-2 sm:order-1">{m.away.name}</span>
                           <span className="order-1 sm:order-2 ml-1.5 flex items-center">
-                            <TeamFlag iso={m.away.iso} flag={m.away.flag} name={m.away.name} size="small" />
+                            <TeamFlag iso={m.away.iso} flag={m.away.flag} name={m.away.name} logo={m.away.logo} size="small" />
                           </span>
                         </div>
                       </div>
