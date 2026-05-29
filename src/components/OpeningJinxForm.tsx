@@ -199,7 +199,7 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
               : isStarted
               ? 'המשחק כבר התחיל. הניחוש נעול! 🔒'
               : sport === 'ucl'
-                ? 'ריאל מדריד נגד דורטמונד. המנצחת זוכה בגביע.'
+                ? 'פריז סן ז\'רמן נגד ארסנל. המנצחת זוכה בגביע.'
               : sport === 'football'
                 ? (isOpening ? 'מקסיקו נגד דרום אפריקה. נאחס את התוצאה המדויקת.' : 'משחק ביתי של שלב הבתים של מונדיאל 2026.')
                 : `משחק ${match.stage} ברולאן גארוס. הטוב מ-${match.bestOf} מערכות.`}
