@@ -239,98 +239,113 @@ export interface Match {
   timestamp: number;   // Epoch timestamp for easy chronological sorting
 }
 
-// Deterministic helper to generate realistic World Cup 2026 schedules
+// Deterministic helper to retrieve the official Israel Hayom World Cup 2026 schedule info
+const OFFICIAL_SCHEDULE: Record<string, { dateStr: string, timeStr: string, channel: string, timestamp: number }> = {
+  // Group A
+  'A-1': { dateStr: 'יום חמישי, 11/06/2026', timeStr: '22:00', channel: 'כאן 11', timestamp: new Date('2026-06-11T22:00:00+03:00').getTime() },
+  'A-2': { dateStr: 'יום שישי, 12/06/2026', timeStr: '05:00', channel: 'ספורט 1', timestamp: new Date('2026-06-12T05:00:00+03:00').getTime() },
+  'A-3': { dateStr: 'יום חמישי, 25/06/2026', timeStr: '04:00', channel: 'כאן 11', timestamp: new Date('2026-06-25T04:00:00+03:00').getTime() },
+  'A-4': { dateStr: 'יום חמישי, 25/06/2026', timeStr: '04:00', channel: 'ספורט 1', timestamp: new Date('2026-06-25T04:00:00+03:00').getTime() },
+  'A-5': { dateStr: 'יום שישי, 19/06/2026', timeStr: '04:00', channel: 'כאן 11', timestamp: new Date('2026-06-19T04:00:00+03:00').getTime() },
+  'A-6': { dateStr: 'יום חמישי, 18/06/2026', timeStr: '19:00', channel: 'ספורט 1', timestamp: new Date('2026-06-18T19:00:00+03:00').getTime() },
+
+  // Group B
+  'B-1': { dateStr: 'יום שישי, 12/06/2026', timeStr: '22:00', channel: 'כאן 11', timestamp: new Date('2026-06-12T22:00:00+03:00').getTime() },
+  'B-2': { dateStr: 'יום שבת, 13/06/2026', timeStr: '22:00', channel: 'ספורט 1', timestamp: new Date('2026-06-13T22:00:00+03:00').getTime() },
+  'B-3': { dateStr: 'יום רביעי, 24/06/2026', timeStr: '22:00', channel: 'כאן 11', timestamp: new Date('2026-06-24T22:00:00+03:00').getTime() },
+  'B-4': { dateStr: 'יום רביעי, 24/06/2026', timeStr: '22:00', channel: 'ספורט 1', timestamp: new Date('2026-06-24T22:00:00+03:00').getTime() },
+  'B-5': { dateStr: 'יום שישי, 19/06/2026', timeStr: '01:00', channel: 'כאן 11', timestamp: new Date('2026-06-19T01:00:00+03:00').getTime() },
+  'B-6': { dateStr: 'יום חמישי, 18/06/2026', timeStr: '22:00', channel: 'ספורט 1', timestamp: new Date('2026-06-18T22:00:00+03:00').getTime() },
+
+  // Group C
+  'C-1': { dateStr: 'יום ראשון, 14/06/2026', timeStr: '01:00', channel: 'כאן 11', timestamp: new Date('2026-06-14T01:00:00+03:00').getTime() },
+  'C-2': { dateStr: 'יום ראשון, 14/06/2026', timeStr: '04:00', channel: 'ספורט 1', timestamp: new Date('2026-06-14T04:00:00+03:00').getTime() },
+  'C-3': { dateStr: 'יום חמישי, 25/06/2026', timeStr: '01:00', channel: 'כאן 11', timestamp: new Date('2026-06-25T01:00:00+03:00').getTime() },
+  'C-4': { dateStr: 'יום חמישי, 25/06/2026', timeStr: '01:00', channel: 'ספורט 1', timestamp: new Date('2026-06-25T01:00:00+03:00').getTime() },
+  'C-5': { dateStr: 'יום שבת, 20/06/2026', timeStr: '04:00', channel: 'כאן 11', timestamp: new Date('2026-06-20T04:00:00+03:00').getTime() },
+  'C-6': { dateStr: 'יום שבת, 20/06/2026', timeStr: '01:00', channel: 'ספורט 1', timestamp: new Date('2026-06-20T01:00:00+03:00').getTime() },
+
+  // Group D
+  'D-1': { dateStr: 'יום שבת, 13/06/2026', timeStr: '04:00', channel: 'כאן 11', timestamp: new Date('2026-06-13T04:00:00+03:00').getTime() },
+  'D-2': { dateStr: 'יום ראשון, 14/06/2026', timeStr: '07:00', channel: 'ספורט 1', timestamp: new Date('2026-06-14T07:00:00+03:00').getTime() },
+  'D-3': { dateStr: 'יום שישי, 26/06/2026', timeStr: '05:00', channel: 'כאן 11', timestamp: new Date('2026-06-26T05:00:00+03:00').getTime() },
+  'D-4': { dateStr: 'יום שישי, 26/06/2026', timeStr: '05:00', channel: 'ספורט 1', timestamp: new Date('2026-06-26T05:00:00+03:00').getTime() },
+  'D-5': { dateStr: 'יום שישי, 19/06/2026', timeStr: '22:00', channel: 'כאן 11', timestamp: new Date('2026-06-19T22:00:00+03:00').getTime() },
+  'D-6': { dateStr: 'יום שבת, 20/06/2026', timeStr: '07:00', channel: 'ספורט 1', timestamp: new Date('2026-06-20T07:00:00+03:00').getTime() },
+
+  // Group E
+  'E-1': { dateStr: 'יום ראשון, 14/06/2026', timeStr: '20:00', channel: 'כאן 11', timestamp: new Date('2026-06-14T20:00:00+03:00').getTime() },
+  'E-2': { dateStr: 'יום שני, 15/06/2026', timeStr: '02:00', channel: 'ספורט 1', timestamp: new Date('2026-06-15T02:00:00+03:00').getTime() },
+  'E-3': { dateStr: 'יום חמישי, 25/06/2026', timeStr: '23:00', channel: 'כאן 11', timestamp: new Date('2026-06-25T23:00:00+03:00').getTime() },
+  'E-4': { dateStr: 'יום חמישי, 25/06/2026', timeStr: '23:00', channel: 'ספורט 1', timestamp: new Date('2026-06-25T23:00:00+03:00').getTime() },
+  'E-5': { dateStr: 'יום שבת, 20/06/2026', timeStr: '23:00', channel: 'כאן 11', timestamp: new Date('2026-06-20T23:00:00+03:00').getTime() },
+  'E-6': { dateStr: 'יום ראשון, 21/06/2026', timeStr: '03:00', channel: 'ספורט 1', timestamp: new Date('2026-06-21T03:00:00+03:00').getTime() },
+
+  // Group F
+  'F-1': { dateStr: 'יום ראשון, 14/06/2026', timeStr: '23:00', channel: 'כאן 11', timestamp: new Date('2026-06-14T23:00:00+03:00').getTime() },
+  'F-2': { dateStr: 'יום שני, 15/06/2026', timeStr: '05:00', channel: 'ספורט 1', timestamp: new Date('2026-06-15T05:00:00+03:00').getTime() },
+  'F-3': { dateStr: 'יום שישי, 26/06/2026', timeStr: '02:00', channel: 'כאן 11', timestamp: new Date('2026-06-26T02:00:00+03:00').getTime() },
+  'F-4': { dateStr: 'יום שישי, 26/06/2026', timeStr: '02:00', channel: 'ספורט 1', timestamp: new Date('2026-06-26T02:00:00+03:00').getTime() },
+  'F-5': { dateStr: 'יום שבת, 20/06/2026', timeStr: '20:00', channel: 'כאן 11', timestamp: new Date('2026-06-20T20:00:00+03:00').getTime() },
+  'F-6': { dateStr: 'יום ראשון, 21/06/2026', timeStr: '07:00', channel: 'ספורט 1', timestamp: new Date('2026-06-21T07:00:00+03:00').getTime() },
+
+  // Group G
+  'G-1': { dateStr: 'יום שני, 15/06/2026', timeStr: '22:00', channel: 'כאן 11', timestamp: new Date('2026-06-15T22:00:00+03:00').getTime() },
+  'G-2': { dateStr: 'יום שלישי, 16/06/2026', timeStr: '04:00', channel: 'ספורט 1', timestamp: new Date('2026-06-16T04:00:00+03:00').getTime() },
+  'G-3': { dateStr: 'יום שבת, 27/06/2026', timeStr: '06:00', channel: 'כאן 11', timestamp: new Date('2026-06-27T06:00:00+03:00').getTime() },
+  'G-4': { dateStr: 'יום שבת, 27/06/2026', timeStr: '06:00', channel: 'ספורט 1', timestamp: new Date('2026-06-27T06:00:00+03:00').getTime() },
+  'G-5': { dateStr: 'יום ראשון, 21/06/2026', timeStr: '22:00', channel: 'כאן 11', timestamp: new Date('2026-06-21T22:00:00+03:00').getTime() },
+  'G-6': { dateStr: 'יום שני, 22/06/2026', timeStr: '04:00', channel: 'ספורט 1', timestamp: new Date('2026-06-22T04:00:00+03:00').getTime() },
+
+  // Group H
+  'H-1': { dateStr: 'יום שני, 15/06/2026', timeStr: '19:00', channel: 'כאן 11', timestamp: new Date('2026-06-15T19:00:00+03:00').getTime() },
+  'H-2': { dateStr: 'יום שלישי, 16/06/2026', timeStr: '01:00', channel: 'ספורט 1', timestamp: new Date('2026-06-16T01:00:00+03:00').getTime() },
+  'H-3': { dateStr: 'יום שבת, 27/06/2026', timeStr: '03:00', channel: 'כאן 11', timestamp: new Date('2026-06-27T03:00:00+03:00').getTime() },
+  'H-4': { dateStr: 'יום שבת, 27/06/2026', timeStr: '03:00', channel: 'ספורט 1', timestamp: new Date('2026-06-27T03:00:00+03:00').getTime() },
+  'H-5': { dateStr: 'יום ראשון, 21/06/2026', timeStr: '19:00', channel: 'כאן 11', timestamp: new Date('2026-06-21T19:00:00+03:00').getTime() },
+  'H-6': { dateStr: 'יום שני, 22/06/2026', timeStr: '01:00', channel: 'ספורט 1', timestamp: new Date('2026-06-22T01:00:00+03:00').getTime() },
+
+  // Group I
+  'I-1': { dateStr: 'יום שלישי, 16/06/2026', timeStr: '22:00', channel: 'כאן 11', timestamp: new Date('2026-06-16T22:00:00+03:00').getTime() },
+  'I-2': { dateStr: 'יום רביעי, 17/06/2026', timeStr: '01:00', channel: 'ספורט 1', timestamp: new Date('2026-06-17T01:00:00+03:00').getTime() },
+  'I-3': { dateStr: 'יום שישי, 26/06/2026', timeStr: '22:00', channel: 'כאן 11', timestamp: new Date('2026-06-26T22:00:00+03:00').getTime() },
+  'I-4': { dateStr: 'יום שישי, 26/06/2026', timeStr: '22:00', channel: 'ספורט 1', timestamp: new Date('2026-06-26T22:00:00+03:00').getTime() },
+  'I-5': { dateStr: 'יום שלישי, 23/06/2026', timeStr: '00:00', channel: 'כאן 11', timestamp: new Date('2026-06-23T00:00:00+03:00').getTime() },
+  'I-6': { dateStr: 'יום שלישי, 23/06/2026', timeStr: '03:00', channel: 'ספורט 1', timestamp: new Date('2026-06-23T03:00:00+03:00').getTime() },
+
+  // Group J
+  'J-1': { dateStr: 'יום רביעי, 17/06/2026', timeStr: '04:00', channel: 'כאן 11', timestamp: new Date('2026-06-17T04:00:00+03:00').getTime() },
+  'J-2': { dateStr: 'יום רביעי, 17/06/2026', timeStr: '07:00', channel: 'ספורט 1', timestamp: new Date('2026-06-17T07:00:00+03:00').getTime() },
+  'J-3': { dateStr: 'יום ראשון, 28/06/2026', timeStr: '05:00', channel: 'כאן 11', timestamp: new Date('2026-06-28T05:00:00+03:00').getTime() },
+  'J-4': { dateStr: 'יום ראשון, 28/06/2026', timeStr: '05:00', channel: 'ספורט 1', timestamp: new Date('2026-06-28T05:00:00+03:00').getTime() },
+  'J-5': { dateStr: 'יום שני, 22/06/2026', timeStr: '20:00', channel: 'כאן 11', timestamp: new Date('2026-06-22T20:00:00+03:00').getTime() },
+  'J-6': { dateStr: 'יום שלישי, 23/06/2026', timeStr: '06:00', channel: 'ספורט 1', timestamp: new Date('2026-06-23T06:00:00+03:00').getTime() },
+
+  // Group K
+  'K-1': { dateStr: 'יום רביעי, 17/06/2026', timeStr: '20:00', channel: 'כאן 11', timestamp: new Date('2026-06-17T20:00:00+03:00').getTime() },
+  'K-2': { dateStr: 'יום חמישי, 18/06/2026', timeStr: '05:00', channel: 'ספורט 1', timestamp: new Date('2026-06-18T05:00:00+03:00').getTime() },
+  'K-3': { dateStr: 'יום ראשון, 28/06/2026', timeStr: '02:30', channel: 'כאן 11', timestamp: new Date('2026-06-28T02:30:00+03:00').getTime() },
+  'K-4': { dateStr: 'יום ראשון, 28/06/2026', timeStr: '02:30', channel: 'ספורט 1', timestamp: new Date('2026-06-28T02:30:00+03:00').getTime() },
+  'K-5': { dateStr: 'יום שלישי, 23/06/2026', timeStr: '20:00', channel: 'כאן 11', timestamp: new Date('2026-06-23T20:00:00+03:00').getTime() },
+  'K-6': { dateStr: 'יום רביעי, 24/06/2026', timeStr: '05:00', channel: 'ספורט 1', timestamp: new Date('2026-06-24T05:00:00+03:00').getTime() },
+
+  // Group L
+  'L-1': { dateStr: 'יום רביעי, 17/06/2026', timeStr: '23:00', channel: 'כאן 11', timestamp: new Date('2026-06-17T23:00:00+03:00').getTime() },
+  'L-2': { dateStr: 'יום חמישי, 18/06/2026', timeStr: '02:00', channel: 'ספורט 1', timestamp: new Date('2026-06-18T02:00:00+03:00').getTime() },
+  'L-3': { dateStr: 'יום ראשון, 28/06/2026', timeStr: '00:00', channel: 'כאן 11', timestamp: new Date('2026-06-28T00:00:00+03:00').getTime() },
+  'L-4': { dateStr: 'יום ראשון, 28/06/2026', timeStr: '00:00', channel: 'ספורט 1', timestamp: new Date('2026-06-28T00:00:00+03:00').getTime() },
+  'L-5': { dateStr: 'יום שלישי, 23/06/2026', timeStr: '23:00', channel: 'כאן 11', timestamp: new Date('2026-06-23T23:00:00+03:00').getTime() },
+  'L-6': { dateStr: 'יום רביעי, 24/06/2026', timeStr: '02:00', channel: 'ספורט 1', timestamp: new Date('2026-06-24T02:00:00+03:00').getTime() }
+};
+
 const getMatchScheduleInfo = (group: string, matchIdx: number) => {
-  const groupIdx = group.charCodeAt(0) - 'A'.charCodeAt(0); // 0 to 11
-
-  let dateStr = "";
-  let timeStr = "";
-  let channel = "";
-  let timestamp = 0;
-
-  // Round 1 (matchIdx 1 & 2)
-  if (matchIdx === 1 || matchIdx === 2) {
-    const dayOffset = Math.floor(groupIdx / 2); // 0 to 5
-    const day = 11 + dayOffset;
-    const daysOfWeek = ["יום חמישי", "יום שישי", "יום שבת", "יום ראשון", "יום שני", "יום שלישי"];
-    dateStr = `${daysOfWeek[dayOffset]}, ${day}/06/2026`;
-
-    const isEven = groupIdx % 2 === 0;
-    if (isEven) {
-      timeStr = matchIdx === 1 ? "19:00" : "22:00";
-      channel = matchIdx === 1 ? "כאן 11" : "ספורט 1";
-      timestamp = new Date(`2026-06-${day}T${timeStr}:00+03:00`).getTime();
-    } else {
-      timeStr = matchIdx === 1 ? "01:00" : "04:00";
-      channel = matchIdx === 1 ? "כאן 11" : "ספורט 2";
-      const nextDay = day + 1;
-      timestamp = new Date(`2026-06-${nextDay}T${timeStr}:00+03:00`).getTime();
-    }
-  }
-  // Round 2 (matchIdx 3 & 4)
-  else if (matchIdx === 3 || matchIdx === 4) {
-    const dayOffset = Math.floor(groupIdx / 2); // 0 to 5
-    const day = 17 + dayOffset;
-    const daysOfWeek = ["יום רביעי", "יום חמישי", "יום שישי", "יום שבת", "יום ראשון", "יום שני"];
-    dateStr = `${daysOfWeek[dayOffset]}, ${day}/06/2026`;
-
-    const isEven = groupIdx % 2 === 0;
-    if (isEven) {
-      timeStr = matchIdx === 3 ? "19:00" : "22:00";
-      channel = matchIdx === 3 ? "כאן 11" : "ספורט 1";
-      timestamp = new Date(`2026-06-${day}T${timeStr}:00+03:00`).getTime();
-    } else {
-      timeStr = matchIdx === 3 ? "01:00" : "04:00";
-      channel = matchIdx === 3 ? "כאן 11" : "ספורט 2";
-      const nextDay = day + 1;
-      timestamp = new Date(`2026-06-${nextDay}T${timeStr}:00+03:00`).getTime();
-    }
-  }
-  // Round 3 (matchIdx 5 & 6) - Simultaneous matches!
-  else {
-    let day = 23;
-    let dayOfWeek = "";
-    if (groupIdx < 2) {
-      day = 23;
-      dayOfWeek = "יום שלישי";
-    } else if (groupIdx < 4) {
-      day = 24;
-      dayOfWeek = "יום רביעי";
-    } else if (groupIdx < 6) {
-      day = 25;
-      dayOfWeek = "יום חמישי";
-    } else if (groupIdx < 8) {
-      day = 26;
-      dayOfWeek = "יום שישי";
-    } else {
-      day = 27;
-      dayOfWeek = "יום שבת";
-    }
-    dateStr = `${dayOfWeek}, ${day}/06/2026`;
-
-    if (day < 27) {
-      const isEven = groupIdx % 2 === 0;
-      timeStr = isEven ? "20:00" : "23:00";
-      channel = matchIdx === 5 ? "כאן 11" : "ספורט 1";
-      timestamp = new Date(`2026-06-${day}T${timeStr}:00+03:00`).getTime();
-    } else {
-      // June 27: Group I (8), J (9), K (10), L (11)
-      if (groupIdx === 8) {
-        timeStr = "17:00";
-      } else if (groupIdx === 9) {
-        timeStr = "20:00";
-      } else if (groupIdx === 10) {
-        timeStr = "23:00";
-      } else {
-        timeStr = "02:00";
-      }
-      channel = matchIdx === 5 ? "כאן 11" : "ספורט 5";
-      const actualDay = groupIdx === 11 ? day + 1 : day;
-      timestamp = new Date(`2026-06-${actualDay}T${timeStr}:00+03:00`).getTime();
-    }
-  }
-
-  return { dateStr, timeStr, channel, timestamp };
+  const key = `${group}-${matchIdx}`;
+  return OFFICIAL_SCHEDULE[key] || {
+    dateStr: 'יום חמישי, 11/06/2026',
+    timeStr: '22:00',
+    channel: 'כאן 11',
+    timestamp: new Date('2026-06-11T22:00:00+03:00').getTime()
+  };
 };
 
 // Standard round-robin matches for a group
@@ -359,4 +374,5 @@ export const getGroupMatches = (group: string, teams: Team[]): Match[] => {
     };
   });
 };
+
 
