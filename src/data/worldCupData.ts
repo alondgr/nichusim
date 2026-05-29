@@ -544,7 +544,7 @@ export const TENNIS_MATCHES: Match[] = [
     id: 'rg_2026_qf_02',
     sport: 'tennis',
     home: { id: 'djokovic_qf', name: 'נובאק ג\'וקוביץ\'', flag: '🇷🇸', iso: 'rs' },
-    away: { id: 'ruud_qf', name: 'קספר רוד', flag: '🇳🇴', iso: 'no' },
+    away: { id: 'fonseca_qf', name: 'ז\'ואאו פונסקה', flag: '🇧🇷', iso: 'br' },
     stage: 'רבע גמר',
     status: 'live',
     actualHomeScore: 2,
