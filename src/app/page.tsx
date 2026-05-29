@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Show, SignUp, UserButton } from '@clerk/nextjs';
+import { Show, SignUp, UserButton, useAuth } from '@clerk/nextjs';
 import JinxIntroHome from '@/components/JinxIntroHome';
 import UsersList from '@/components/UsersList';
 import ScoringRules from '@/components/ScoringRules';
@@ -21,6 +21,9 @@ export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [sport, setSport] = useState<'football' | 'tennis' | 'ucl'>('ucl');
 
+  const { isLoaded, isSignedIn } = useAuth();
+  const [dataLoaded, setDataLoaded] = useState(false);
+
   const [fPreds, setFPreds] = useState<PredictionsState>({});
   const [fSub, setFSub] = useState(false);
 
@@ -32,62 +35,110 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true);
-    // Load Football
-    const sf = localStorage.getItem('nichusim_group_stage_predictions');
-    if (sf) {
-      try { setFPreds(JSON.parse(sf)); } catch (e) {}
-    }
-    if (localStorage.getItem('nichusim_group_stage_submitted') === 'true') {
-      setFSub(true);
-    }
-
-    // Load Tennis
-    const st = localStorage.getItem('nichusim_tennis_predictions');
-    if (st) {
-      try { setTPreds(JSON.parse(st)); } catch (e) {}
-    }
-    if (localStorage.getItem('nichusim_tennis_submitted') === 'true') {
-      setTSub(true);
-    }
-
-    // Load UCL
-    const su = localStorage.getItem('nichusim_ucl_predictions');
-    if (su) {
-      try { setUPreds(JSON.parse(su)); } catch (e) {}
-    }
-    if (localStorage.getItem('nichusim_ucl_submitted') === 'true') {
-      setUSub(true);
-    }
   }, []);
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      // Fetch from Cloud API
+      fetch('/api/predictions')
+        .then(res => res.json())
+        .then(data => {
+          if (!data.error) {
+            if (data.fPreds && Object.keys(data.fPreds).length > 0) {
+              setFPreds(data.fPreds);
+              localStorage.setItem('nichusim_group_stage_predictions', JSON.stringify(data.fPreds));
+            } else {
+              // Fallback to local if cloud is empty (first migration)
+              const sf = localStorage.getItem('nichusim_group_stage_predictions');
+              if (sf) try { setFPreds(JSON.parse(sf)); } catch (e) {}
+            }
+            if (data.fSub !== undefined) {
+              setFSub(data.fSub);
+              if (data.fSub) localStorage.setItem('nichusim_group_stage_submitted', 'true');
+            } else {
+              if (localStorage.getItem('nichusim_group_stage_submitted') === 'true') setFSub(true);
+            }
+
+            if (data.tPreds && Object.keys(data.tPreds).length > 0) {
+              setTPreds(data.tPreds);
+              localStorage.setItem('nichusim_tennis_predictions', JSON.stringify(data.tPreds));
+            } else {
+              const st = localStorage.getItem('nichusim_tennis_predictions');
+              if (st) try { setTPreds(JSON.parse(st)); } catch (e) {}
+            }
+            if (data.tSub !== undefined) {
+              setTSub(data.tSub);
+              if (data.tSub) localStorage.setItem('nichusim_tennis_submitted', 'true');
+            } else {
+              if (localStorage.getItem('nichusim_tennis_submitted') === 'true') setTSub(true);
+            }
+
+            if (data.uPreds && Object.keys(data.uPreds).length > 0) {
+              setUPreds(data.uPreds);
+              localStorage.setItem('nichusim_ucl_predictions', JSON.stringify(data.uPreds));
+            } else {
+              const su = localStorage.getItem('nichusim_ucl_predictions');
+              if (su) try { setUPreds(JSON.parse(su)); } catch (e) {}
+            }
+            if (data.uSub !== undefined) {
+              setUSub(data.uSub);
+              if (data.uSub) localStorage.setItem('nichusim_ucl_submitted', 'true');
+            } else {
+              if (localStorage.getItem('nichusim_ucl_submitted') === 'true') setUSub(true);
+            }
+          }
+          setDataLoaded(true);
+        })
+        .catch(() => {
+          setDataLoaded(true);
+        });
+    } else if (isLoaded && !isSignedIn) {
+      setDataLoaded(true);
+    }
+  }, [isLoaded, isSignedIn]);
+
+  const saveToCloud = (data: any) => {
+    fetch('/api/predictions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).catch(e => console.error("Cloud save error", e));
+  };
 
   const saveFPreds = (preds: PredictionsState) => {
     setFPreds(preds);
     localStorage.setItem('nichusim_group_stage_predictions', JSON.stringify(preds));
+    saveToCloud({ fPreds: preds });
   };
   const handleFSub = (val: boolean) => {
     setFSub(val);
     if (val) localStorage.setItem('nichusim_group_stage_submitted', 'true');
     else localStorage.removeItem('nichusim_group_stage_submitted');
+    saveToCloud({ fSub: val });
   };
 
   const saveTPreds = (preds: PredictionsState) => {
     setTPreds(preds);
     localStorage.setItem('nichusim_tennis_predictions', JSON.stringify(preds));
+    saveToCloud({ tPreds: preds });
   };
   const handleTSub = (val: boolean) => {
     setTSub(val);
     if (val) localStorage.setItem('nichusim_tennis_submitted', 'true');
     else localStorage.removeItem('nichusim_tennis_submitted');
+    saveToCloud({ tSub: val });
   };
 
   const saveUPreds = (preds: PredictionsState) => {
     setUPreds(preds);
     localStorage.setItem('nichusim_ucl_predictions', JSON.stringify(preds));
+    saveToCloud({ uPreds: preds });
   };
   const handleUSub = (val: boolean) => {
     setUSub(val);
     if (val) localStorage.setItem('nichusim_ucl_submitted', 'true');
     else localStorage.removeItem('nichusim_ucl_submitted');
+    saveToCloud({ uSub: val });
   };
 
   if (!mounted) return null;
@@ -109,7 +160,14 @@ export default function Home() {
       </Show>
 
       <Show when="signed-in">
-        {/* Sticky Header Layout Switcher */}
+        {!dataLoaded ? (
+          <div className="flex flex-col items-center justify-center min-h-[100svh] w-full text-white">
+            <div className="w-8 h-8 sm:w-12 sm:h-12 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin mb-4" />
+            <p className="text-zinc-400 font-bold text-sm">מסנכרן נתונים...</p>
+          </div>
+        ) : (
+          <>
+            {/* Sticky Header Layout Switcher */}
         <div className="sticky top-0 z-[60] w-full bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-800 p-3 flex items-center">
           <div className="absolute left-4">
             <UserButton />
@@ -171,6 +229,8 @@ export default function Home() {
             setSubmitted={sport === 'football' ? handleFSub : sport === 'ucl' ? handleUSub : handleTSub}
           />
         </div>
+        </>
+        )}
       </Show>
     </main>
   );
