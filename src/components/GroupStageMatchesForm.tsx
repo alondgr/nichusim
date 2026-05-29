@@ -3,7 +3,35 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { Trophy, ShieldCheck, Sparkles, Trash2, CheckCircle2, ChevronLeft, ChevronRight, Image as ImageIcon, X } from 'lucide-react';
-import { TEAMS, Team } from '@/data/worldCupData';
+import { TEAMS, Team, getGroupMatches, Match } from '@/data/worldCupData';
+
+const TeamFlag = ({ iso, flag, name, size = 'large' }: { iso: string, flag: string, name: string, size?: 'small' | 'large' }) => {
+  const [error, setError] = useState(false);
+  
+  useEffect(() => {
+    setError(false);
+  }, [iso]);
+
+  if (error) {
+    return (
+      <span className={`${size === 'small' ? 'text-lg' : 'text-3xl'} flex-shrink-0 select-none filter drop-shadow-md`} title={name}>
+        {flag}
+      </span>
+    );
+  }
+
+  return (
+    <img
+      src={`https://flagcdn.com/w80/${iso}.png`}
+      alt={name}
+      className={size === 'small' 
+        ? "w-5 h-3.5 object-cover rounded-sm shadow-sm border border-zinc-800 bg-zinc-950 flex-shrink-0"
+        : "w-14 h-9.5 object-cover rounded shadow-md border border-zinc-800 bg-zinc-900 flex-shrink-0"
+      }
+      onError={() => setError(true)}
+    />
+  );
+};
 
 // Realistic soccer score generator
 const generateRealisticScore = (): number => {
@@ -30,21 +58,7 @@ interface MatchPrediction {
 
 type PredictionsState = Record<string, MatchPrediction>;
 
-// Helper to generate the 6 standard round-robin matches for a group of 4 teams
-const getGroupMatches = (group: string, teams: Team[]) => {
-  const groupTeams = teams.filter(t => t.group === group);
-  if (groupTeams.length < 4) return [];
-
-  // Standard round robin matchups
-  return [
-    { id: `${group}-1`, home: groupTeams[0], away: groupTeams[1] },
-    { id: `${group}-2`, home: groupTeams[2], away: groupTeams[3] },
-    { id: `${group}-3`, home: groupTeams[0], away: groupTeams[3] },
-    { id: `${group}-4`, home: groupTeams[1], away: groupTeams[2] },
-    { id: `${group}-5`, home: groupTeams[0], away: groupTeams[2] },
-    { id: `${group}-6`, home: groupTeams[1], away: groupTeams[3] },
-  ];
-};
+// getGroupMatches is now imported from worldCupData.ts
 
 interface GroupStageMatchesFormProps {
   predictions: PredictionsState;
@@ -421,14 +435,7 @@ export default function GroupStageMatchesForm({ predictions, savePredictions, su
                     >
                       {/* Home Team */}
                       <div className="flex items-center gap-1.5 min-w-0 flex-1 justify-start">
-                        <img
-                          src={`https://flagcdn.com/w40/${m.home.iso}.png`}
-                          alt={m.home.name}
-                          className="w-5 h-3.5 object-cover rounded-sm shadow-sm border border-zinc-800 bg-zinc-950 flex-shrink-0"
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                          }}
-                        />
+                        <TeamFlag iso={m.home.iso} flag={m.home.flag} name={m.home.name} size="small" />
                         <span className="text-xs font-bold text-slate-200 truncate">{m.home.name}</span>
                       </div>
 
@@ -464,14 +471,9 @@ export default function GroupStageMatchesForm({ predictions, savePredictions, su
                       {/* Away Team */}
                       <div className="flex items-center gap-1.5 min-w-0 flex-1 justify-end text-left">
                         <span className="text-xs font-bold text-slate-200 truncate order-2 sm:order-1">{m.away.name}</span>
-                        <img
-                          src={`https://flagcdn.com/w40/${m.away.iso}.png`}
-                          alt={m.away.name}
-                          className="w-5 h-3.5 object-cover rounded-sm shadow-sm border border-zinc-800 bg-zinc-950 flex-shrink-0 order-1 sm:order-2 ml-1.5"
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                          }}
-                        />
+                        <span className="order-1 sm:order-2 ml-1.5 flex items-center">
+                          <TeamFlag iso={m.away.iso} flag={m.away.flag} name={m.away.name} size="small" />
+                        </span>
                       </div>
                     </div>
                   );

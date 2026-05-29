@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { Target, Trophy, ChevronRight, ChevronLeft, Lock } from 'lucide-react';
-import { TEAMS, Team, PredictionsState } from '@/data/worldCupData';
+import { TEAMS, Team, PredictionsState, getGroupMatches, Match } from '@/data/worldCupData';
 
 const GROUPS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
 const GROUP_HEBREW: Record<string, string> = {
@@ -12,20 +12,35 @@ const GROUP_HEBREW: Record<string, string> = {
   I: 'בית ט\'', J: 'בית י\'', K: 'בית י"א', L: 'בית י"ב'
 };
 
-const getGroupMatches = (group: string, teams: Team[]) => {
-  const groupTeams = teams.filter(t => t.group === group);
-  if (groupTeams.length < 4) return [];
-  return [
-    { id: `${group}-1`, home: groupTeams[0], away: groupTeams[1], group },
-    { id: `${group}-2`, home: groupTeams[2], away: groupTeams[3], group },
-    { id: `${group}-3`, home: groupTeams[0], away: groupTeams[3], group },
-    { id: `${group}-4`, home: groupTeams[1], away: groupTeams[2], group },
-    { id: `${group}-5`, home: groupTeams[0], away: groupTeams[2], group },
-    { id: `${group}-6`, home: groupTeams[1], away: groupTeams[3], group },
-  ];
-};
+const ALL_MATCHES = GROUPS.flatMap(g => getGroupMatches(g, TEAMS)).sort((a, b) => a.timestamp - b.timestamp);
 
-const ALL_MATCHES = GROUPS.flatMap(g => getGroupMatches(g, TEAMS));
+const TeamFlag = ({ iso, flag, name, size = 'large' }: { iso: string, flag: string, name: string, size?: 'small' | 'large' }) => {
+  const [error, setError] = useState(false);
+  
+  useEffect(() => {
+    setError(false);
+  }, [iso]);
+
+  if (error) {
+    return (
+      <span className={`${size === 'small' ? 'text-lg' : 'text-3xl'} flex-shrink-0 select-none filter drop-shadow-md`} title={name}>
+        {flag}
+      </span>
+    );
+  }
+
+  return (
+    <img
+      src={`https://flagcdn.com/w80/${iso}.png`}
+      alt={name}
+      className={size === 'small' 
+        ? "w-5 h-3.5 object-cover rounded-sm shadow-sm border border-zinc-800 bg-zinc-950 flex-shrink-0"
+        : "w-14 h-9.5 object-cover rounded shadow-md border border-zinc-800 bg-zinc-900 flex-shrink-0"
+      }
+      onError={() => setError(true)}
+    />
+  );
+};
 
 interface OpeningJinxFormProps {
   predictions: PredictionsState;
@@ -172,56 +187,58 @@ export default function OpeningJinxForm({ predictions, savePredictions, submitte
               exit="exit"
               className="w-full"
             >
-              <div className="flex items-center justify-between bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5 sm:p-6">
-                
-                {/* Team 1: Home */}
-                <div className="flex flex-col items-center space-y-3 flex-1 min-w-0">
-                  <img
-                    src={`https://flagcdn.com/w80/${match.home.iso}.png`}
-                    alt={match.home.name}
-                    className="w-14 h-9.5 object-cover rounded shadow-md border border-zinc-800 bg-zinc-900 flex-shrink-0"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                    }}
-                  />
-                  <span className="font-bold text-xs sm:text-sm text-slate-200 truncate w-full text-center">{match.home.name}</span>
-                  <input
-                    type="number"
-                    min="0"
-                    max="10"
-                    required
-                    disabled={submitted}
-                    value={p.homeScore}
-                    onChange={(e) => handleScoreChange(match.id, 'home', e.target.value)}
-                    className="w-14 h-14 sm:w-16 sm:h-16 text-center text-xl sm:text-2xl font-black bg-zinc-950 border border-zinc-700 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-slate-100 disabled:opacity-90 disabled:text-indigo-400 disabled:border-indigo-500/30"
-                    dir="ltr"
-                  />
+              <div className="flex flex-col bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5 sm:p-6">
+                {/* Match Schedule & Channel Info */}
+                <div className="flex flex-col items-center space-y-1 mb-4 pb-3.5 border-b border-zinc-800/60 select-none">
+                  <div className="text-[11px] font-bold text-indigo-400 flex items-center gap-1.5 bg-indigo-500/10 px-2.5 py-1 rounded-full border border-indigo-500/15 shadow-sm">
+                    <span>📅</span>
+                    <span>{match.dateStr}</span>
+                    <span className="text-zinc-700 font-extrabold">|</span>
+                    <span>⏰</span>
+                    <span dir="ltr">{match.timeStr} שעון ישראל</span>
+                  </div>
+                  <div className="text-[10px] font-bold text-emerald-400 flex items-center gap-1 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/15">
+                    <span>📺</span>
+                    <span>שידור ישיר: {match.channel}</span>
+                  </div>
                 </div>
 
-                <div className="text-xl font-black text-slate-600 mb-6 px-3 flex-shrink-0">-</div>
+                <div className="flex items-center justify-between">
+                  {/* Team 1: Home */}
+                  <div className="flex flex-col items-center space-y-3 flex-1 min-w-0">
+                    <TeamFlag iso={match.home.iso} flag={match.home.flag} name={match.home.name} />
+                    <span className="font-bold text-xs sm:text-sm text-slate-200 truncate w-full text-center">{match.home.name}</span>
+                    <input
+                      type="number"
+                      min="0"
+                      max="10"
+                      required
+                      disabled={submitted}
+                      value={p.homeScore}
+                      onChange={(e) => handleScoreChange(match.id, 'home', e.target.value)}
+                      className="w-14 h-14 sm:w-16 sm:h-16 text-center text-xl sm:text-2xl font-black bg-zinc-950 border border-zinc-700 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-slate-100 disabled:opacity-90 disabled:text-indigo-400 disabled:border-indigo-500/30"
+                      dir="ltr"
+                    />
+                  </div>
 
-                {/* Team 2: Away */}
-                <div className="flex flex-col items-center space-y-3 flex-1 min-w-0">
-                  <img
-                    src={`https://flagcdn.com/w80/${match.away.iso}.png`}
-                    alt={match.away.name}
-                    className="w-14 h-9.5 object-cover rounded shadow-md border border-zinc-800 bg-zinc-900 flex-shrink-0"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                    }}
-                  />
-                  <span className="font-bold text-xs sm:text-sm text-slate-200 truncate w-full text-center">{match.away.name}</span>
-                  <input
-                    type="number"
-                    min="0"
-                    max="10"
-                    required
-                    disabled={submitted}
-                    value={p.awayScore}
-                    onChange={(e) => handleScoreChange(match.id, 'away', e.target.value)}
-                    className="w-14 h-14 sm:w-16 sm:h-16 text-center text-xl sm:text-2xl font-black bg-zinc-950 border border-zinc-700 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-slate-100 disabled:opacity-90 disabled:text-indigo-400 disabled:border-indigo-500/30"
-                    dir="ltr"
-                  />
+                  <div className="text-xl font-black text-slate-600 mb-6 px-3 flex-shrink-0">-</div>
+
+                  {/* Team 2: Away */}
+                  <div className="flex flex-col items-center space-y-3 flex-1 min-w-0">
+                    <TeamFlag iso={match.away.iso} flag={match.away.flag} name={match.away.name} />
+                    <span className="font-bold text-xs sm:text-sm text-slate-200 truncate w-full text-center">{match.away.name}</span>
+                    <input
+                      type="number"
+                      min="0"
+                      max="10"
+                      required
+                      disabled={submitted}
+                      value={p.awayScore}
+                      onChange={(e) => handleScoreChange(match.id, 'away', e.target.value)}
+                      className="w-14 h-14 sm:w-16 sm:h-16 text-center text-xl sm:text-2xl font-black bg-zinc-950 border border-zinc-700 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-slate-100 disabled:opacity-90 disabled:text-indigo-400 disabled:border-indigo-500/30"
+                      dir="ltr"
+                    />
+                  </div>
                 </div>
               </div>
             </motion.div>

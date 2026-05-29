@@ -227,3 +227,136 @@ export const TOP_SCORERS: Player[] = [
     imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/b/b0/BFA_2023_-2_Heung-Min_Son_%28cropped%29.jpg' 
   }
 ];
+
+export interface Match {
+  id: string;
+  home: Team;
+  away: Team;
+  group: string;
+  dateStr: string;     // Hebrew date, e.g. "יום חמישי, 11/06/2026"
+  timeStr: string;     // Israel time, e.g. "19:00"
+  channel: string;     // Israeli channel, e.g. "כאן 11"
+  timestamp: number;   // Epoch timestamp for easy chronological sorting
+}
+
+// Deterministic helper to generate realistic World Cup 2026 schedules
+const getMatchScheduleInfo = (group: string, matchIdx: number) => {
+  const groupIdx = group.charCodeAt(0) - 'A'.charCodeAt(0); // 0 to 11
+
+  let dateStr = "";
+  let timeStr = "";
+  let channel = "";
+  let timestamp = 0;
+
+  // Round 1 (matchIdx 1 & 2)
+  if (matchIdx === 1 || matchIdx === 2) {
+    const dayOffset = Math.floor(groupIdx / 2); // 0 to 5
+    const day = 11 + dayOffset;
+    const daysOfWeek = ["יום חמישי", "יום שישי", "יום שבת", "יום ראשון", "יום שני", "יום שלישי"];
+    dateStr = `${daysOfWeek[dayOffset]}, ${day}/06/2026`;
+
+    const isEven = groupIdx % 2 === 0;
+    if (isEven) {
+      timeStr = matchIdx === 1 ? "19:00" : "22:00";
+      channel = matchIdx === 1 ? "כאן 11" : "ספורט 1";
+      timestamp = new Date(`2026-06-${day}T${timeStr}:00+03:00`).getTime();
+    } else {
+      timeStr = matchIdx === 1 ? "01:00" : "04:00";
+      channel = matchIdx === 1 ? "כאן 11" : "ספורט 2";
+      const nextDay = day + 1;
+      timestamp = new Date(`2026-06-${nextDay}T${timeStr}:00+03:00`).getTime();
+    }
+  }
+  // Round 2 (matchIdx 3 & 4)
+  else if (matchIdx === 3 || matchIdx === 4) {
+    const dayOffset = Math.floor(groupIdx / 2); // 0 to 5
+    const day = 17 + dayOffset;
+    const daysOfWeek = ["יום רביעי", "יום חמישי", "יום שישי", "יום שבת", "יום ראשון", "יום שני"];
+    dateStr = `${daysOfWeek[dayOffset]}, ${day}/06/2026`;
+
+    const isEven = groupIdx % 2 === 0;
+    if (isEven) {
+      timeStr = matchIdx === 3 ? "19:00" : "22:00";
+      channel = matchIdx === 3 ? "כאן 11" : "ספורט 1";
+      timestamp = new Date(`2026-06-${day}T${timeStr}:00+03:00`).getTime();
+    } else {
+      timeStr = matchIdx === 3 ? "01:00" : "04:00";
+      channel = matchIdx === 3 ? "כאן 11" : "ספורט 2";
+      const nextDay = day + 1;
+      timestamp = new Date(`2026-06-${nextDay}T${timeStr}:00+03:00`).getTime();
+    }
+  }
+  // Round 3 (matchIdx 5 & 6) - Simultaneous matches!
+  else {
+    let day = 23;
+    let dayOfWeek = "";
+    if (groupIdx < 2) {
+      day = 23;
+      dayOfWeek = "יום שלישי";
+    } else if (groupIdx < 4) {
+      day = 24;
+      dayOfWeek = "יום רביעי";
+    } else if (groupIdx < 6) {
+      day = 25;
+      dayOfWeek = "יום חמישי";
+    } else if (groupIdx < 8) {
+      day = 26;
+      dayOfWeek = "יום שישי";
+    } else {
+      day = 27;
+      dayOfWeek = "יום שבת";
+    }
+    dateStr = `${dayOfWeek}, ${day}/06/2026`;
+
+    if (day < 27) {
+      const isEven = groupIdx % 2 === 0;
+      timeStr = isEven ? "20:00" : "23:00";
+      channel = matchIdx === 5 ? "כאן 11" : "ספורט 1";
+      timestamp = new Date(`2026-06-${day}T${timeStr}:00+03:00`).getTime();
+    } else {
+      // June 27: Group I (8), J (9), K (10), L (11)
+      if (groupIdx === 8) {
+        timeStr = "17:00";
+      } else if (groupIdx === 9) {
+        timeStr = "20:00";
+      } else if (groupIdx === 10) {
+        timeStr = "23:00";
+      } else {
+        timeStr = "02:00";
+      }
+      channel = matchIdx === 5 ? "כאן 11" : "ספורט 5";
+      const actualDay = groupIdx === 11 ? day + 1 : day;
+      timestamp = new Date(`2026-06-${actualDay}T${timeStr}:00+03:00`).getTime();
+    }
+  }
+
+  return { dateStr, timeStr, channel, timestamp };
+};
+
+// Standard round-robin matches for a group
+export const getGroupMatches = (group: string, teams: Team[]): Match[] => {
+  const groupTeams = teams.filter(t => t.group === group);
+  if (groupTeams.length < 4) return [];
+
+  const basicMatches = [
+    { idx: 1, home: groupTeams[0], away: groupTeams[1] },
+    { idx: 2, home: groupTeams[2], away: groupTeams[3] },
+    { idx: 3, home: groupTeams[0], away: groupTeams[3] },
+    { idx: 4, home: groupTeams[1], away: groupTeams[2] },
+    { idx: 5, home: groupTeams[0], away: groupTeams[2] },
+    { idx: 6, home: groupTeams[1], away: groupTeams[3] },
+  ];
+
+  return basicMatches.map(({ idx, home, away }) => {
+    const id = `${group}-${idx}`;
+    const info = getMatchScheduleInfo(group, idx);
+    return {
+      id,
+      home,
+      away,
+      group,
+      ...info
+    };
+  });
+};
+
