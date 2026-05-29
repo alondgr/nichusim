@@ -433,6 +433,97 @@ export const TENNIS_MATCHES: Match[] = [
     channel: 'ספורט 5',
     timestamp: new Date('2026-05-29T18:30:00+03:00').getTime(),
     bestOf: 5
+  },
+  {
+    id: 'rg_2026_4r_01',
+    sport: 'tennis',
+    home: { id: 'alcaraz', name: 'קרלוס אלקראס', flag: '🇪🇸', iso: 'es' },
+    away: { id: 'sinner', name: 'יאניק סינר', flag: '🇮🇹', iso: 'it' },
+    stage: 'שמינית גמר',
+    status: 'upcoming',
+    dateStr: 'יום ראשון, 31/05/2026',
+    timeStr: '15:00',
+    channel: 'ספורט 5',
+    timestamp: new Date('2026-05-31T15:00:00+03:00').getTime(),
+    bestOf: 5
+  },
+  {
+    id: 'rg_2026_4r_02',
+    sport: 'tennis',
+    home: { id: 'sabalenka', name: 'ארינה סבלנקה', flag: '🏳️', iso: 'un' },
+    away: { id: 'gauff', name: 'קוקו גוף', flag: '🇺🇸', iso: 'us' },
+    stage: 'שמינית גמר',
+    status: 'upcoming',
+    dateStr: 'יום שני, 01/06/2026',
+    timeStr: '12:00',
+    channel: 'ספורט 5 לייב',
+    timestamp: new Date('2026-06-01T12:00:00+03:00').getTime(),
+    bestOf: 3
+  },
+  {
+    id: 'rg_2026_qf_01',
+    sport: 'tennis',
+    home: { id: 'medvedev', name: 'דניאיל מדבדב', flag: '🏳️', iso: 'un' },
+    away: { id: 'tsitsipas', name: 'סטפנוס ציציפס', flag: '🇬🇷', iso: 'gr' },
+    stage: 'רבע גמר',
+    status: 'upcoming',
+    dateStr: 'יום שלישי, 02/06/2026',
+    timeStr: '16:00',
+    channel: 'ספורט 5 פלוס',
+    timestamp: new Date('2026-06-02T16:00:00+03:00').getTime(),
+    bestOf: 5
+  },
+  {
+    id: 'rg_2026_qf_02',
+    sport: 'tennis',
+    home: { id: 'rybakina', name: 'ילנה ריבאקינה', flag: '🇰🇿', iso: 'kz' },
+    away: { id: 'jabeur', name: 'אונס ג\'אבור', flag: '🇹🇳', iso: 'tn' },
+    stage: 'רבע גמר',
+    status: 'upcoming',
+    dateStr: 'יום רביעי, 03/06/2026',
+    timeStr: '14:30',
+    channel: 'ספורט 5',
+    timestamp: new Date('2026-06-03T14:30:00+03:00').getTime(),
+    bestOf: 3
+  },
+  {
+    id: 'rg_2026_sf_01',
+    sport: 'tennis',
+    home: { id: 'tbd_sf1_h', name: 'מנצח רבע גמר 1', flag: '❓', iso: 'un' },
+    away: { id: 'tbd_sf1_a', name: 'מנצח רבע גמר 2', flag: '❓', iso: 'un' },
+    stage: 'חצי גמר',
+    status: 'upcoming',
+    dateStr: 'יום שישי, 05/06/2026',
+    timeStr: '15:30',
+    channel: 'ספורט 5',
+    timestamp: new Date('2026-06-05T15:30:00+03:00').getTime(),
+    bestOf: 5
+  },
+  {
+    id: 'rg_2026_sf_02',
+    sport: 'tennis',
+    home: { id: 'tbd_sf2_h', name: 'מנצח רבע גמר 3', flag: '❓', iso: 'un' },
+    away: { id: 'tbd_sf2_a', name: 'מנצח רבע גמר 4', flag: '❓', iso: 'un' },
+    stage: 'חצי גמר',
+    status: 'upcoming',
+    dateStr: 'יום שישי, 05/06/2026',
+    timeStr: '19:00',
+    channel: 'ספורט 5 פלוס',
+    timestamp: new Date('2026-06-05T19:00:00+03:00').getTime(),
+    bestOf: 5
+  },
+  {
+    id: 'rg_2026_f_01',
+    sport: 'tennis',
+    home: { id: 'tbd_f_h', name: 'מנצח חצי גמר 1', flag: '🏆', iso: 'un' },
+    away: { id: 'tbd_f_a', name: 'מנצח חצי גמר 2', flag: '🏆', iso: 'un' },
+    stage: 'גמר',
+    status: 'upcoming',
+    dateStr: 'יום ראשון, 07/06/2026',
+    timeStr: '16:00',
+    channel: 'ספורט 5',
+    timestamp: new Date('2026-06-07T16:00:00+03:00').getTime(),
+    bestOf: 5
   }
 ];
 
