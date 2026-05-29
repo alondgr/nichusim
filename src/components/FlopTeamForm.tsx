@@ -5,6 +5,34 @@ import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { Trophy, Search, ChevronDown, Check } from 'lucide-react';
 import { TEAMS } from '@/data/worldCupData';
 
+const TeamFlag = ({ iso, flag, name, size = 'large' }: { iso: string, flag: string, name: string, size?: 'small' | 'large' }) => {
+  const [error, setError] = useState(false);
+  
+  useEffect(() => {
+    setError(false);
+  }, [iso]);
+
+  if (error) {
+    return (
+      <span className={`${size === 'small' ? 'text-lg' : 'text-3xl'} flex-shrink-0 select-none filter drop-shadow-md`} title={name}>
+        {flag}
+      </span>
+    );
+  }
+
+  return (
+    <img
+      src={`https://flagcdn.com/w80/${iso}.png`}
+      alt={name}
+      className={size === 'small' 
+        ? "w-7 h-5 object-cover rounded shadow-sm border border-zinc-800 bg-zinc-900 flex-shrink-0"
+        : "w-12 h-8 object-cover rounded shadow-md border border-zinc-800 bg-zinc-900 flex-shrink-0"
+      }
+      onError={() => setError(true)}
+    />
+  );
+};
+
 export default function FlopTeamForm() {
   const [selectedTeam, setSelectedTeam] = useState<string>('');
   const [isOpen, setIsOpen] = useState(false);
@@ -90,7 +118,7 @@ export default function FlopTeamForm() {
         <h2 className="text-3xl font-extrabold text-slate-100 tracking-tight">🏆 האלופה ננעלה!</h2>
         <div className="flex flex-col items-center space-y-4 bg-zinc-900/60 backdrop-blur border border-zinc-800 rounded-3xl p-6 w-full shadow-xl">
           <div className="flex items-center space-x-3 space-x-reverse">
-            <span className="text-3xl">{selectedTeamData.flag}</span>
+            <TeamFlag iso={selectedTeamData.iso} flag={selectedTeamData.flag} name={selectedTeamData.name} />
             <span className="text-2xl font-bold text-slate-200">{selectedTeamData.name}</span>
           </div>
           <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
@@ -147,7 +175,7 @@ export default function FlopTeamForm() {
               >
                 {selectedTeamData ? (
                   <div className="flex items-center space-x-3 space-x-reverse">
-                    <span className="text-2xl select-none">{selectedTeamData.flag}</span>
+                    <TeamFlag iso={selectedTeamData.iso} flag={selectedTeamData.flag} name={selectedTeamData.name} size="small" />
                     <span>{selectedTeamData.name}</span>
                   </div>
                 ) : (
@@ -197,7 +225,7 @@ export default function FlopTeamForm() {
                               className={`w-full text-right p-3.5 hover:bg-zinc-800/50 flex items-center justify-between text-slate-200 transition-colors ${isSelected ? 'bg-amber-500/10 hover:bg-amber-500/20' : ''}`}
                             >
                               <div className="flex items-center space-x-3 space-x-reverse">
-                                <span className="text-2xl select-none">{team.flag}</span>
+                                <TeamFlag iso={team.iso} flag={team.flag} name={team.name} size="small" />
                                 <span className={`text-base ${isSelected ? 'font-bold text-amber-400' : ''}`}>{team.name}</span>
                               </div>
                               {isSelected && <Check className="w-5 h-5 text-amber-500 ml-2" />}
