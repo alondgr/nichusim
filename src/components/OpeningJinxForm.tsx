@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { Target, Trophy, ChevronRight, ChevronLeft, Lock } from 'lucide-react';
+import { Target, Trophy, ChevronRight, ChevronLeft, Lock, Radio } from 'lucide-react';
 import { Match, PredictionsState } from '@/data/worldCupData';
 
 const GROUP_HEBREW: Record<string, string> = {
@@ -84,26 +84,32 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
   useEffect(() => {
     setMounted(true);
     setNow(Date.now()); // Sync immediately on client mount
-    const savedIdxKey = sport === 'football' ? 'nichusim_carousel_index' : 'nichusim_tennis_carousel_index';
-    const savedIdx = localStorage.getItem(savedIdxKey);
-    if (savedIdx !== null) {
-      const parsed = parseInt(savedIdx, 10);
-      if (parsed >= 0 && parsed < matches.length) {
-        setCurrentIndex(parsed);
-      }
+    
+    const liveIndex = matches.findIndex(m => m.status === 'live');
+    if (liveIndex !== -1) {
+      setCurrentIndex(liveIndex);
     } else {
-      setCurrentIndex(0);
+      const savedIdxKey = sport === 'football' ? 'nichusim_carousel_index' : sport === 'ucl' ? 'nichusim_ucl_carousel_index' : 'nichusim_tennis_carousel_index';
+      const savedIdx = localStorage.getItem(savedIdxKey);
+      if (savedIdx !== null) {
+        const parsed = parseInt(savedIdx, 10);
+        if (parsed >= 0 && parsed < matches.length) {
+          setCurrentIndex(parsed);
+        }
+      } else {
+        setCurrentIndex(0);
+      }
     }
 
     const interval = setInterval(() => setNow(Date.now()), 60000);
     return () => clearInterval(interval);
-  }, [sport, matches.length]);
+  }, [sport, matches]);
 
   const handleIndexChange = (newIdx: number, dir: number) => {
     if (newIdx >= 0 && newIdx < matches.length) {
       setDirection(dir);
       setCurrentIndex(newIdx);
-      const savedIdxKey = sport === 'football' ? 'nichusim_carousel_index' : 'nichusim_tennis_carousel_index';
+      const savedIdxKey = sport === 'football' ? 'nichusim_carousel_index' : sport === 'ucl' ? 'nichusim_ucl_carousel_index' : 'nichusim_tennis_carousel_index';
       localStorage.setItem(savedIdxKey, String(newIdx));
     }
   };
@@ -165,6 +171,7 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
   const GRACE_PERIOD_MS = 15 * 60 * 1000; // 15 minutes
   const isStarted = match.timestamp + GRACE_PERIOD_MS <= now;
   const isInputDisabled = submitted || isStarted;
+  const liveIndex = matches.findIndex(m => m.status === 'live');
 
   return (
     <div className="w-full max-w-md p-2 sm:p-6 z-10">
@@ -338,6 +345,20 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
             <ChevronLeft className="w-4 h-4" />
           </button>
         </div>
+
+        {liveIndex !== -1 && currentIndex !== liveIndex && (
+          <button
+            type="button"
+            onClick={() => {
+              setDirection(liveIndex > currentIndex ? 1 : -1);
+              setCurrentIndex(liveIndex);
+            }}
+            className="w-full mt-3 py-2 px-4 bg-red-600 hover:bg-red-500 text-white rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-all shadow-md animate-pulse active:scale-95 select-none"
+          >
+            <Radio className="w-4.5 h-4.5" />
+            <span>חזור למשחק הפעיל (לייב) 📺</span>
+          </button>
+        )}
 
         {/* Submit / Unlock global state */}
         {submitted && (
