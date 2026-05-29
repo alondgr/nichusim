@@ -312,7 +312,7 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col items-center space-y-3 flex-1 min-w-0">
                     <TeamFlag iso={match.home.iso} flag={match.home.flag} name={match.home.name} logo={match.home.logo} />
-                    <span className="font-bold text-xs sm:text-sm text-slate-200 truncate w-full text-center">{match.home.name}</span>
+                    <span className="font-bold text-xs sm:text-sm text-slate-200 truncate w-full text-center" dir={/^[a-zA-Z]/.test(match.home.name) ? 'ltr' : 'rtl'}>{match.home.name}</span>
                     <input
                       type="number"
                       min="0"
@@ -330,7 +330,7 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
 
                   <div className="flex flex-col items-center space-y-3 flex-1 min-w-0">
                     <TeamFlag iso={match.away.iso} flag={match.away.flag} name={match.away.name} logo={match.away.logo} />
-                    <span className="font-bold text-xs sm:text-sm text-slate-200 truncate w-full text-center">{match.away.name}</span>
+                    <span className="font-bold text-xs sm:text-sm text-slate-200 truncate w-full text-center" dir={/^[a-zA-Z]/.test(match.away.name) ? 'ltr' : 'rtl'}>{match.away.name}</span>
                     <input
                       type="number"
                       min="0"
@@ -357,26 +357,41 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
                           <span className="block text-xs font-extrabold text-slate-200 text-right">
                             {bet.question}
                           </span>
-                          <div className="grid grid-cols-2 gap-2 text-right">
-                            {bet.options.map((opt) => {
-                              const isSelected = selectedOpt === opt;
-                              return (
-                                <button
-                                  key={opt}
-                                  type="button"
-                                  disabled={isInputDisabled}
-                                  onClick={() => handleMultiPropChange(match.id, bet.id, opt)}
-                                  className={`px-3 py-2 text-xs font-bold rounded-xl border text-center transition-all ${
-                                    isSelected
-                                      ? 'bg-blue-600 border-blue-500 text-white shadow-md shadow-blue-950/20'
-                                      : 'bg-zinc-950 border-zinc-850 text-slate-400 hover:text-slate-200 hover:bg-zinc-900/40'
-                                  } disabled:opacity-85 disabled:cursor-not-allowed`}
-                                >
-                                  {opt}
-                                </button>
-                              );
-                            })}
-                          </div>
+                          {bet.options.length === 0 ? (
+                            <div className="w-full">
+                              <input
+                                type="number"
+                                min="0"
+                                placeholder="הזינו מספר..."
+                                disabled={isInputDisabled}
+                                value={selectedOpt}
+                                onChange={(e) => handleMultiPropChange(match.id, bet.id, e.target.value)}
+                                className="w-full px-4 py-2.5 text-center text-sm font-black bg-zinc-950 border border-zinc-850 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-slate-100 disabled:opacity-85 disabled:cursor-not-allowed transition-colors"
+                                dir="ltr"
+                              />
+                            </div>
+                          ) : (
+                            <div className="grid grid-cols-2 gap-2 text-right">
+                              {bet.options.map((opt) => {
+                                const isSelected = selectedOpt === opt;
+                                return (
+                                  <button
+                                    key={opt}
+                                    type="button"
+                                    disabled={isInputDisabled}
+                                    onClick={() => handleMultiPropChange(match.id, bet.id, opt)}
+                                    className={`px-3 py-2 text-xs font-bold rounded-xl border text-center transition-all ${
+                                      isSelected
+                                        ? 'bg-blue-600 border-blue-500 text-white shadow-md shadow-blue-950/20'
+                                        : 'bg-zinc-950 border-zinc-850 text-slate-400 hover:text-slate-200 hover:bg-zinc-900/40'
+                                    } disabled:opacity-85 disabled:cursor-not-allowed`}
+                                  >
+                                    {opt}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          )}
                         </div>
                       );
                     })}

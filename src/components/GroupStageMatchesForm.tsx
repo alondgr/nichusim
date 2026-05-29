@@ -586,7 +586,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                         {/* Home Team */}
                         <div className="flex items-center gap-1.5 min-w-0 flex-1 justify-start">
                           <TeamFlag iso={m.home.iso} flag={m.home.flag} name={m.home.name} logo={m.home.logo} size="small" />
-                          <span className={`text-xs font-bold truncate ${getMatchStatus(m, now) === 'finished' ? '' : 'text-slate-200'}`}>{m.home.name}</span>
+                          <span className={`text-xs font-bold truncate ${getMatchStatus(m, now) === 'finished' ? '' : 'text-slate-200'}`} dir={/^[a-zA-Z]/.test(m.home.name) ? 'ltr' : 'rtl'}>{m.home.name}</span>
                         </div>
 
                         {/* Scores inputs */}
@@ -620,7 +620,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
 
                         {/* Away Team */}
                         <div className="flex items-center gap-1.5 min-w-0 flex-1 justify-end text-left">
-                          <span className={`text-xs font-bold truncate order-2 sm:order-1 ${getMatchStatus(m, now) === 'finished' ? '' : 'text-slate-200'}`}>{m.away.name}</span>
+                          <span className={`text-xs font-bold truncate order-2 sm:order-1 ${getMatchStatus(m, now) === 'finished' ? '' : 'text-slate-200'}`} dir={/^[a-zA-Z]/.test(m.away.name) ? 'ltr' : 'rtl'}>{m.away.name}</span>
                           <span className="order-1 sm:order-2 ml-1.5 flex items-center">
                             <TeamFlag iso={m.away.iso} flag={m.away.flag} name={m.away.name} logo={m.away.logo} size="small" />
                           </span>
@@ -639,26 +639,41 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                                 <span className="block text-[11px] font-extrabold text-slate-300 text-right">
                                   {bet.question}
                                 </span>
-                                <div className="grid grid-cols-2 gap-1.5 text-right">
-                                  {bet.options.map((opt) => {
-                                    const isSelected = selectedOpt === opt;
-                                    return (
-                                      <button
-                                        key={opt}
-                                        type="button"
-                                        disabled={isInputDisabled}
-                                        onClick={() => handleMultiPropChange(m.id, bet.id, opt)}
-                                        className={`px-2.5 py-1.5 text-[10px] font-bold rounded-lg border text-center transition-all ${
-                                          isSelected
-                                            ? 'bg-blue-600 border-blue-500 text-white shadow shadow-blue-950/20'
-                                            : 'bg-zinc-950 border-zinc-850 text-slate-400 hover:text-slate-200 hover:bg-zinc-900/40'
-                                        } disabled:opacity-85 disabled:cursor-not-allowed`}
-                                      >
-                                        {opt}
-                                      </button>
-                                    );
-                                  })}
-                                </div>
+                                {bet.options.length === 0 ? (
+                                  <div className="w-full">
+                                    <input
+                                      type="number"
+                                      min="0"
+                                      placeholder="הזינו מספר..."
+                                      disabled={isInputDisabled}
+                                      value={selectedOpt}
+                                      onChange={(e) => handleMultiPropChange(m.id, bet.id, e.target.value)}
+                                      className="w-full px-3 py-1.5 text-center text-xs font-black bg-zinc-950 border border-zinc-850 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none text-slate-100 disabled:opacity-85 disabled:cursor-not-allowed transition-colors"
+                                      dir="ltr"
+                                    />
+                                  </div>
+                                ) : (
+                                  <div className="grid grid-cols-2 gap-1.5 text-right">
+                                    {bet.options.map((opt) => {
+                                      const isSelected = selectedOpt === opt;
+                                      return (
+                                        <button
+                                          key={opt}
+                                          type="button"
+                                          disabled={isInputDisabled}
+                                          onClick={() => handleMultiPropChange(m.id, bet.id, opt)}
+                                          className={`px-2.5 py-1.5 text-[10px] font-bold rounded-lg border text-center transition-all ${
+                                            isSelected
+                                              ? 'bg-blue-600 border-blue-500 text-white shadow shadow-blue-950/20'
+                                              : 'bg-zinc-950 border-zinc-850 text-slate-400 hover:text-slate-200 hover:bg-zinc-900/40'
+                                          } disabled:opacity-85 disabled:cursor-not-allowed`}
+                                        >
+                                          {opt}
+                                        </button>
+                                      );
+                                    })}
+                                  </div>
+                                )}
                               </div>
                             );
                           })}
