@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Match } from '@/data/worldCupData';
+import { useState, useEffect } from 'react';
+import { Match, getMatchStatus } from '@/data/worldCupData';
 import { Play, Tv } from 'lucide-react';
 
 interface LiveMatchShortcutProps {
@@ -11,9 +11,19 @@ interface LiveMatchShortcutProps {
 
 export default function LiveMatchShortcut({ sport, matches }: LiveMatchShortcutProps) {
   const [scrollCycleIdx, setScrollCycleIdx] = useState(0);
-  const liveMatches = matches.filter((m) => m.status === 'live');
+  const [now, setNow] = useState(Date.now());
+  const [mounted, setMounted] = useState(false);
 
-  if (liveMatches.length === 0) return null;
+  useEffect(() => {
+    setMounted(true);
+    setNow(Date.now());
+    const interval = setInterval(() => setNow(Date.now()), 10000); // Update every 10s
+    return () => clearInterval(interval);
+  }, []);
+
+  const liveMatches = matches.filter((m) => getMatchStatus(m, now) === 'live');
+
+  if (!mounted || liveMatches.length === 0) return null;
 
   const handleJump = () => {
     // Cycle through all active live matches on click

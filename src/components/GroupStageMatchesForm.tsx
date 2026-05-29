@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { Trophy, ShieldCheck, Sparkles, Trash2, CheckCircle2, ChevronLeft, ChevronRight, Image as ImageIcon, X } from 'lucide-react';
-import { Match, PredictionsState, generateTennisScore, calculateMatchPoints } from '@/data/worldCupData';
+import { Match, PredictionsState, generateTennisScore, calculateMatchPoints, getMatchStatus } from '@/data/worldCupData';
 
 const GROUP_HEBREW: Record<string, string> = {
   A: 'בית א\'', B: 'בית ב\'', C: 'בית ג\'', D: 'בית ד\'',
@@ -532,7 +532,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                   let cardClass = "border-zinc-800/80 hover:border-zinc-700/60 bg-zinc-900/40 text-slate-100";
                   let pointsBadge = null;
 
-                  if (m.status === 'finished' && m.actualHomeScore !== undefined && m.actualAwayScore !== undefined) {
+                  if (getMatchStatus(m, now) === 'finished' && m.actualHomeScore !== undefined && m.actualAwayScore !== undefined) {
                     const points = calculateMatchPoints(
                       sport,
                       p.homeScore,
@@ -586,7 +586,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                         {/* Home Team */}
                         <div className="flex items-center gap-1.5 min-w-0 flex-1 justify-start">
                           <TeamFlag iso={m.home.iso} flag={m.home.flag} name={m.home.name} logo={m.home.logo} size="small" />
-                          <span className={`text-xs font-bold truncate ${m.status === 'finished' ? '' : 'text-slate-200'}`}>{m.home.name}</span>
+                          <span className={`text-xs font-bold truncate ${getMatchStatus(m, now) === 'finished' ? '' : 'text-slate-200'}`}>{m.home.name}</span>
                         </div>
 
                         {/* Scores inputs */}
@@ -620,7 +620,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
 
                         {/* Away Team */}
                         <div className="flex items-center gap-1.5 min-w-0 flex-1 justify-end text-left">
-                          <span className={`text-xs font-bold truncate order-2 sm:order-1 ${m.status === 'finished' ? '' : 'text-slate-200'}`}>{m.away.name}</span>
+                          <span className={`text-xs font-bold truncate order-2 sm:order-1 ${getMatchStatus(m, now) === 'finished' ? '' : 'text-slate-200'}`}>{m.away.name}</span>
                           <span className="order-1 sm:order-2 ml-1.5 flex items-center">
                             <TeamFlag iso={m.away.iso} flag={m.away.flag} name={m.away.name} logo={m.away.logo} size="small" />
                           </span>
@@ -693,13 +693,12 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                           </div>
                         </div>
                       ) : null}
-                      
-                      {isStarted && m.status !== 'finished' && (
+                      {isStarted && getMatchStatus(m, now) !== 'finished' && (
                         <div className="text-[9px] text-center text-red-400 mt-0.5">
                           🔒 המשחק החל (נעול)
                         </div>
                       )}
-                      {m.status === 'finished' && m.actualHomeScore !== undefined && m.actualAwayScore !== undefined && (
+                      {getMatchStatus(m, now) === 'finished' && m.actualHomeScore !== undefined && m.actualAwayScore !== undefined && (
                         <div className="text-[10px] text-center font-bold text-emerald-400 mt-0.5 bg-emerald-500/10 rounded-full py-1 border border-emerald-500/20">
                           תוצאת סיום: {m.actualHomeScore} - {m.actualAwayScore}
                         </div>

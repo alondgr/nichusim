@@ -105,12 +105,39 @@ export default function ScoringRules({ sport = 'football' }: { sport?: 'football
                       </div>
                       <span className="text-indigo-400 font-black text-sm bg-indigo-500/10 px-2.5 py-0.5 rounded-full border border-indigo-500/10">{sport === 'ucl' ? '5' : '1'} נק&apos;</span>
                     </div>
+
+                    {/* UCL Prop Bets Scoring */}
+                    {sport === 'ucl' && (
+                      <>
+                        <div className="flex items-center justify-between p-2.5 bg-zinc-900/30 border border-zinc-850 rounded-xl">
+                          <div className="flex items-center gap-2">
+                            <span className="text-base select-none">⚽</span>
+                            <div className="flex flex-col">
+                              <span className="font-bold text-slate-200 text-xs">מבקיעי שערים (שער ראשון / אחרון)</span>
+                              <span className="text-[9px] text-zinc-500 mt-0.5">ניחוש נכון של מבקיע השער הראשון או השער האחרון בגמר</span>
+                            </div>
+                          </div>
+                          <span className="text-amber-400 font-black text-sm bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/10">3 נק&apos;</span>
+                        </div>
+
+                        <div className="flex items-center justify-between p-2.5 bg-zinc-900/30 border border-zinc-850 rounded-xl">
+                          <div className="flex items-center gap-2">
+                            <span className="text-base select-none">📊</span>
+                            <div className="flex flex-col">
+                              <span className="font-bold text-slate-200 text-xs">שאר שאלות הבונוס (קרנות וכרטיסים)</span>
+                              <span className="text-[9px] text-zinc-500 mt-0.5">ניחוש נכון של כמות הקרנות, כרטיסים צהובים או כרטיסים אדומים</span>
+                            </div>
+                          </div>
+                          <span className="text-blue-400 font-black text-sm bg-blue-500/10 px-2.5 py-0.5 rounded-full border border-blue-500/10">1 נק&apos;</span>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
 
                 {/* Note */}
                 <div className="text-[10px] text-zinc-500 bg-zinc-900/20 p-2.5 rounded-lg border border-zinc-850 text-center font-medium">
-                  💡 שימו לב: אין כפל ניקוד על משחק (תוצאה מדויקת מעניקה 3 נקודות סך הכל).
+                  {sport === 'ucl' ? '💡 שימו לב: תוצאה מדויקת מעניקה 10 נקודות סך הכל (אין כפל ניקוד עם כיוון).' : '💡 שימו לב: אין כפל ניקוד על משחק (תוצאה מדויקת מעניקה 3 נקודות סך הכל).'}
                 </div>
 
               </div>

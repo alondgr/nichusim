@@ -560,13 +560,11 @@ export const TENNIS_MATCHES: Match[] = [
     home: { id: 'djokovic_qf', name: 'נובאק ג\'וקוביץ\'', flag: '🇷🇸', iso: 'rs' },
     away: { id: 'fonseca_qf', name: 'ז\'ואאו פונסקה', flag: '🇧🇷', iso: 'br' },
     stage: 'רבע גמר',
-    status: 'live',
-    actualHomeScore: 2,
-    actualAwayScore: 1,
-    dateStr: 'יום רביעי, 03/06/2026',
-    timeStr: '14:30',
+    status: 'upcoming', // will be dynamically 'live' via getMatchStatus
+    dateStr: 'יום שישי, 29/05/2026',
+    timeStr: '17:00',
     channel: 'ספורט 5',
-    timestamp: new Date('2026-06-03T14:30:00+03:00').getTime(),
+    timestamp: new Date('2026-05-29T17:00:00+03:00').getTime(),
     bestOf: 5
   },
   {
@@ -623,10 +621,8 @@ export const UCL_MATCHES: Match[] = [
     team_b: 'Arsenal',
     team_b_logo: 'https://crests.football-data.org/57.svg',
     stage: 'Final',
-    status: 'live',
+    status: 'upcoming',
     match_time: '19:00 IDT',
-    actualHomeScore: 1,
-    actualAwayScore: 0,
     
     // Prop Bet fields (Backwards compatible)
     has_prop_bet: true,
@@ -732,5 +728,20 @@ export function calculateMatchPoints(
     const actualWinner = aHome > aAway ? 'home' : 'away';
     if (predictedWinner === actualWinner) return 1;
     return 0;
+  }
+}
+
+export function getMatchStatus(match: Match, now: number): 'upcoming' | 'live' | 'finished' {
+  if (match.status === 'finished') return 'finished';
+  
+  // Dynamic clock duration: 4 hours for tennis, 2.5 hours for football/ucl
+  const duration = match.sport === 'tennis' ? 4 * 60 * 60 * 1000 : 2.5 * 60 * 60 * 1000;
+  
+  if (now < match.timestamp) {
+    return 'upcoming';
+  } else if (now >= match.timestamp && now < match.timestamp + duration) {
+    return 'live';
+  } else {
+    return 'finished';
   }
 }

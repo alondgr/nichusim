@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { Target, Trophy, ChevronRight, ChevronLeft, Lock, Radio } from 'lucide-react';
-import { Match, PredictionsState } from '@/data/worldCupData';
+import { Match, PredictionsState, getMatchStatus } from '@/data/worldCupData';
 
 const GROUP_HEBREW: Record<string, string> = {
   A: 'בית א\'', B: 'בית ב\'', C: 'בית ג\'', D: 'בית ד\'',
@@ -85,7 +85,7 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
     setMounted(true);
     setNow(Date.now()); // Sync immediately on client mount
     
-    const liveIndex = matches.findIndex(m => m.status === 'live');
+    const liveIndex = matches.findIndex(m => getMatchStatus(m, Date.now()) === 'live');
     if (liveIndex !== -1) {
       setCurrentIndex(liveIndex);
     } else {
@@ -199,7 +199,7 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
   const GRACE_PERIOD_MS = 15 * 60 * 1000; // 15 minutes
   const isStarted = match.timestamp + GRACE_PERIOD_MS <= now;
   const isInputDisabled = submitted || isStarted;
-  const liveIndex = matches.findIndex(m => m.status === 'live');
+  const liveIndex = matches.findIndex(m => getMatchStatus(m, now) === 'live');
 
   return (
     <div className="w-full max-w-md p-2 sm:p-6 z-10">
@@ -245,7 +245,7 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
               : '🎾 נחש תוצאת מערכות'}
           </h2>
           <p className={`text-xs sm:text-sm font-medium ${
-            match.status === 'finished' 
+            getMatchStatus(match, now) === 'finished' 
               ? 'text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20'
               : submitted 
               ? 'text-indigo-300' 
@@ -253,7 +253,7 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
               ? 'text-red-400' 
               : 'text-slate-400'
           }`}>
-            {match.status === 'finished' && match.actualHomeScore !== undefined && match.actualAwayScore !== undefined
+            {getMatchStatus(match, now) === 'finished' && match.actualHomeScore !== undefined && match.actualAwayScore !== undefined
               ? `תוצאת סיום: ${match.actualHomeScore} - ${match.actualAwayScore}`
               : submitted
               ? 'הניחוש שלך נשמר בהצלחה! 🎉'
@@ -289,7 +289,7 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
                     <span>⏰</span>
                     <span dir="ltr">{match.timeStr} שעון ישראל</span>
                     
-                    {match.status === 'live' && (
+                    {getMatchStatus(match, now) === 'live' && (
                       <span className="ml-1 text-[9px] bg-red-500 text-white px-1.5 py-0.5 rounded uppercase animate-pulse">Live</span>
                     )}
                   </div>
