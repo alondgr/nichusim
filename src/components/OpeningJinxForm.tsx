@@ -181,14 +181,24 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
               ? (isOpening ? '🏆 משחק הפתיחה' : '🔮 נאחס את התוצאה') 
               : '🎾 נחש תוצאת מערכות'}
           </h2>
-          <p className="text-xs sm:text-sm text-slate-400">
-            {isStarted
-              ? 'המשחק כבר התחיל. הניחוש נעול! 🔒'
+          <p className={`text-xs sm:text-sm font-medium ${
+            match.status === 'finished' 
+              ? 'text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20'
               : submitted 
-                ? 'כל הניחושים ננעלו בהצלחה! 🔒'
-                : sport === 'football'
-                  ? (isOpening ? 'מקסיקו נגד דרום אפריקה. נאחס את התוצאה המדויקת.' : 'משחק ביתי של שלב הבתים של מונדיאל 2026.')
-                  : `משחק ${match.stage} ברולאן גארוס. הטוב מ-${match.bestOf} מערכות.`}
+              ? 'text-indigo-300' 
+              : isStarted 
+              ? 'text-red-400' 
+              : 'text-slate-400'
+          }`}>
+            {match.status === 'finished' && match.actualHomeScore !== undefined && match.actualAwayScore !== undefined
+              ? `תוצאת סיום: ${match.actualHomeScore} - ${match.actualAwayScore}`
+              : submitted
+              ? 'הניחוש שלך נשמר בהצלחה! 🎉'
+              : isStarted
+              ? 'המשחק כבר התחיל. הניחוש נעול! 🔒'
+              : sport === 'football'
+                ? (isOpening ? 'מקסיקו נגד דרום אפריקה. נאחס את התוצאה המדויקת.' : 'משחק ביתי של שלב הבתים של מונדיאל 2026.')
+                : `משחק ${match.stage} ברולאן גארוס. הטוב מ-${match.bestOf} מערכות.`}
           </p>
         </div>
 

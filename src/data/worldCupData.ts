@@ -241,6 +241,8 @@ export interface Match {
   channel: string;     // Israeli channel, e.g. "כאן 11"
   timestamp: number;   // Epoch timestamp for easy chronological sorting
   bestOf?: 3 | 5;      // Tennis sets rules
+  actualHomeScore?: number;
+  actualAwayScore?: number;
 }
 
 // Deterministic helper to retrieve the official Israel Hayom World Cup 2026 schedule info
@@ -388,12 +390,14 @@ export const TENNIS_MATCHES: Match[] = [
     home: { id: 'borges', name: 'נונו בורחס', flag: '🇵🇹', iso: 'pt' },
     away: { id: 'rublev', name: 'אנדריי רובלב', flag: '🏳️', iso: 'un' },
     stage: 'סיבוב 3',
-    status: 'live',
+    status: 'finished',
     dateStr: 'יום שישי, 29/05/2026',
     timeStr: '11:00',
     channel: 'ספורט 5',
     timestamp: new Date('2026-05-29T11:00:00+03:00').getTime(),
-    bestOf: 5
+    bestOf: 5,
+    actualHomeScore: 0,
+    actualAwayScore: 3
   },
   {
     id: 'rg_2026_3r_02',
@@ -401,12 +405,14 @@ export const TENNIS_MATCHES: Match[] = [
     home: { id: 'tirante', name: 'טיאגו טיראנטה', flag: '🇦🇷', iso: 'ar' },
     away: { id: 'carreno', name: 'פבלו קרניו', flag: '🇪🇸', iso: 'es' },
     stage: 'סיבוב 3',
-    status: 'live',
+    status: 'finished',
     dateStr: 'יום שישי, 29/05/2026',
     timeStr: '11:00',
     channel: 'ספורט 5 פלוס',
     timestamp: new Date('2026-05-29T11:00:00+03:00').getTime(),
-    bestOf: 5
+    bestOf: 5,
+    actualHomeScore: 1,
+    actualAwayScore: 3
   },
   {
     id: 'rg_2026_3r_03',

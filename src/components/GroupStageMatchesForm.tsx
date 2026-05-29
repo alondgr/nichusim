@@ -525,9 +525,14 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                         </div>
                       </div>
                       
-                      {isStarted && (
+                      {isStarted && m.status !== 'finished' && (
                         <div className="text-[9px] text-center text-red-400 mt-0.5">
                           🔒 המשחק החל (נעול)
+                        </div>
+                      )}
+                      {m.status === 'finished' && m.actualHomeScore !== undefined && m.actualAwayScore !== undefined && (
+                        <div className="text-[10px] text-center font-bold text-emerald-400 mt-0.5 bg-emerald-500/10 rounded-full py-1 border border-emerald-500/20">
+                          תוצאת סיום: {m.actualHomeScore} - {m.actualAwayScore}
                         </div>
                       )}
                     </div>
