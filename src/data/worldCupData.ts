@@ -502,15 +502,15 @@ export const TENNIS_MATCHES: Match[] = [
   {
     id: 'rg_2026_4r_02',
     sport: 'tennis',
-    home: { id: 'sabalenka', name: 'ארינה סבלנקה', flag: '🏳️', iso: 'un' },
-    away: { id: 'gauff', name: 'קוקו גוף', flag: '🇺🇸', iso: 'us' },
+    home: { id: 'zverev_4r', name: 'אלכסנדר זברב', flag: '🇩🇪', iso: 'de' },
+    away: { id: 'rune_4r', name: 'הולגר רונה', flag: '🇩🇰', iso: 'dk' },
     stage: 'שמינית גמר',
     status: 'upcoming',
     dateStr: 'יום שני, 01/06/2026',
     timeStr: '12:00',
     channel: 'ספורט 5 לייב',
     timestamp: new Date('2026-06-01T12:00:00+03:00').getTime(),
-    bestOf: 3
+    bestOf: 5
   },
   {
     id: 'rg_2026_qf_01',
@@ -528,15 +528,15 @@ export const TENNIS_MATCHES: Match[] = [
   {
     id: 'rg_2026_qf_02',
     sport: 'tennis',
-    home: { id: 'rybakina', name: 'ילנה ריבאקינה', flag: '🇰🇿', iso: 'kz' },
-    away: { id: 'jabeur', name: 'אונס ג\'אבור', flag: '🇹🇳', iso: 'tn' },
+    home: { id: 'djokovic_qf', name: 'נובאק ג\'וקוביץ\'', flag: '🇷🇸', iso: 'rs' },
+    away: { id: 'ruud_qf', name: 'קספר רוד', flag: '🇳🇴', iso: 'no' },
     stage: 'רבע גמר',
     status: 'upcoming',
     dateStr: 'יום רביעי, 03/06/2026',
     timeStr: '14:30',
     channel: 'ספורט 5',
     timestamp: new Date('2026-06-03T14:30:00+03:00').getTime(),
-    bestOf: 3
+    bestOf: 5
   },
   {
     id: 'rg_2026_sf_01',
