@@ -241,82 +241,36 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
                   <div className="flex flex-col items-center space-y-3 flex-1 min-w-0">
                     <TeamFlag iso={match.home.iso} flag={match.home.flag} name={match.home.name} />
                     <span className="font-bold text-xs sm:text-sm text-slate-200 truncate w-full text-center">{match.home.name}</span>
-                    {sport === 'football' && (
-                      <input
-                        type="number"
-                        min="0"
-                        max="10"
-                        required
-                        disabled={isInputDisabled}
-                        value={p.homeScore}
-                        onChange={(e) => handleScoreChange(match.id, 'home', e.target.value)}
-                        className={`w-14 h-14 sm:w-16 sm:h-16 text-center text-xl sm:text-2xl font-black bg-zinc-950 border rounded-xl focus:ring-2 outline-none text-slate-100 disabled:opacity-90 disabled:border-opacity-30 transition-colors border-zinc-700 focus:ring-indigo-500`}
-                        dir="ltr"
-                      />
-                    )}
+                    <input
+                      type="number"
+                      min="0"
+                      max={sport === 'tennis' ? (match.bestOf === 3 ? 2 : 3) : 10}
+                      required
+                      disabled={isInputDisabled}
+                      value={p.homeScore}
+                      onChange={(e) => handleScoreChange(match.id, 'home', e.target.value)}
+                      className={`w-14 h-14 sm:w-16 sm:h-16 text-center text-xl sm:text-2xl font-black bg-zinc-950 border rounded-xl focus:ring-2 outline-none text-slate-100 disabled:opacity-90 disabled:border-opacity-30 transition-colors ${sport === 'tennis' ? 'border-orange-500/50 focus:ring-orange-500' : 'border-zinc-700 focus:ring-indigo-500'}`}
+                      dir="ltr"
+                    />
                   </div>
 
-                  {/* Tennis Select (Center) or Football Dash */}
-                  {sport === 'tennis' ? (
-                    <div className="px-2">
-                      <select
-                        disabled={isInputDisabled}
-                        value={p.homeScore !== '' && p.awayScore !== '' ? `${p.homeScore}-${p.awayScore}` : '-'}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          if (val === '-') {
-                            handleScoreChange(match.id, 'home', '');
-                            handleScoreChange(match.id, 'away', '');
-                          } else {
-                            const [h, a] = val.split('-');
-                            handleScoreChange(match.id, 'home', h);
-                            handleScoreChange(match.id, 'away', a);
-                          }
-                        }}
-                        className="bg-zinc-950 border border-orange-500/50 text-slate-100 text-sm sm:text-lg font-black rounded-xl px-2 py-3 focus:ring-2 focus:ring-orange-500 outline-none disabled:opacity-90 transition-colors text-center cursor-pointer"
-                        dir="ltr"
-                      >
-                        <option value="-">-- : --</option>
-                        {match.bestOf === 3 ? (
-                          <>
-                            <option value="2-0">2 - 0</option>
-                            <option value="2-1">2 - 1</option>
-                            <option value="1-2">1 - 2</option>
-                            <option value="0-2">0 - 2</option>
-                          </>
-                        ) : (
-                          <>
-                            <option value="3-0">3 - 0</option>
-                            <option value="3-1">3 - 1</option>
-                            <option value="3-2">3 - 2</option>
-                            <option value="2-3">2 - 3</option>
-                            <option value="1-3">1 - 3</option>
-                            <option value="0-3">0 - 3</option>
-                          </>
-                        )}
-                      </select>
-                    </div>
-                  ) : (
-                    <div className="text-xl font-black text-slate-600 mb-6 px-3 flex-shrink-0">-</div>
-                  )}
+                  <div className={`text-xl font-black mb-6 px-3 flex-shrink-0 ${sport === 'tennis' ? 'text-orange-600/50' : 'text-slate-600'}`}>-</div>
 
                   {/* Team 2: Away */}
                   <div className="flex flex-col items-center space-y-3 flex-1 min-w-0">
                     <TeamFlag iso={match.away.iso} flag={match.away.flag} name={match.away.name} />
                     <span className="font-bold text-xs sm:text-sm text-slate-200 truncate w-full text-center">{match.away.name}</span>
-                    {sport === 'football' && (
-                      <input
-                        type="number"
-                        min="0"
-                        max="10"
-                        required
-                        disabled={isInputDisabled}
-                        value={p.awayScore}
-                        onChange={(e) => handleScoreChange(match.id, 'away', e.target.value)}
-                        className={`w-14 h-14 sm:w-16 sm:h-16 text-center text-xl sm:text-2xl font-black bg-zinc-950 border rounded-xl focus:ring-2 outline-none text-slate-100 disabled:opacity-90 disabled:border-opacity-30 transition-colors border-zinc-700 focus:ring-indigo-500`}
-                        dir="ltr"
-                      />
-                    )}
+                    <input
+                      type="number"
+                      min="0"
+                      max={sport === 'tennis' ? (match.bestOf === 3 ? 2 : 3) : 10}
+                      required
+                      disabled={isInputDisabled}
+                      value={p.awayScore}
+                      onChange={(e) => handleScoreChange(match.id, 'away', e.target.value)}
+                      className={`w-14 h-14 sm:w-16 sm:h-16 text-center text-xl sm:text-2xl font-black bg-zinc-950 border rounded-xl focus:ring-2 outline-none text-slate-100 disabled:opacity-90 disabled:border-opacity-30 transition-colors ${sport === 'tennis' ? 'border-orange-500/50 focus:ring-orange-500' : 'border-zinc-700 focus:ring-indigo-500'}`}
+                      dir="ltr"
+                    />
                   </div>
                 </div>
 

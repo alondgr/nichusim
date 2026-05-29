@@ -489,72 +489,31 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
 
                         {/* Scores inputs */}
                         <div className="flex items-center justify-center gap-1 flex-shrink-0 mx-1">
-                          {sport === 'football' ? (
-                            <>
-                              <input
-                                type="number"
-                                min="0"
-                                max="10"
-                                required
-                                disabled={isInputDisabled}
-                                placeholder="-"
-                                value={p.homeScore}
-                                onChange={(e) => handleScoreChange(m.id, 'home', e.target.value)}
-                                className={`w-8 h-8 text-center text-xs font-black bg-zinc-950 border rounded-md focus:ring-1 outline-none text-slate-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none disabled:opacity-90 disabled:border-opacity-30 border-zinc-800 focus:border-indigo-500 focus:ring-indigo-500 disabled:text-indigo-400`}
-                                dir="ltr"
-                              />
-                              <span className="text-zinc-600 font-extrabold text-xs">-</span>
-                              <input
-                                type="number"
-                                min="0"
-                                max="10"
-                                required
-                                disabled={isInputDisabled}
-                                placeholder="-"
-                                value={p.awayScore}
-                                onChange={(e) => handleScoreChange(m.id, 'away', e.target.value)}
-                                className={`w-8 h-8 text-center text-xs font-black bg-zinc-950 border rounded-md focus:ring-1 outline-none text-slate-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none disabled:opacity-90 disabled:border-opacity-30 border-zinc-800 focus:border-indigo-500 focus:ring-indigo-500 disabled:text-indigo-400`}
-                                dir="ltr"
-                              />
-                            </>
-                          ) : (
-                            <select
-                              disabled={isInputDisabled}
-                              value={p.homeScore !== '' && p.awayScore !== '' ? `${p.homeScore}-${p.awayScore}` : '-'}
-                              onChange={(e) => {
-                                const val = e.target.value;
-                                if (val === '-') {
-                                  handleScoreChange(m.id, 'home', '');
-                                  handleScoreChange(m.id, 'away', '');
-                                } else {
-                                  const [h, a] = val.split('-');
-                                  handleScoreChange(m.id, 'home', h);
-                                  handleScoreChange(m.id, 'away', a);
-                                }
-                              }}
-                              className="bg-zinc-950 border border-orange-500/50 text-slate-100 text-[11px] font-black rounded-md px-1 py-1 focus:ring-1 focus:ring-orange-500 outline-none disabled:opacity-90 transition-colors text-center cursor-pointer"
-                              dir="ltr"
-                            >
-                              <option value="-">- : -</option>
-                              {m.bestOf === 3 ? (
-                                <>
-                                  <option value="2-0">2 - 0</option>
-                                  <option value="2-1">2 - 1</option>
-                                  <option value="1-2">1 - 2</option>
-                                  <option value="0-2">0 - 2</option>
-                                </>
-                              ) : (
-                                <>
-                                  <option value="3-0">3 - 0</option>
-                                  <option value="3-1">3 - 1</option>
-                                  <option value="3-2">3 - 2</option>
-                                  <option value="2-3">2 - 3</option>
-                                  <option value="1-3">1 - 3</option>
-                                  <option value="0-3">0 - 3</option>
-                                </>
-                              )}
-                            </select>
-                          )}
+                          <input
+                            type="number"
+                            min="0"
+                            max={sport === 'tennis' ? (m.bestOf === 3 ? 2 : 3) : 10}
+                            required
+                            disabled={isInputDisabled}
+                            placeholder="-"
+                            value={p.homeScore}
+                            onChange={(e) => handleScoreChange(m.id, 'home', e.target.value)}
+                            className={`w-8 h-8 text-center text-xs font-black bg-zinc-950 border rounded-md focus:ring-1 outline-none text-slate-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none disabled:opacity-90 disabled:border-opacity-30 border-zinc-800 ${sport === 'tennis' ? 'focus:border-orange-500 focus:ring-orange-500 disabled:text-orange-400' : 'focus:border-indigo-500 focus:ring-indigo-500 disabled:text-indigo-400'}`}
+                            dir="ltr"
+                          />
+                          <span className={`font-extrabold text-xs ${sport === 'tennis' ? 'text-orange-600/50' : 'text-zinc-600'}`}>-</span>
+                          <input
+                            type="number"
+                            min="0"
+                            max={sport === 'tennis' ? (m.bestOf === 3 ? 2 : 3) : 10}
+                            required
+                            disabled={isInputDisabled}
+                            placeholder="-"
+                            value={p.awayScore}
+                            onChange={(e) => handleScoreChange(m.id, 'away', e.target.value)}
+                            className={`w-8 h-8 text-center text-xs font-black bg-zinc-950 border rounded-md focus:ring-1 outline-none text-slate-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none disabled:opacity-90 disabled:border-opacity-30 border-zinc-800 ${sport === 'tennis' ? 'focus:border-orange-500 focus:ring-orange-500 disabled:text-orange-400' : 'focus:border-indigo-500 focus:ring-indigo-500 disabled:text-indigo-400'}`}
+                            dir="ltr"
+                          />
                         </div>
 
                         {/* Away Team */}
