@@ -10,6 +10,7 @@ import FlopTeamForm from '@/components/FlopTeamForm';
 import GoalDroughtForm from '@/components/GoalDroughtForm';
 import GroupStageMatchesForm from '@/components/GroupStageMatchesForm';
 import CustomAvatarModal from '@/components/CustomAvatarModal';
+import ChangeNameModal from '@/components/ChangeNameModal';
 import { PredictionsState, getGroupMatches, TEAMS, ALL_TENNIS_MATCHES, UCL_MATCHES } from '@/data/worldCupData';
 
 import LiveMatchShortcut from '@/components/LiveMatchShortcut';
@@ -25,6 +26,7 @@ export default function Home() {
   const { isLoaded, isSignedIn } = useAuth();
   const [dataLoaded, setDataLoaded] = useState(false);
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+  const [isNameModalOpen, setIsNameModalOpen] = useState(false);
 
   const [fPreds, setFPreds] = useState<PredictionsState>({});
   const [fSub, setFSub] = useState(false);
@@ -175,6 +177,13 @@ export default function Home() {
             <UserButton>
               <UserButton.MenuItems>
                 <UserButton.Action 
+                  label="ערוך שם לתצוגה ✏️" 
+                  labelIcon={
+                    <svg xmlns="http://www.w3.org/-2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  }
+                  onClick={() => setIsNameModalOpen(true)} 
+                />
+                <UserButton.Action 
                   label="בחר אווטאר AI 🤖" 
                   labelIcon={
                     <svg xmlns="http://www.w3.org/-2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
@@ -245,6 +254,11 @@ export default function Home() {
         <CustomAvatarModal 
           isOpen={isAvatarModalOpen} 
           onClose={() => setIsAvatarModalOpen(false)} 
+        />
+        
+        <ChangeNameModal
+          isOpen={isNameModalOpen}
+          onClose={() => setIsNameModalOpen(false)}
         />
         </>
         )}
