@@ -9,6 +9,7 @@ import OpeningJinxForm from '@/components/OpeningJinxForm';
 import FlopTeamForm from '@/components/FlopTeamForm';
 import GoalDroughtForm from '@/components/GoalDroughtForm';
 import GroupStageMatchesForm from '@/components/GroupStageMatchesForm';
+import CustomAvatarModal from '@/components/CustomAvatarModal';
 import { PredictionsState, getGroupMatches, TEAMS, ALL_TENNIS_MATCHES, UCL_MATCHES } from '@/data/worldCupData';
 
 import LiveMatchShortcut from '@/components/LiveMatchShortcut';
@@ -23,6 +24,7 @@ export default function Home() {
 
   const { isLoaded, isSignedIn } = useAuth();
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
 
   const [fPreds, setFPreds] = useState<PredictionsState>({});
   const [fSub, setFSub] = useState(false);
@@ -170,7 +172,17 @@ export default function Home() {
             {/* Sticky Header Layout Switcher */}
         <div className="sticky top-0 z-[60] w-full bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-800 p-3 flex items-center">
           <div className="absolute left-4">
-            <UserButton />
+            <UserButton>
+              <UserButton.MenuItems>
+                <UserButton.Action 
+                  label="בחר אווטאר AI 🤖" 
+                  labelIcon={
+                    <svg xmlns="http://www.w3.org/-2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                  }
+                  onClick={() => setIsAvatarModalOpen(true)} 
+                />
+              </UserButton.MenuItems>
+            </UserButton>
           </div>
           <div className="flex bg-zinc-900 rounded-full p-1 border border-zinc-800 mx-auto">
             <button
@@ -229,6 +241,11 @@ export default function Home() {
             setSubmitted={sport === 'football' ? handleFSub : sport === 'ucl' ? handleUSub : handleTSub}
           />
         </div>
+        
+        <CustomAvatarModal 
+          isOpen={isAvatarModalOpen} 
+          onClose={() => setIsAvatarModalOpen(false)} 
+        />
         </>
         )}
       </Show>
