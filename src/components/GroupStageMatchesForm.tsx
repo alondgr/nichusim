@@ -538,7 +538,9 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                       p.homeScore,
                       p.awayScore,
                       m.actualHomeScore,
-                      m.actualAwayScore
+                      m.actualAwayScore,
+                      p.propBets || p.selectedProp,
+                      m.actualPropBets || (m as any).actualProp
                     );
 
                     const maxPoints = sport === 'ucl' ? 10 : 3;
@@ -593,6 +595,8 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                         <div className="flex items-center justify-center gap-1 flex-shrink-0 mx-1">
                           <input
                             type="number"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
                             min="0"
                             max={sport === 'tennis' ? (m.bestOf === 3 ? 2 : 3) : 10}
                             required
@@ -606,6 +610,8 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                           <span className={`font-extrabold text-xs ${sport === 'ucl' ? 'text-blue-600/50' : sport === 'tennis' ? 'text-orange-600/50' : 'text-zinc-600'}`}>-</span>
                           <input
                             type="number"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
                             min="0"
                             max={sport === 'tennis' ? (m.bestOf === 3 ? 2 : 3) : 10}
                             required
@@ -643,6 +649,8 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                                   <div className="w-full">
                                     <input
                                       type="number"
+                                      inputMode="numeric"
+                                      pattern="[0-9]*"
                                       min="0"
                                       placeholder="הזינו מספר..."
                                       disabled={isInputDisabled}

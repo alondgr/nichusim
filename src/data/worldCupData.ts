@@ -246,6 +246,7 @@ export interface Match {
   bestOf?: 3 | 5;      // Tennis sets rules
   actualHomeScore?: number;
   actualAwayScore?: number;
+  actualPropBets?: Record<string, string>;
 
   // Champions League specific fields
   league?: string;
@@ -560,11 +561,11 @@ export const TENNIS_MATCHES: Match[] = [
     home: { id: 'djokovic_qf', name: 'נובאק ג\'וקוביץ\'', flag: '🇷🇸', iso: 'rs' },
     away: { id: 'fonseca_qf', name: 'ז\'ואאו פונסקה', flag: '🇧🇷', iso: 'br' },
     stage: 'רבע גמר',
-    status: 'upcoming', // will be dynamically 'live' via getMatchStatus
-    dateStr: 'יום שישי, 29/05/2026',
-    timeStr: '17:00',
+    status: 'upcoming',
+    dateStr: 'יום שלישי, 02/06/2026',
+    timeStr: '20:00',
     channel: 'ספורט 5',
-    timestamp: new Date('2026-05-29T17:00:00+03:00').getTime(),
+    timestamp: new Date('2026-06-02T20:00:00+03:00').getTime(),
     bestOf: 5
   },
   {
@@ -707,25 +708,54 @@ export function calculateMatchPoints(
   predictedHome: number | '',
   predictedAway: number | '',
   actualHome: number | '',
-  actualAway: number | ''
+  actualAway: number | '',
+  predictedProps?: Record<string, string> | string,
+  actualProps?: Record<string, string> | string
 ): number {
-  if (predictedHome === '' || predictedAway === '' || actualHome === '' || actualAway === '') {
-    return 0;
-  }
-
-  const pHome = Number(predictedHome);
-  const pAway = Number(predictedAway);
-  const aHome = Number(actualHome);
-  const aAway = Number(actualAway);
+  let points = 0;
 
   if (sport === 'ucl') {
     // UCL Specific Rules
-    if (pHome === aHome && pAway === aAway) return 10;
-    const predictedWinner = pHome > pAway ? 'home' : pHome < pAway ? 'away' : 'draw';
-    const actualWinner = aHome > aAway ? 'home' : aHome < aAway ? 'away' : 'draw';
-    if (predictedWinner === actualWinner) return 5;
-    return 0;
+    if (predictedHome !== '' && predictedAway !== '' && actualHome !== '' && actualAway !== '') {
+      const pHome = Number(predictedHome);
+      const pAway = Number(predictedAway);
+      const aHome = Number(actualHome);
+      const aAway = Number(actualAway);
+      
+      if (pHome === aHome && pAway === aAway) points += 10;
+      else {
+        const predictedWinner = pHome > pAway ? 'home' : pHome < pAway ? 'away' : 'draw';
+        const actualWinner = aHome > aAway ? 'home' : aHome < aAway ? 'away' : 'draw';
+        if (predictedWinner === actualWinner) points += 5;
+      }
+    }
+
+    // Prop Bets Scoring
+    if (typeof predictedProps === 'object' && typeof actualProps === 'object') {
+      const pp = predictedProps as Record<string, string>;
+      const ap = actualProps as Record<string, string>;
+      
+      if (pp['top_scorer'] && pp['top_scorer'] === ap['top_scorer']) points += 3;
+      if (pp['first_goalscorer'] && pp['first_goalscorer'] === ap['first_goalscorer']) points += 3;
+      if (pp['last_goalscorer'] && pp['last_goalscorer'] === ap['last_goalscorer']) points += 3;
+      
+      if (pp['total_corners'] && pp['total_corners'] === ap['total_corners']) points += 1;
+      if (pp['yellow_cards'] && pp['yellow_cards'] === ap['yellow_cards']) points += 1;
+      if (pp['red_cards'] && pp['red_cards'] === ap['red_cards']) points += 1;
+    }
+    
+    // Single Prop Bet backwards compatibility
+    if (typeof predictedProps === 'string' && typeof actualProps === 'string') {
+        if (predictedProps === actualProps) points += 3;
+    }
+
+    return points;
   } else if (sport === 'football') {
+    if (predictedHome === '' || predictedAway === '' || actualHome === '' || actualAway === '') return 0;
+    const pHome = Number(predictedHome);
+    const pAway = Number(predictedAway);
+    const aHome = Number(actualHome);
+    const aAway = Number(actualAway);
     // Exact Score
     if (pHome === aHome && pAway === aAway) return 3;
     // Outcome Match
@@ -734,6 +764,11 @@ export function calculateMatchPoints(
     if (predictedWinner === actualWinner) return 1;
     return 0;
   } else {
+    if (predictedHome === '' || predictedAway === '' || actualHome === '' || actualAway === '') return 0;
+    const pHome = Number(predictedHome);
+    const pAway = Number(predictedAway);
+    const aHome = Number(actualHome);
+    const aAway = Number(actualAway);
     // Tennis
     // Exact Set Score Match
     if (pHome === aHome && pAway === aAway) return 3;

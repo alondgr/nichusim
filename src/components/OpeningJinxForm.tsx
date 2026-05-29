@@ -315,6 +315,8 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
                     <span className="font-bold text-xs sm:text-sm text-slate-200 w-full text-center whitespace-normal break-words leading-tight" dir={/^[a-zA-Z]/.test(match.home.name) ? 'ltr' : 'rtl'}>{match.home.name}</span>
                     <input
                       type="number"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
                       min="0"
                       max={sport === 'tennis' ? (match.bestOf === 3 ? 2 : 3) : 10}
                       required
@@ -333,6 +335,8 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
                     <span className="font-bold text-xs sm:text-sm text-slate-200 w-full text-center whitespace-normal break-words leading-tight" dir={/^[a-zA-Z]/.test(match.away.name) ? 'ltr' : 'rtl'}>{match.away.name}</span>
                     <input
                       type="number"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
                       min="0"
                       max={sport === 'tennis' ? (match.bestOf === 3 ? 2 : 3) : 10}
                       required
@@ -361,6 +365,8 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
                             <div className="w-full">
                               <input
                                 type="number"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
                                 min="0"
                                 placeholder="הזינו מספר..."
                                 disabled={isInputDisabled}
