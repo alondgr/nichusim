@@ -72,6 +72,7 @@ export default function GroupStageMatchesForm({ predictions, savePredictions, su
   const [showDiagram, setShowDiagram] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isConfirmingClear, setIsConfirmingClear] = useState(false);
 
   // Set mounted on mount
   useEffect(() => {
@@ -121,11 +122,15 @@ export default function GroupStageMatchesForm({ predictions, savePredictions, su
     savePredictions(updated);
   };
 
-  // Clear all predictions
+  // Clear all predictions (with a double-click confirm mechanism for mobile)
   const handleClearAll = () => {
-    if (window.confirm('האם אתה בטוח שברצונך למחוק את כל הניחושים?')) {
-      savePredictions({});
+    if (!isConfirmingClear) {
+      setIsConfirmingClear(true);
+      setTimeout(() => setIsConfirmingClear(false), 4000);
+      return;
     }
+    savePredictions({});
+    setIsConfirmingClear(false);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -189,11 +194,9 @@ export default function GroupStageMatchesForm({ predictions, savePredictions, su
             <button
               type="button"
               onClick={() => {
-                if (window.confirm('האם לפתוח מחדש את הנעילה כדי לערוך את הניחושים?')) {
-                  setSubmitted(false);
-                  setIsModalOpen(true);
-                  localStorage.removeItem('nichusim_group_stage_submitted');
-                }
+                setSubmitted(false);
+                setIsModalOpen(true);
+                localStorage.removeItem('nichusim_group_stage_submitted');
               }}
               className="py-2.5 px-4 bg-zinc-950 border border-zinc-800 hover:bg-red-500/10 hover:border-red-500/30 text-zinc-400 hover:text-red-400 font-bold rounded-xl text-xs transition-colors"
             >
@@ -368,10 +371,14 @@ export default function GroupStageMatchesForm({ predictions, savePredictions, su
               <button
                 type="button"
                 onClick={handleClearAll}
-                className="flex items-center justify-center gap-1.5 py-2 px-3 bg-zinc-950 border border-zinc-850 hover:bg-red-500/10 hover:border-red-500/30 text-zinc-500 hover:text-red-400 font-medium rounded-xl text-xs transition-all"
+                className={`flex items-center justify-center gap-1.5 py-2 px-3 border rounded-xl text-xs transition-all ${
+                  isConfirmingClear 
+                    ? 'bg-red-500/10 border-red-500/50 text-red-400 animate-pulse font-bold' 
+                    : 'bg-zinc-950 border-zinc-850 hover:bg-red-500/10 hover:border-red-500/30 text-zinc-500 hover:text-red-400 font-medium'
+                }`}
               >
                 <Trash2 className="w-3.5 h-3.5" />
-                נקה הכל
+                {isConfirmingClear ? '⚠️ לחץ שוב למחיקה!' : 'נקה הכל'}
               </button>
             </div>
           )}
@@ -518,10 +525,8 @@ export default function GroupStageMatchesForm({ predictions, savePredictions, su
           <button
             type="button"
             onClick={() => {
-              if (window.confirm('האם לפתוח מחדש את הנעילה כדי לערוך את הניחושים?')) {
-                setSubmitted(false);
-                localStorage.removeItem('nichusim_group_stage_submitted');
-              }
+              setSubmitted(false);
+              localStorage.removeItem('nichusim_group_stage_submitted');
             }}
             className="flex-1 flex items-center justify-center py-3 bg-zinc-950 border border-zinc-800 hover:bg-red-500/10 hover:border-red-500/30 text-zinc-400 hover:text-red-400 font-bold rounded-xl text-sm gap-1.5 transition-colors"
           >

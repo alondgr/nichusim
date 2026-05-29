@@ -89,9 +89,7 @@ export default function OpeningJinxForm({ predictions, savePredictions, submitte
   };
 
   const handleUnlock = () => {
-    if (window.confirm('האם לפתוח מחדש את הנעילה כדי לערוך את כל הניחושים?')) {
-      setSubmitted(false);
-    }
+    setSubmitted(false);
   };
 
   const containerVariants: Variants = {
