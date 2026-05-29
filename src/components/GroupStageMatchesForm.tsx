@@ -142,6 +142,18 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
     savePredictions(updated);
   };
 
+  const handlePropChange = (matchId: string, option: string) => {
+    const current = predictions[matchId] || { homeScore: '', awayScore: '' };
+    const updated = {
+      ...predictions,
+      [matchId]: {
+        ...current,
+        selectedProp: option
+      }
+    };
+    savePredictions(updated);
+  };
+
   const handleAutoFillAll = () => {
     const updated: PredictionsState = {};
     matches.forEach(m => {
@@ -598,6 +610,37 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                           </span>
                         </div>
                       </div>
+
+                      {m.has_prop_bet && m.prop_question && m.prop_options && (
+                        <div className="mt-2.5 pt-2 border-t border-zinc-800/80 w-full" dir="rtl">
+                          <label className="block text-[9px] font-black text-blue-400 uppercase tracking-wider mb-1 text-right">
+                            🔥 שאלת בונוס (Prop Bet)
+                          </label>
+                          <span className="block text-[11px] font-extrabold text-slate-300 mb-2 text-right">
+                            {m.prop_question}
+                          </span>
+                          <div className="grid grid-cols-2 gap-1.5 text-right">
+                            {m.prop_options.map((opt) => {
+                              const isSelected = p.selectedProp === opt;
+                              return (
+                                <button
+                                  key={opt}
+                                  type="button"
+                                  disabled={isInputDisabled}
+                                  onClick={() => handlePropChange(m.id, opt)}
+                                  className={`px-2.5 py-1.5 text-[10px] font-bold rounded-lg border text-center transition-all ${
+                                    isSelected
+                                      ? 'bg-blue-600 border-blue-500 text-white shadow shadow-blue-950/20'
+                                      : 'bg-zinc-950 border-zinc-850 text-slate-400 hover:text-slate-200 hover:bg-zinc-900/40'
+                                  } disabled:opacity-85 disabled:cursor-not-allowed`}
+                                >
+                                  {opt}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
                       
                       {isStarted && m.status !== 'finished' && (
                         <div className="text-[9px] text-center text-red-400 mt-0.5">

@@ -19,6 +19,7 @@ export interface Player {
 export interface MatchPrediction {
   homeScore: number | '';
   awayScore: number | '';
+  selectedProp?: string;
 }
 
 export type PredictionsState = Record<string, MatchPrediction>;
@@ -252,6 +253,11 @@ export interface Match {
   team_b?: string;
   team_b_logo?: string;
   match_time?: string;
+
+  // Prop Bet fields
+  has_prop_bet?: boolean;
+  prop_question?: string;
+  prop_options?: string[];
 }
 
 // Deterministic helper to retrieve the official Israel Hayom World Cup 2026 schedule info
@@ -616,6 +622,11 @@ export const UCL_MATCHES: Match[] = [
     actualHomeScore: 1,
     actualAwayScore: 0,
     
+    // Prop Bet fields
+    has_prop_bet: true,
+    prop_question: 'Who will score the opening goal of the final?',
+    prop_options: ['K. Kvaratskhelia', 'B. Saka', 'G. Martinelli', 'O. Dembélé', 'Other/No Goal'],
+
     // Existing fields for frontend compatibility
     home: { id: 'psg', name: 'Paris Saint-Germain', flag: '🇫🇷', iso: 'fr', logo: 'https://crests.football-data.org/524.svg' },
     away: { id: 'ars', name: 'Arsenal', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', iso: 'gb-eng', logo: 'https://crests.football-data.org/57.svg' },
