@@ -91,7 +91,7 @@ export default function ScoringRules() {
                       <div className="flex items-center gap-2">
                         <span className="text-base select-none">🧭</span>
                         <div className="flex flex-col">
-                          <span className="font-bold text-slate-200 text-xs">כיוון (מנצחת או תיקו)</span>
+                          <span className="font-bold text-slate-200 text-xs">כיוון</span>
                           <span className="text-[9px] text-zinc-500 mt-0.5">ניחוש נכון של זהות המנצחת או תוצאת תיקו</span>
                         </div>
                       </div>
