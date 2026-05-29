@@ -403,6 +403,8 @@ export const getGroupMatches = (group: string, teams: Team[]): Match[] => {
   });
 };
 
+export const ALL_FOOTBALL_MATCHES = ['A','B','C','D','E','F','G','H','I','J','K','L'].flatMap(group => getGroupMatches(group, TEAMS));
+
 // --- Tennis Sandbox Data ---
 
 export const TENNIS_MATCHES: Match[] = [
@@ -793,4 +795,58 @@ export function getMatchStatus(match: Match, now: number): 'upcoming' | 'live' |
   } else {
     return 'finished';
   }
+}
+
+export function calculateTotalScore(predictionsData: any): number {
+  if (!predictionsData) return 0;
+  let total = 0;
+
+  // 1. UCL
+  const uPreds = predictionsData.uPreds || {};
+  UCL_MATCHES.forEach(match => {
+    if (match.actualHomeScore !== undefined && match.actualAwayScore !== undefined) {
+      const p = uPreds[match.id];
+      if (p) {
+        total += calculateMatchPoints(
+          'ucl', 
+          p.homeScore, p.awayScore, 
+          match.actualHomeScore, match.actualAwayScore, 
+          p.propBets || p.selectedProp, 
+          match.actualPropBets || {}
+        );
+      }
+    }
+  });
+
+  // 2. Tennis
+  const tPreds = predictionsData.tPreds || {};
+  ALL_TENNIS_MATCHES.forEach(match => {
+    if (match.actualHomeScore !== undefined && match.actualAwayScore !== undefined) {
+      const p = tPreds[match.id];
+      if (p) {
+        total += calculateMatchPoints(
+          'tennis', 
+          p.homeScore, p.awayScore, 
+          match.actualHomeScore, match.actualAwayScore
+        );
+      }
+    }
+  });
+
+  // 3. Football (World Cup)
+  const fPreds = predictionsData.fPreds || {};
+  ALL_FOOTBALL_MATCHES.forEach(match => {
+    if (match.actualHomeScore !== undefined && match.actualAwayScore !== undefined) {
+      const p = fPreds[match.id];
+      if (p) {
+        total += calculateMatchPoints(
+          'football', 
+          p.homeScore, p.awayScore, 
+          match.actualHomeScore, match.actualAwayScore
+        );
+      }
+    }
+  });
+
+  return total;
 }

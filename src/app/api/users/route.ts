@@ -44,6 +44,7 @@ export async function GET() {
           imageUrl: u.imageUrl || 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=60',
           username: u.username || '',
           createdAt: u.createdAt,
+          predictions: u.privateMetadata?.predictions || {}
         };
       });
 
