@@ -140,6 +140,22 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
     savePredictions(updated);
   };
 
+  const handleMultiPropChange = (matchId: string, propId: string, option: string) => {
+    const current = predictions[matchId] || { homeScore: '', awayScore: '' };
+    const currentProps = current.propBets || {};
+    const updated = {
+      ...predictions,
+      [matchId]: {
+        ...current,
+        propBets: {
+          ...currentProps,
+          [propId]: option
+        }
+      }
+    };
+    savePredictions(updated);
+  };
+
   const handleUnlock = () => {
     setSubmitted(false);
   };
@@ -329,7 +345,43 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
                   </div>
                 </div>
 
-                {match.has_prop_bet && match.prop_question && match.prop_options && (
+                {match.prop_bets && match.prop_bets.length > 0 ? (
+                  <div className="mt-5 pt-4 border-t border-zinc-800/80 w-full space-y-5" dir="rtl">
+                    <label className="block text-[10px] font-black text-blue-400 uppercase tracking-wider text-right mb-1">
+                      🔥 שאלות בונוס (Prop Bets)
+                    </label>
+                    {match.prop_bets.map((bet) => {
+                      const selectedOpt = (p.propBets || {})[bet.id] || '';
+                      return (
+                        <div key={bet.id} className="space-y-2 pb-3 border-b border-zinc-900/60 last:border-0 last:pb-0">
+                          <span className="block text-xs font-extrabold text-slate-200 text-right">
+                            {bet.question}
+                          </span>
+                          <div className="grid grid-cols-2 gap-2 text-right">
+                            {bet.options.map((opt) => {
+                              const isSelected = selectedOpt === opt;
+                              return (
+                                <button
+                                  key={opt}
+                                  type="button"
+                                  disabled={isInputDisabled}
+                                  onClick={() => handleMultiPropChange(match.id, bet.id, opt)}
+                                  className={`px-3 py-2 text-xs font-bold rounded-xl border text-center transition-all ${
+                                    isSelected
+                                      ? 'bg-blue-600 border-blue-500 text-white shadow-md shadow-blue-950/20'
+                                      : 'bg-zinc-950 border-zinc-850 text-slate-400 hover:text-slate-200 hover:bg-zinc-900/40'
+                                  } disabled:opacity-85 disabled:cursor-not-allowed`}
+                                >
+                                  {opt}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : match.has_prop_bet && match.prop_question && match.prop_options ? (
                   <div className="mt-5 pt-4 border-t border-zinc-800/80 w-full" dir="rtl">
                     <label className="block text-[10px] font-black text-blue-400 uppercase tracking-wider mb-2 text-right">
                       🔥 שאלת בונוס (Prop Bet)
@@ -358,7 +410,7 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
                       })}
                     </div>
                   </div>
-                )}
+                ) : null}
 
               </div>
             </motion.div>

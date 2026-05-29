@@ -20,6 +20,7 @@ export interface MatchPrediction {
   homeScore: number | '';
   awayScore: number | '';
   selectedProp?: string;
+  propBets?: Record<string, string>;
 }
 
 export type PredictionsState = Record<string, MatchPrediction>;
@@ -258,6 +259,11 @@ export interface Match {
   has_prop_bet?: boolean;
   prop_question?: string;
   prop_options?: string[];
+  prop_bets?: {
+    id: string;
+    question: string;
+    options: string[];
+  }[];
 }
 
 // Deterministic helper to retrieve the official Israel Hayom World Cup 2026 schedule info
@@ -622,10 +628,39 @@ export const UCL_MATCHES: Match[] = [
     actualHomeScore: 1,
     actualAwayScore: 0,
     
-    // Prop Bet fields
+    // Prop Bet fields (Backwards compatible)
     has_prop_bet: true,
-    prop_question: 'Who will score the opening goal of the final?',
-    prop_options: ['K. Kvaratskhelia', 'B. Saka', 'G. Martinelli', 'O. Dembélé', 'Other/No Goal'],
+    prop_question: 'מי יבקיע את השער הראשון במשחק מחר?',
+    prop_options: ['ח. קווארצחליה', 'ב. סאקה', 'ג. מרטינלי', 'א. דמבלה', 'אחר/אין שער'],
+
+    // Multi-prop bets questions list
+    prop_bets: [
+      {
+        id: 'first_goalscorer',
+        question: 'מי יבקיע את השער הראשון במשחק מחר?',
+        options: ['ח. קווארצחליה', 'ב. סאקה', 'ג. מרטינלי', 'א. דמבלה', 'אחר/אין שער']
+      },
+      {
+        id: 'last_goalscorer',
+        question: 'מי יבקיע את השער האחרון במשחק מחר?',
+        options: ['ח. קווארצחליה', 'ב. סאקה', 'ג. מרטינלי', 'א. דמבלה', 'אחר/אין שער']
+      },
+      {
+        id: 'total_corners',
+        question: 'כמה קרנות סך הכל יהיו בכל המשחק מחר?',
+        options: ['פחות מ-8', '8-10', '11-13', '14 ומעלה']
+      },
+      {
+        id: 'yellow_cards',
+        question: 'כמה כרטיסים צהובים יחולקו?',
+        options: ['פחות מ-3', '3-4', '5-6', '7 ומעלה']
+      },
+      {
+        id: 'red_cards',
+        question: 'כמה כרטיסים אדומים יחולקו?',
+        options: ['ללא כרטיס אדום', 'כרטיס אדום אחד', 'שני כרטיסים ומעלה']
+      }
+    ],
 
     // Existing fields for frontend compatibility
     home: { id: 'psg', name: 'Paris Saint-Germain', flag: '🇫🇷', iso: 'fr', logo: 'https://crests.football-data.org/524.svg' },

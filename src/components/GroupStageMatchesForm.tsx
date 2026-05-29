@@ -154,6 +154,22 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
     savePredictions(updated);
   };
 
+  const handleMultiPropChange = (matchId: string, propId: string, option: string) => {
+    const current = predictions[matchId] || { homeScore: '', awayScore: '' };
+    const currentProps = current.propBets || {};
+    const updated = {
+      ...predictions,
+      [matchId]: {
+        ...current,
+        propBets: {
+          ...currentProps,
+          [propId]: option
+        }
+      }
+    };
+    savePredictions(updated);
+  };
+
   const handleAutoFillAll = () => {
     const updated: PredictionsState = {};
     matches.forEach(m => {
@@ -611,7 +627,43 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                         </div>
                       </div>
 
-                      {m.has_prop_bet && m.prop_question && m.prop_options && (
+                      {m.prop_bets && m.prop_bets.length > 0 ? (
+                        <div className="mt-2.5 pt-2 border-t border-zinc-800/80 w-full space-y-3" dir="rtl">
+                          <label className="block text-[9px] font-black text-blue-400 uppercase tracking-wider text-right mb-0.5">
+                            🔥 שאלות בונוס (Prop Bets)
+                          </label>
+                          {m.prop_bets.map((bet) => {
+                            const selectedOpt = (p.propBets || {})[bet.id] || '';
+                            return (
+                              <div key={bet.id} className="space-y-1 pb-2 border-b border-zinc-900/60 last:border-0 last:pb-0">
+                                <span className="block text-[11px] font-extrabold text-slate-300 text-right">
+                                  {bet.question}
+                                </span>
+                                <div className="grid grid-cols-2 gap-1.5 text-right">
+                                  {bet.options.map((opt) => {
+                                    const isSelected = selectedOpt === opt;
+                                    return (
+                                      <button
+                                        key={opt}
+                                        type="button"
+                                        disabled={isInputDisabled}
+                                        onClick={() => handleMultiPropChange(m.id, bet.id, opt)}
+                                        className={`px-2.5 py-1.5 text-[10px] font-bold rounded-lg border text-center transition-all ${
+                                          isSelected
+                                            ? 'bg-blue-600 border-blue-500 text-white shadow shadow-blue-950/20'
+                                            : 'bg-zinc-950 border-zinc-850 text-slate-400 hover:text-slate-200 hover:bg-zinc-900/40'
+                                        } disabled:opacity-85 disabled:cursor-not-allowed`}
+                                      >
+                                        {opt}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : m.has_prop_bet && m.prop_question && m.prop_options ? (
                         <div className="mt-2.5 pt-2 border-t border-zinc-800/80 w-full" dir="rtl">
                           <label className="block text-[9px] font-black text-blue-400 uppercase tracking-wider mb-1 text-right">
                             🔥 שאלת בונוס (Prop Bet)
@@ -640,7 +692,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                             })}
                           </div>
                         </div>
-                      )}
+                      ) : null}
                       
                       {isStarted && m.status !== 'finished' && (
                         <div className="text-[9px] text-center text-red-400 mt-0.5">
