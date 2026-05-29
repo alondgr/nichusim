@@ -19,7 +19,7 @@ const ALL_FOOTBALL_MATCHES = GROUPS.flatMap(g => getGroupMatches(g, TEAMS)).sort
 export default function Home() {
   const [started, setStarted] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [sport, setSport] = useState<'football' | 'tennis' | 'ucl'>('football');
+  const [sport, setSport] = useState<'football' | 'tennis' | 'ucl'>('ucl');
 
   const [fPreds, setFPreds] = useState<PredictionsState>({});
   const [fSub, setFSub] = useState(false);
@@ -116,10 +116,11 @@ export default function Home() {
           </div>
           <div className="flex bg-zinc-900 rounded-full p-1 border border-zinc-800 mx-auto">
             <button
-              onClick={() => setSport('football')}
-              className={`px-4 py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-colors ${sport === 'football' ? 'bg-indigo-600 text-white shadow' : 'text-zinc-500 hover:text-zinc-300'}`}
+              disabled
+              className="px-4 py-1.5 rounded-full text-[10px] sm:text-xs font-bold text-zinc-600 opacity-40 cursor-not-allowed flex items-center gap-1 select-none"
+              title="ייפתח בהמשך הטורניר"
             >
-              🏆 World Cup
+              🔒 World Cup
             </button>
             <button
               onClick={() => setSport('ucl')}
