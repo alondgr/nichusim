@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Award, Trophy, ChevronDown, Star } from 'lucide-react';
 
-export default function ScoringRules({ sport = 'football' }: { sport?: 'football' | 'tennis' }) {
+export default function ScoringRules({ sport = 'football' }: { sport?: 'football' | 'tennis' | 'ucl' }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -74,7 +74,7 @@ export default function ScoringRules({ sport = 'football' }: { sport?: 'football
                 {/* Match Predictions */}
                 <div className="space-y-2 pt-1">
                   <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block px-1">
-                    {sport === 'football' ? 'ניקוד לשלב הבתים' : 'ניקוד למשחקי טניס'}
+                    {sport === 'football' ? 'ניקוד לשלב הבתים' : sport === 'ucl' ? 'ניקוד למשחק הגמר' : 'ניקוד למשחקי טניס'}
                   </span>
                   
                   <div className="space-y-2">
@@ -85,11 +85,11 @@ export default function ScoringRules({ sport = 'football' }: { sport?: 'football
                         <div className="flex flex-col">
                           <span className="font-bold text-slate-200 text-xs">תוצאה בול (מדויקת)</span>
                           <span className="text-[9px] text-zinc-500 mt-0.5">
-                            {sport === 'football' ? 'ניחוש של התוצאה המדויקת של המשחק' : 'ניחוש מדויק של תוצאת המערכות'}
+                            {sport === 'tennis' ? 'ניחוש מדויק של תוצאת המערכות' : 'ניחוש של התוצאה המדויקת של המשחק'}
                           </span>
                         </div>
                       </div>
-                      <span className="text-emerald-400 font-black text-sm bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/10">3 נק&apos;</span>
+                      <span className="text-emerald-400 font-black text-sm bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/10">{sport === 'ucl' ? '10' : '3'} נק&apos;</span>
                     </div>
 
                     {/* Outcome Direction */}
@@ -99,11 +99,11 @@ export default function ScoringRules({ sport = 'football' }: { sport?: 'football
                         <div className="flex flex-col">
                           <span className="font-bold text-slate-200 text-xs">כיוון</span>
                           <span className="text-[9px] text-zinc-500 mt-0.5">
-                            {sport === 'football' ? 'ניחוש נכון של זהות המנצחת או תוצאת תיקו' : 'ניחוש נכון של זהות המנצח/ת במשחק'}
+                            {sport === 'tennis' ? 'ניחוש נכון של זהות המנצח/ת במשחק' : 'ניחוש נכון של זהות המנצחת או תוצאת תיקו'}
                           </span>
                         </div>
                       </div>
-                      <span className="text-indigo-400 font-black text-sm bg-indigo-500/10 px-2.5 py-0.5 rounded-full border border-indigo-500/10">1 נק&apos;</span>
+                      <span className="text-indigo-400 font-black text-sm bg-indigo-500/10 px-2.5 py-0.5 rounded-full border border-indigo-500/10">{sport === 'ucl' ? '5' : '1'} נק&apos;</span>
                     </div>
                   </div>
                 </div>

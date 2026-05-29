@@ -40,7 +40,7 @@ const TeamFlag = ({ iso, flag, name, size = 'large' }: { iso: string, flag: stri
 };
 
 interface OpeningJinxFormProps {
-  sport?: 'football' | 'tennis';
+  sport?: 'football' | 'tennis' | 'ucl';
   matches: Match[];
   predictions: PredictionsState;
   savePredictions: (preds: PredictionsState) => void;
@@ -170,6 +170,7 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
           <div className="inline-flex items-center justify-center p-3 bg-red-500/10 rounded-2xl mb-1">
             {submitted || isStarted ? (
               <Lock className={`w-6 h-6 ${sport === 'tennis' ? 'text-orange-400' : 'text-indigo-400'}`} />
+              <Lock className={`w-6 h-6 ${sport === 'ucl' ? 'text-blue-400' : sport === 'tennis' ? 'text-orange-400' : 'text-indigo-400'}`} />
             ) : isOpening ? (
               <Trophy className="w-6 h-6 text-yellow-500" />
             ) : (
@@ -177,7 +178,9 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
             )}
           </div>
           <h2 className="text-xl sm:text-2xl font-extrabold text-slate-100 tracking-tight">
-            {sport === 'football' 
+            {sport === 'ucl' 
+              ? '⭐ גמר ליגת האלופות' 
+              : sport === 'football' 
               ? (isOpening ? '🏆 משחק הפתיחה' : '🔮 נאחס את התוצאה') 
               : '🎾 נחש תוצאת מערכות'}
           </h2>
@@ -196,13 +199,14 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
               ? 'הניחוש שלך נשמר בהצלחה! 🎉'
               : isStarted
               ? 'המשחק כבר התחיל. הניחוש נעול! 🔒'
+              : sport === 'ucl'
+                ? 'ריאל מדריד נגד דורטמונד. המנצחת זוכה בגביע.'
               : sport === 'football'
                 ? (isOpening ? 'מקסיקו נגד דרום אפריקה. נאחס את התוצאה המדויקת.' : 'משחק ביתי של שלב הבתים של מונדיאל 2026.')
                 : `משחק ${match.stage} ברולאן גארוס. הטוב מ-${match.bestOf} מערכות.`}
           </p>
         </div>
 
-        {/* Swipeable Match Area */}
         <div className="relative min-h-[190px] flex items-center justify-center">
           <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
@@ -215,10 +219,9 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
               className="w-full"
             >
               <div className="flex flex-col bg-zinc-900/50 border border-zinc-800 rounded-2xl p-5 sm:p-6">
-                {/* Match Schedule & Channel Info */}
                 <div className="flex flex-col items-center space-y-1 mb-4 pb-3.5 border-b border-zinc-800/60 select-none">
                   <div className={`text-[11px] font-bold flex items-center gap-1.5 px-2.5 py-1 rounded-full border shadow-sm ${
-                    sport === 'tennis' ? 'text-orange-400 bg-orange-500/10 border-orange-500/15' : 'text-indigo-400 bg-indigo-500/10 border-indigo-500/15'
+                    sport === 'ucl' ? 'text-blue-400 bg-blue-500/10 border-blue-500/15' : sport === 'tennis' ? 'text-orange-400 bg-orange-500/10 border-orange-500/15' : 'text-indigo-400 bg-indigo-500/10 border-indigo-500/15'
                   }`}>
                     <span>📅</span>
                     <span>{match.dateStr}</span>
@@ -247,7 +250,6 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
                 </div>
 
                 <div className="flex items-center justify-between">
-                  {/* Team 1: Home */}
                   <div className="flex flex-col items-center space-y-3 flex-1 min-w-0">
                     <TeamFlag iso={match.home.iso} flag={match.home.flag} name={match.home.name} />
                     <span className="font-bold text-xs sm:text-sm text-slate-200 truncate w-full text-center">{match.home.name}</span>
@@ -259,14 +261,13 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
                       disabled={isInputDisabled}
                       value={p.homeScore}
                       onChange={(e) => handleScoreChange(match.id, 'home', e.target.value)}
-                      className={`w-14 h-14 sm:w-16 sm:h-16 text-center text-xl sm:text-2xl font-black bg-zinc-950 border rounded-xl focus:ring-2 outline-none text-slate-100 disabled:opacity-90 disabled:border-opacity-30 transition-colors ${sport === 'tennis' ? 'border-orange-500/50 focus:ring-orange-500' : 'border-zinc-700 focus:ring-indigo-500'}`}
+                      className={`w-14 h-14 sm:w-16 sm:h-16 text-center text-xl sm:text-2xl font-black bg-zinc-950 border rounded-xl focus:ring-2 outline-none text-slate-100 disabled:opacity-90 disabled:border-opacity-30 transition-colors ${sport === 'ucl' ? 'border-blue-500/50 focus:ring-blue-500' : sport === 'tennis' ? 'border-orange-500/50 focus:ring-orange-500' : 'border-zinc-700 focus:ring-indigo-500'}`}
                       dir="ltr"
                     />
                   </div>
 
-                  <div className={`text-xl font-black mb-6 px-3 flex-shrink-0 ${sport === 'tennis' ? 'text-orange-600/50' : 'text-slate-600'}`}>-</div>
+                  <div className={`text-xl font-black mb-6 px-3 flex-shrink-0 ${sport === 'ucl' ? 'text-blue-600/50' : sport === 'tennis' ? 'text-orange-600/50' : 'text-slate-600'}`}>-</div>
 
-                  {/* Team 2: Away */}
                   <div className="flex flex-col items-center space-y-3 flex-1 min-w-0">
                     <TeamFlag iso={match.away.iso} flag={match.away.flag} name={match.away.name} />
                     <span className="font-bold text-xs sm:text-sm text-slate-200 truncate w-full text-center">{match.away.name}</span>
@@ -278,7 +279,7 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
                       disabled={isInputDisabled}
                       value={p.awayScore}
                       onChange={(e) => handleScoreChange(match.id, 'away', e.target.value)}
-                      className={`w-14 h-14 sm:w-16 sm:h-16 text-center text-xl sm:text-2xl font-black bg-zinc-950 border rounded-xl focus:ring-2 outline-none text-slate-100 disabled:opacity-90 disabled:border-opacity-30 transition-colors ${sport === 'tennis' ? 'border-orange-500/50 focus:ring-orange-500' : 'border-zinc-700 focus:ring-indigo-500'}`}
+                      className={`w-14 h-14 sm:w-16 sm:h-16 text-center text-xl sm:text-2xl font-black bg-zinc-950 border rounded-xl focus:ring-2 outline-none text-slate-100 disabled:opacity-90 disabled:border-opacity-30 transition-colors ${sport === 'ucl' ? 'border-blue-500/50 focus:ring-blue-500' : sport === 'tennis' ? 'border-orange-500/50 focus:ring-orange-500' : 'border-zinc-700 focus:ring-indigo-500'}`}
                       dir="ltr"
                     />
                   </div>
@@ -289,13 +290,12 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
           </AnimatePresence>
         </div>
 
-        {/* Carousel Navigation Buttons */}
         <div className="flex justify-between items-center gap-3 mt-6">
           <button
             type="button"
             onClick={() => handleIndexChange(currentIndex - 1, -1)}
             disabled={currentIndex === 0}
-            className={`flex-1 py-2.5 px-3 bg-zinc-900 border hover:border-indigo-500/40 text-zinc-400 hover:text-indigo-400 font-bold rounded-xl text-xs flex items-center justify-center gap-1 transition-all disabled:opacity-20 disabled:cursor-not-allowed select-none ${sport === 'tennis' ? 'border-orange-900/30 hover:border-orange-500/40 hover:text-orange-400' : 'border-zinc-800'}`}
+            className={`flex-1 py-2.5 px-3 bg-zinc-900 border hover:border-indigo-500/40 text-zinc-400 hover:text-indigo-400 font-bold rounded-xl text-xs flex items-center justify-center gap-1 transition-all disabled:opacity-20 disabled:cursor-not-allowed select-none ${sport === 'ucl' ? 'border-blue-900/30 hover:border-blue-500/40 hover:text-blue-400' : sport === 'tennis' ? 'border-orange-900/30 hover:border-orange-500/40 hover:text-orange-400' : 'border-zinc-800'}`}
           >
             <ChevronRight className="w-4 h-4" />
             משחק קודם
@@ -306,7 +306,7 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
             onClick={() => handleIndexChange(currentIndex + 1, 1)}
             disabled={currentIndex === matches.length - 1}
             className={`flex-1 py-2.5 px-3 border font-bold rounded-xl text-xs flex items-center justify-center gap-1 transition-all disabled:opacity-20 disabled:cursor-not-allowed select-none ${
-              sport === 'tennis' ? 'bg-orange-600/10 border-orange-500/30 hover:bg-orange-600/20 text-orange-300' : 'bg-indigo-600/10 border-indigo-500/30 hover:bg-indigo-600/20 text-indigo-300'
+              sport === 'ucl' ? 'bg-blue-600/10 border-blue-500/30 hover:bg-blue-600/20 text-blue-300' : sport === 'tennis' ? 'bg-orange-600/10 border-orange-500/30 hover:bg-orange-600/20 text-orange-300' : 'bg-indigo-600/10 border-indigo-500/30 hover:bg-indigo-600/20 text-indigo-300'
             }`}
           >
             משחק הבא

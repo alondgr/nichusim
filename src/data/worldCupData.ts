@@ -230,7 +230,7 @@ export const TOP_SCORERS: Player[] = [
 
 export interface Match {
   id: string;
-  sport?: 'football' | 'tennis';
+  sport?: 'football' | 'tennis' | 'ucl';
   home: Team;
   away: Team;
   group?: string;
@@ -587,6 +587,22 @@ export const TENNIS_MATCHES: Match[] = [
 
 export const ALL_TENNIS_MATCHES = TENNIS_MATCHES.sort((a, b) => a.timestamp - b.timestamp);
 
+// --- UCL Sandbox Data ---
+export const UCL_MATCHES: Match[] = [
+  {
+    id: 'ucl_2026_final',
+    sport: 'ucl',
+    home: { id: 'rmd', name: 'ריאל מדריד', flag: '🇪🇸', iso: 'es' },
+    away: { id: 'bvb', name: 'דורטמונד', flag: '🇩🇪', iso: 'de' },
+    stage: 'גמר',
+    status: 'upcoming',
+    dateStr: 'יום שבת, 30/05/2026',
+    timeStr: '22:00',
+    channel: 'ספורט 5',
+    timestamp: new Date('2026-05-30T22:00:00+03:00').getTime()
+  }
+];
+
 // --- Helpers ---
 
 export const generateTennisScore = (bestOf: 3 | 5): { home: number, away: number } => {
@@ -608,7 +624,7 @@ export const generateTennisScore = (bestOf: 3 | 5): { home: number, away: number
 };
 
 export function calculateMatchPoints(
-  sport: 'football' | 'tennis',
+  sport: 'football' | 'tennis' | 'ucl',
   predictedHome: number | '',
   predictedAway: number | '',
   actualHome: number | '',
@@ -623,7 +639,14 @@ export function calculateMatchPoints(
   const aHome = Number(actualHome);
   const aAway = Number(actualAway);
 
-  if (sport === 'football') {
+  if (sport === 'ucl') {
+    // UCL Specific Rules
+    if (pHome === aHome && pAway === aAway) return 10;
+    const predictedWinner = pHome > pAway ? 'home' : pHome < pAway ? 'away' : 'draw';
+    const actualWinner = aHome > aAway ? 'home' : aHome < aAway ? 'away' : 'draw';
+    if (predictedWinner === actualWinner) return 5;
+    return 0;
+  } else if (sport === 'football') {
     // Exact Score
     if (pHome === aHome && pAway === aAway) return 3;
     // Outcome Match

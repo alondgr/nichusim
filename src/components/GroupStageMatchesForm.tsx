@@ -51,7 +51,7 @@ const generateRealisticScore = (): number => {
 };
 
 interface GroupStageMatchesFormProps {
-  sport?: 'football' | 'tennis';
+  sport?: 'football' | 'tennis' | 'ucl';
   matches: Match[];
   predictions: PredictionsState;
   savePredictions: (preds: PredictionsState) => void;
@@ -199,7 +199,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
         </h2>
         <div className="flex flex-col items-center space-y-4 bg-zinc-900/60 backdrop-blur border border-zinc-800 rounded-3xl p-5 w-full shadow-xl">
           <p className="text-slate-400 text-sm leading-relaxed">
-            {sport === 'football' ? `כל ${totalRequired} המשחקים של שלב הבתים של מונדיאל 2026 נוחשו וננעלו במערכת!` : `כל ${totalRequired} המשחקים נוחשו וננעלו במערכת!`}
+            {sport === 'football' ? `כל ${totalRequired} המשחקים של שלב הבתים נוחשו וננעלו!` : `כל ${totalRequired} המשחקים נוחשו וננעלו במערכת!`}
           </p>
           
           <div className="flex gap-4 w-full">
@@ -207,7 +207,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
               type="button"
               onClick={() => setIsModalOpen(true)}
               className={`flex-1 py-2.5 px-4 font-bold rounded-xl text-xs transition-colors ${
-                sport === 'football' ? 'bg-indigo-600 hover:bg-indigo-500 text-white' : 'bg-orange-600 hover:bg-orange-500 text-white'
+                sport === 'football' ? 'bg-indigo-600 hover:bg-indigo-500 text-white' : sport === 'ucl' ? 'bg-blue-600 hover:bg-blue-500 text-white' : 'bg-orange-600 hover:bg-orange-500 text-white'
               }`}
             >
               הצג ניחושים 📋
@@ -498,10 +498,10 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                             placeholder="-"
                             value={p.homeScore}
                             onChange={(e) => handleScoreChange(m.id, 'home', e.target.value)}
-                            className={`w-8 h-8 text-center text-xs font-black bg-zinc-950 border rounded-md focus:ring-1 outline-none text-slate-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none disabled:opacity-90 disabled:border-opacity-30 border-zinc-800 ${sport === 'tennis' ? 'focus:border-orange-500 focus:ring-orange-500 disabled:text-orange-400' : 'focus:border-indigo-500 focus:ring-indigo-500 disabled:text-indigo-400'}`}
+                            className={`w-8 h-8 text-center text-xs font-black bg-zinc-950 border rounded-md focus:ring-1 outline-none text-slate-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none disabled:opacity-90 disabled:border-opacity-30 border-zinc-800 ${sport === 'ucl' ? 'focus:border-blue-500 focus:ring-blue-500 disabled:text-blue-400' : sport === 'tennis' ? 'focus:border-orange-500 focus:ring-orange-500 disabled:text-orange-400' : 'focus:border-indigo-500 focus:ring-indigo-500 disabled:text-indigo-400'}`}
                             dir="ltr"
                           />
-                          <span className={`font-extrabold text-xs ${sport === 'tennis' ? 'text-orange-600/50' : 'text-zinc-600'}`}>-</span>
+                          <span className={`font-extrabold text-xs ${sport === 'ucl' ? 'text-blue-600/50' : sport === 'tennis' ? 'text-orange-600/50' : 'text-zinc-600'}`}>-</span>
                           <input
                             type="number"
                             min="0"
@@ -511,7 +511,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                             placeholder="-"
                             value={p.awayScore}
                             onChange={(e) => handleScoreChange(m.id, 'away', e.target.value)}
-                            className={`w-8 h-8 text-center text-xs font-black bg-zinc-950 border rounded-md focus:ring-1 outline-none text-slate-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none disabled:opacity-90 disabled:border-opacity-30 border-zinc-800 ${sport === 'tennis' ? 'focus:border-orange-500 focus:ring-orange-500 disabled:text-orange-400' : 'focus:border-indigo-500 focus:ring-indigo-500 disabled:text-indigo-400'}`}
+                            className={`w-8 h-8 text-center text-xs font-black bg-zinc-950 border rounded-md focus:ring-1 outline-none text-slate-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none disabled:opacity-90 disabled:border-opacity-30 border-zinc-800 ${sport === 'ucl' ? 'focus:border-blue-500 focus:ring-blue-500 disabled:text-blue-400' : sport === 'tennis' ? 'focus:border-orange-500 focus:ring-orange-500 disabled:text-orange-400' : 'focus:border-indigo-500 focus:ring-indigo-500 disabled:text-indigo-400'}`}
                             dir="ltr"
                           />
                         </div>

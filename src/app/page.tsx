@@ -9,7 +9,7 @@ import OpeningJinxForm from '@/components/OpeningJinxForm';
 import FlopTeamForm from '@/components/FlopTeamForm';
 import GoalDroughtForm from '@/components/GoalDroughtForm';
 import GroupStageMatchesForm from '@/components/GroupStageMatchesForm';
-import { PredictionsState, getGroupMatches, TEAMS, ALL_TENNIS_MATCHES } from '@/data/worldCupData';
+import { PredictionsState, getGroupMatches, TEAMS, ALL_TENNIS_MATCHES, UCL_MATCHES } from '@/data/worldCupData';
 
 const GROUPS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
 const ALL_FOOTBALL_MATCHES = GROUPS.flatMap(g => getGroupMatches(g, TEAMS)).sort((a, b) => a.timestamp - b.timestamp);
@@ -17,13 +17,16 @@ const ALL_FOOTBALL_MATCHES = GROUPS.flatMap(g => getGroupMatches(g, TEAMS)).sort
 export default function Home() {
   const [started, setStarted] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [sport, setSport] = useState<'football' | 'tennis'>('football');
+  const [sport, setSport] = useState<'football' | 'tennis' | 'ucl'>('football');
 
   const [fPreds, setFPreds] = useState<PredictionsState>({});
   const [fSub, setFSub] = useState(false);
 
   const [tPreds, setTPreds] = useState<PredictionsState>({});
   const [tSub, setTSub] = useState(false);
+
+  const [uPreds, setUPreds] = useState<PredictionsState>({});
+  const [uSub, setUSub] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -43,6 +46,15 @@ export default function Home() {
     }
     if (localStorage.getItem('nichusim_tennis_submitted') === 'true') {
       setTSub(true);
+    }
+
+    // Load UCL
+    const su = localStorage.getItem('nichusim_ucl_predictions');
+    if (su) {
+      try { setUPreds(JSON.parse(su)); } catch (e) {}
+    }
+    if (localStorage.getItem('nichusim_ucl_submitted') === 'true') {
+      setUSub(true);
     }
   }, []);
 
@@ -66,10 +78,20 @@ export default function Home() {
     else localStorage.removeItem('nichusim_tennis_submitted');
   };
 
+  const saveUPreds = (preds: PredictionsState) => {
+    setUPreds(preds);
+    localStorage.setItem('nichusim_ucl_predictions', JSON.stringify(preds));
+  };
+  const handleUSub = (val: boolean) => {
+    setUSub(val);
+    if (val) localStorage.setItem('nichusim_ucl_submitted', 'true');
+    else localStorage.removeItem('nichusim_ucl_submitted');
+  };
+
   if (!mounted) return null;
 
   return (
-    <main className={`flex min-h-[100svh] flex-col items-center justify-start bg-zinc-950 relative ${sport === 'football' ? 'selection:bg-indigo-500/30' : 'selection:bg-orange-500/30'}`}>
+    <main className={`flex min-h-[100svh] flex-col items-center justify-start bg-zinc-950 relative ${sport === 'football' ? 'selection:bg-indigo-500/30' : sport === 'ucl' ? 'selection:bg-blue-500/30' : 'selection:bg-orange-500/30'}`}>
       <Show when="signed-out">
         <div className="flex min-h-[100svh] flex-col items-center justify-center w-full">
           {!started ? (
@@ -95,13 +117,19 @@ export default function Home() {
               onClick={() => setSport('football')}
               className={`px-4 py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-colors ${sport === 'football' ? 'bg-indigo-600 text-white shadow' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
-              🏆 World Cup 2026
+              🏆 World Cup
+            </button>
+            <button
+              onClick={() => setSport('ucl')}
+              className={`px-4 py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-colors ${sport === 'ucl' ? 'bg-blue-600 text-white shadow' : 'text-zinc-500 hover:text-zinc-300'}`}
+            >
+              ⭐ UCL Final
             </button>
             <button
               onClick={() => setSport('tennis')}
               className={`px-4 py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-colors ${sport === 'tennis' ? 'bg-orange-600 text-white shadow' : 'text-zinc-500 hover:text-zinc-300'}`}
             >
-              🎾 French Open (Live Testing)
+              🎾 French Open
             </button>
           </div>
         </div>
@@ -112,11 +140,11 @@ export default function Home() {
           
           <OpeningJinxForm 
             sport={sport}
-            matches={sport === 'football' ? ALL_FOOTBALL_MATCHES : ALL_TENNIS_MATCHES}
-            predictions={sport === 'football' ? fPreds : tPreds}
-            savePredictions={sport === 'football' ? saveFPreds : saveTPreds}
-            submitted={sport === 'football' ? fSub : tSub}
-            setSubmitted={sport === 'football' ? handleFSub : handleTSub}
+            matches={sport === 'football' ? ALL_FOOTBALL_MATCHES : sport === 'ucl' ? UCL_MATCHES : ALL_TENNIS_MATCHES}
+            predictions={sport === 'football' ? fPreds : sport === 'ucl' ? uPreds : tPreds}
+            savePredictions={sport === 'football' ? saveFPreds : sport === 'ucl' ? saveUPreds : saveTPreds}
+            submitted={sport === 'football' ? fSub : sport === 'ucl' ? uSub : tSub}
+            setSubmitted={sport === 'football' ? handleFSub : sport === 'ucl' ? handleUSub : handleTSub}
           />
           
           {sport === 'football' && (
@@ -128,11 +156,11 @@ export default function Home() {
 
           <GroupStageMatchesForm 
             sport={sport}
-            matches={sport === 'football' ? ALL_FOOTBALL_MATCHES : ALL_TENNIS_MATCHES}
-            predictions={sport === 'football' ? fPreds : tPreds}
-            savePredictions={sport === 'football' ? saveFPreds : saveTPreds}
-            submitted={sport === 'football' ? fSub : tSub}
-            setSubmitted={sport === 'football' ? handleFSub : handleTSub}
+            matches={sport === 'football' ? ALL_FOOTBALL_MATCHES : sport === 'ucl' ? UCL_MATCHES : ALL_TENNIS_MATCHES}
+            predictions={sport === 'football' ? fPreds : sport === 'ucl' ? uPreds : tPreds}
+            savePredictions={sport === 'football' ? saveFPreds : sport === 'ucl' ? saveUPreds : saveTPreds}
+            submitted={sport === 'football' ? fSub : sport === 'ucl' ? uSub : tSub}
+            setSubmitted={sport === 'football' ? handleFSub : sport === 'ucl' ? handleUSub : handleTSub}
           />
         </div>
       </Show>
