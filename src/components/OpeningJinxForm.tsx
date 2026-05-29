@@ -57,6 +57,7 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
 
   useEffect(() => {
     setMounted(true);
+    setNow(Date.now()); // Sync immediately on client mount
     const savedIdxKey = sport === 'football' ? 'nichusim_carousel_index' : 'nichusim_tennis_carousel_index';
     const savedIdx = localStorage.getItem(savedIdxKey);
     if (savedIdx !== null) {
@@ -135,7 +136,8 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
     return pred && pred.homeScore !== '' && pred.awayScore !== '';
   }).length;
 
-  const isStarted = match.timestamp <= now;
+  const GRACE_PERIOD_MS = 15 * 60 * 1000; // 15 minutes
+  const isStarted = match.timestamp + GRACE_PERIOD_MS <= now;
   const isInputDisabled = submitted || isStarted;
 
   return (

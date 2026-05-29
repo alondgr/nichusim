@@ -79,6 +79,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
   // Set mounted on mount
   useEffect(() => {
     setMounted(true);
+    setNow(Date.now()); // Sync immediately on client mount
     const interval = setInterval(() => setNow(Date.now()), 60000);
     return () => clearInterval(interval);
   }, []);
@@ -470,7 +471,8 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
               >
                 {currentGroupMatches.map((m) => {
                   const p = predictions[m.id] || { homeScore: '', awayScore: '' };
-                  const isStarted = m.timestamp <= now;
+                  const GRACE_PERIOD_MS = 15 * 60 * 1000; // 15 minutes
+                  const isStarted = m.timestamp + GRACE_PERIOD_MS <= now;
                   const isInputDisabled = submitted || isStarted;
 
                   return (
