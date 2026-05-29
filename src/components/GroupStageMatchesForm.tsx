@@ -188,8 +188,17 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                 const randomOption = bet.options[Math.floor(Math.random() * bet.options.length)];
                 propBets![bet.id] = randomOption;
               } else {
-                // Free number input for cards/corners
-                propBets![bet.id] = String(Math.floor(Math.random() * 8) + 2); // Random 2-9
+                // Free number input for cards/corners with realistic ranges
+                if (bet.id === 'total_corners') {
+                  propBets![bet.id] = String(Math.floor(Math.random() * 9) + 6); // 6-14 corners
+                } else if (bet.id === 'yellow_cards') {
+                  propBets![bet.id] = String(Math.floor(Math.random() * 6) + 2); // 2-7 yellow cards
+                } else if (bet.id === 'red_cards') {
+                  // 80% chance of 0, 20% chance of 1
+                  propBets![bet.id] = Math.random() < 0.8 ? '0' : '1';
+                } else {
+                  propBets![bet.id] = String(Math.floor(Math.random() * 5)); 
+                }
               }
             });
           } else if (m.has_prop_bet && m.prop_options) {
