@@ -64,6 +64,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isConfirmingClear, setIsConfirmingClear] = useState(false);
+  const [now, setNow] = useState(Date.now());
 
   const groups = useMemo(() => {
     if (sport === 'football') {
@@ -78,6 +79,8 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
   // Set mounted on mount
   useEffect(() => {
     setMounted(true);
+    const interval = setInterval(() => setNow(Date.now()), 60000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -467,24 +470,13 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
               >
                 {currentGroupMatches.map((m) => {
                   const p = predictions[m.id] || { homeScore: '', awayScore: '' };
-                  // Check if this particular match is invalid in tennis
-                  let isTennisInvalid = false;
-                  if (sport === 'tennis' && p.homeScore !== '' && p.awayScore !== '') {
-                    const h = Number(p.homeScore);
-                    const a = Number(p.awayScore);
-                    if (m.bestOf === 3) {
-                      if (!((h === 2 && a < 2) || (a === 2 && h < 2))) isTennisInvalid = true;
-                    } else if (m.bestOf === 5) {
-                      if (!((h === 3 && a < 3) || (a === 3 && h < 3))) isTennisInvalid = true;
-                    }
-                  }
+                  const isStarted = m.timestamp <= now;
+                  const isInputDisabled = submitted || isStarted;
 
                   return (
                     <div 
                       key={m.id}
-                      className={`flex flex-col gap-1 w-full bg-zinc-900/40 border rounded-xl p-2.5 transition-colors ${
-                        isTennisInvalid ? 'border-red-500/50 hover:border-red-500/70' : 'border-zinc-800/80 hover:border-zinc-700/60'
-                      }`}
+                      className={`flex flex-col gap-1 w-full bg-zinc-900/40 border rounded-xl p-2.5 transition-colors border-zinc-800/80 hover:border-zinc-700/60`}
                     >
                       <div className="flex items-center justify-between w-full">
                         {/* Home Team */}
@@ -495,39 +487,72 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
 
                         {/* Scores inputs */}
                         <div className="flex items-center justify-center gap-1 flex-shrink-0 mx-1">
-                          <input
-                            type="number"
-                            min="0"
-                            max={sport === 'tennis' ? (m.bestOf === 3 ? 2 : 3) : 10}
-                            required
-                            disabled={submitted}
-                            placeholder="-"
-                            value={p.homeScore}
-                            onChange={(e) => handleScoreChange(m.id, 'home', e.target.value)}
-                            className={`w-8 h-8 text-center text-xs font-black bg-zinc-950 border rounded-md focus:ring-1 outline-none text-slate-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none disabled:opacity-90 disabled:border-opacity-30 ${
-                              isTennisInvalid 
-                                ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500 text-red-200' 
-                                : `border-zinc-800 ${sport === 'football' ? 'focus:border-indigo-500 focus:ring-indigo-500 disabled:text-indigo-400' : 'focus:border-orange-500 focus:ring-orange-500 disabled:text-orange-400'}`
-                            }`}
-                            dir="ltr"
-                          />
-                          <span className="text-zinc-600 font-extrabold text-xs">-</span>
-                          <input
-                            type="number"
-                            min="0"
-                            max={sport === 'tennis' ? (m.bestOf === 3 ? 2 : 3) : 10}
-                            required
-                            disabled={submitted}
-                            placeholder="-"
-                            value={p.awayScore}
-                            onChange={(e) => handleScoreChange(m.id, 'away', e.target.value)}
-                            className={`w-8 h-8 text-center text-xs font-black bg-zinc-950 border rounded-md focus:ring-1 outline-none text-slate-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none disabled:opacity-90 disabled:border-opacity-30 ${
-                              isTennisInvalid 
-                                ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500 text-red-200' 
-                                : `border-zinc-800 ${sport === 'football' ? 'focus:border-indigo-500 focus:ring-indigo-500 disabled:text-indigo-400' : 'focus:border-orange-500 focus:ring-orange-500 disabled:text-orange-400'}`
-                            }`}
-                            dir="ltr"
-                          />
+                          {sport === 'football' ? (
+                            <>
+                              <input
+                                type="number"
+                                min="0"
+                                max="10"
+                                required
+                                disabled={isInputDisabled}
+                                placeholder="-"
+                                value={p.homeScore}
+                                onChange={(e) => handleScoreChange(m.id, 'home', e.target.value)}
+                                className={`w-8 h-8 text-center text-xs font-black bg-zinc-950 border rounded-md focus:ring-1 outline-none text-slate-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none disabled:opacity-90 disabled:border-opacity-30 border-zinc-800 focus:border-indigo-500 focus:ring-indigo-500 disabled:text-indigo-400`}
+                                dir="ltr"
+                              />
+                              <span className="text-zinc-600 font-extrabold text-xs">-</span>
+                              <input
+                                type="number"
+                                min="0"
+                                max="10"
+                                required
+                                disabled={isInputDisabled}
+                                placeholder="-"
+                                value={p.awayScore}
+                                onChange={(e) => handleScoreChange(m.id, 'away', e.target.value)}
+                                className={`w-8 h-8 text-center text-xs font-black bg-zinc-950 border rounded-md focus:ring-1 outline-none text-slate-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none disabled:opacity-90 disabled:border-opacity-30 border-zinc-800 focus:border-indigo-500 focus:ring-indigo-500 disabled:text-indigo-400`}
+                                dir="ltr"
+                              />
+                            </>
+                          ) : (
+                            <select
+                              disabled={isInputDisabled}
+                              value={p.homeScore !== '' && p.awayScore !== '' ? `${p.homeScore}-${p.awayScore}` : '-'}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                if (val === '-') {
+                                  handleScoreChange(m.id, 'home', '');
+                                  handleScoreChange(m.id, 'away', '');
+                                } else {
+                                  const [h, a] = val.split('-');
+                                  handleScoreChange(m.id, 'home', h);
+                                  handleScoreChange(m.id, 'away', a);
+                                }
+                              }}
+                              className="bg-zinc-950 border border-orange-500/50 text-slate-100 text-[11px] font-black rounded-md px-1 py-1 focus:ring-1 focus:ring-orange-500 outline-none disabled:opacity-90 transition-colors text-center cursor-pointer"
+                              dir="ltr"
+                            >
+                              <option value="-">- : -</option>
+                              {m.bestOf === 3 ? (
+                                <>
+                                  <option value="2-0">2 - 0</option>
+                                  <option value="2-1">2 - 1</option>
+                                  <option value="1-2">1 - 2</option>
+                                  <option value="0-2">0 - 2</option>
+                                </>
+                              ) : (
+                                <>
+                                  <option value="3-0">3 - 0</option>
+                                  <option value="3-1">3 - 1</option>
+                                  <option value="3-2">3 - 2</option>
+                                  <option value="2-3">2 - 3</option>
+                                  <option value="1-3">1 - 3</option>
+                                  <option value="0-3">0 - 3</option>
+                                </>
+                              )}
+                            </select>
+                          )}
                         </div>
 
                         {/* Away Team */}
@@ -539,10 +564,9 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                         </div>
                       </div>
                       
-                      {/* Inline error for tennis */}
-                      {isTennisInvalid && (
-                        <div className="text-[9px] text-center text-red-400 mt-1">
-                          התוצאה לא חוקית. צריך להגיע ל-{m.bestOf === 3 ? '2' : '3'} מערכות.
+                      {isStarted && (
+                        <div className="text-[9px] text-center text-red-400 mt-0.5">
+                          🔒 המשחק החל (נעול)
                         </div>
                       )}
                     </div>
