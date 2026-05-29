@@ -11,6 +11,8 @@ import GoalDroughtForm from '@/components/GoalDroughtForm';
 import GroupStageMatchesForm from '@/components/GroupStageMatchesForm';
 import { PredictionsState, getGroupMatches, TEAMS, ALL_TENNIS_MATCHES, UCL_MATCHES } from '@/data/worldCupData';
 
+import LiveMatchShortcut from '@/components/LiveMatchShortcut';
+
 const GROUPS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
 const ALL_FOOTBALL_MATCHES = GROUPS.flatMap(g => getGroupMatches(g, TEAMS)).sort((a, b) => a.timestamp - b.timestamp);
 
@@ -133,6 +135,11 @@ export default function Home() {
             </button>
           </div>
         </div>
+
+        <LiveMatchShortcut
+          sport={sport}
+          matches={sport === 'football' ? ALL_FOOTBALL_MATCHES : sport === 'ucl' ? UCL_MATCHES : ALL_TENNIS_MATCHES}
+        />
 
         <div className="flex flex-col space-y-8 w-full max-w-xl my-12 items-center px-4">
           <UsersList />

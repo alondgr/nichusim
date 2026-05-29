@@ -607,8 +607,10 @@ export const UCL_MATCHES: Match[] = [
     team_b: 'Arsenal',
     team_b_logo: 'https://crests.football-data.org/57.svg',
     stage: 'Final',
-    status: 'upcoming',
+    status: 'live',
     match_time: '19:00 IDT',
+    actualHomeScore: 1,
+    actualAwayScore: 0,
     
     // Existing fields for frontend compatibility
     home: { id: 'psg', name: 'Paris Saint-Germain', flag: '🇫🇷', iso: 'fr', logo: 'https://crests.football-data.org/524.svg' },

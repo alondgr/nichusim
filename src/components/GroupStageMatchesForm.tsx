@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { Trophy, ShieldCheck, Sparkles, Trash2, CheckCircle2, ChevronLeft, ChevronRight, Image as ImageIcon, X } from 'lucide-react';
-import { Match, PredictionsState, generateTennisScore } from '@/data/worldCupData';
+import { Match, PredictionsState, generateTennisScore, calculateMatchPoints } from '@/data/worldCupData';
 
 const GROUP_HEBREW: Record<string, string> = {
   A: 'בית א\'', B: 'בית ב\'', C: 'בית ג\'', D: 'בית ד\'',
@@ -501,16 +501,64 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                   const isStarted = m.timestamp + GRACE_PERIOD_MS <= now;
                   const isInputDisabled = submitted || isStarted;
 
+                  let cardClass = "border-zinc-800/80 hover:border-zinc-700/60 bg-zinc-900/40 text-slate-100";
+                  let pointsBadge = null;
+
+                  if (m.status === 'finished' && m.actualHomeScore !== undefined && m.actualAwayScore !== undefined) {
+                    const points = calculateMatchPoints(
+                      sport,
+                      p.homeScore,
+                      p.awayScore,
+                      m.actualHomeScore,
+                      m.actualAwayScore
+                    );
+
+                    const maxPoints = sport === 'ucl' ? 10 : 3;
+                    const directionPoints = sport === 'ucl' ? 5 : 1;
+
+                    if (points === maxPoints) {
+                      cardClass = "border-green-500 bg-green-950/20 text-green-400";
+                      pointsBadge = (
+                        <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded-md bg-green-500/10 border border-green-500/20 text-green-400">
+                          +{maxPoints} PTS
+                        </span>
+                      );
+                    } else if (points === directionPoints) {
+                      cardClass = "border-blue-500 bg-blue-950/20 text-blue-400";
+                      pointsBadge = (
+                        <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-400">
+                          +{directionPoints} PTS
+                        </span>
+                      );
+                    } else {
+                      cardClass = "border-red-500 bg-red-950/20 text-red-400";
+                      pointsBadge = (
+                        <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded-md bg-red-500/10 border border-red-500/20 text-red-400">
+                          0 PTS
+                        </span>
+                      );
+                    }
+                  }
+
                   return (
                     <div 
                       key={m.id}
-                      className={`flex flex-col gap-1 w-full bg-zinc-900/40 border rounded-xl p-2.5 transition-colors border-zinc-800/80 hover:border-zinc-700/60`}
+                      id={`match-${m.id}`}
+                      className={`flex flex-col gap-1 w-full border rounded-xl p-2.5 transition-all duration-300 ${cardClass}`}
                     >
+                      {pointsBadge && (
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-[9px] font-black tracking-wide text-slate-400 uppercase select-none">
+                            {sport === 'ucl' ? 'Champions League Final' : m.group ? `Group ${m.group}` : m.stage}
+                          </span>
+                          {pointsBadge}
+                        </div>
+                      )}
                       <div className="flex items-center justify-between w-full">
                         {/* Home Team */}
                         <div className="flex items-center gap-1.5 min-w-0 flex-1 justify-start">
                           <TeamFlag iso={m.home.iso} flag={m.home.flag} name={m.home.name} logo={m.home.logo} size="small" />
-                          <span className="text-xs font-bold text-slate-200 truncate">{m.home.name}</span>
+                          <span className={`text-xs font-bold truncate ${m.status === 'finished' ? '' : 'text-slate-200'}`}>{m.home.name}</span>
                         </div>
 
                         {/* Scores inputs */}
@@ -544,7 +592,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
 
                         {/* Away Team */}
                         <div className="flex items-center gap-1.5 min-w-0 flex-1 justify-end text-left">
-                          <span className="text-xs font-bold text-slate-200 truncate order-2 sm:order-1">{m.away.name}</span>
+                          <span className={`text-xs font-bold truncate order-2 sm:order-1 ${m.status === 'finished' ? '' : 'text-slate-200'}`}>{m.away.name}</span>
                           <span className="order-1 sm:order-2 ml-1.5 flex items-center">
                             <TeamFlag iso={m.away.iso} flag={m.away.flag} name={m.away.name} logo={m.away.logo} size="small" />
                           </span>
