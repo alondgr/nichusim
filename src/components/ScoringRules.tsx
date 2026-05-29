@@ -113,8 +113,8 @@ export default function ScoringRules({ sport = 'football' }: { sport?: 'football
                           <div className="flex items-center gap-2">
                             <span className="text-base select-none">⚽</span>
                             <div className="flex flex-col">
-                              <span className="font-bold text-slate-200 text-xs">מבקיעי שערים (שער ראשון / אחרון)</span>
-                              <span className="text-[9px] text-zinc-500 mt-0.5">ניחוש נכון של מבקיע השער הראשון או השער האחרון בגמר</span>
+                              <span className="font-bold text-slate-200 text-xs">שאלות שערים (מלך השערים / מבקיע ראשון / אחרון)</span>
+                              <span className="text-[9px] text-zinc-500 mt-0.5">ניחוש נכון של מלך השערים של המשחק, מבקיע השער הראשון או השער האחרון בגמר</span>
                             </div>
                           </div>
                           <span className="text-amber-400 font-black text-sm bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/10">3 נק&apos;</span>

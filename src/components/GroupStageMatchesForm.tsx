@@ -586,7 +586,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                         {/* Home Team */}
                         <div className="flex items-center gap-1.5 min-w-0 flex-1 justify-start">
                           <TeamFlag iso={m.home.iso} flag={m.home.flag} name={m.home.name} logo={m.home.logo} size="small" />
-                          <span className={`text-xs font-bold truncate ${getMatchStatus(m, now) === 'finished' ? '' : 'text-slate-200'}`} dir={/^[a-zA-Z]/.test(m.home.name) ? 'ltr' : 'rtl'}>{m.home.name}</span>
+                          <span className={`text-xs font-bold whitespace-normal break-words leading-tight ${getMatchStatus(m, now) === 'finished' ? '' : 'text-slate-200'}`} dir={/^[a-zA-Z]/.test(m.home.name) ? 'ltr' : 'rtl'}>{m.home.name}</span>
                         </div>
 
                         {/* Scores inputs */}
@@ -620,7 +620,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
 
                         {/* Away Team */}
                         <div className="flex items-center gap-1.5 min-w-0 flex-1 justify-end text-left">
-                          <span className={`text-xs font-bold truncate order-2 sm:order-1 ${getMatchStatus(m, now) === 'finished' ? '' : 'text-slate-200'}`} dir={/^[a-zA-Z]/.test(m.away.name) ? 'ltr' : 'rtl'}>{m.away.name}</span>
+                          <span className={`text-xs font-bold whitespace-normal break-words leading-tight order-2 sm:order-1 ${getMatchStatus(m, now) === 'finished' ? '' : 'text-slate-200'}`} dir={/^[a-zA-Z]/.test(m.away.name) ? 'ltr' : 'rtl'}>{m.away.name}</span>
                           <span className="order-1 sm:order-2 ml-1.5 flex items-center">
                             <TeamFlag iso={m.away.iso} flag={m.away.flag} name={m.away.name} logo={m.away.logo} size="small" />
                           </span>

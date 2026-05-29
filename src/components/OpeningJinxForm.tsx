@@ -312,7 +312,7 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col items-center space-y-3 flex-1 min-w-0">
                     <TeamFlag iso={match.home.iso} flag={match.home.flag} name={match.home.name} logo={match.home.logo} />
-                    <span className="font-bold text-xs sm:text-sm text-slate-200 truncate w-full text-center" dir={/^[a-zA-Z]/.test(match.home.name) ? 'ltr' : 'rtl'}>{match.home.name}</span>
+                    <span className="font-bold text-xs sm:text-sm text-slate-200 w-full text-center whitespace-normal break-words leading-tight" dir={/^[a-zA-Z]/.test(match.home.name) ? 'ltr' : 'rtl'}>{match.home.name}</span>
                     <input
                       type="number"
                       min="0"
@@ -330,7 +330,7 @@ export default function OpeningJinxForm({ sport = 'football', matches, predictio
 
                   <div className="flex flex-col items-center space-y-3 flex-1 min-w-0">
                     <TeamFlag iso={match.away.iso} flag={match.away.flag} name={match.away.name} logo={match.away.logo} />
-                    <span className="font-bold text-xs sm:text-sm text-slate-200 truncate w-full text-center" dir={/^[a-zA-Z]/.test(match.away.name) ? 'ltr' : 'rtl'}>{match.away.name}</span>
+                    <span className="font-bold text-xs sm:text-sm text-slate-200 w-full text-center whitespace-normal break-words leading-tight" dir={/^[a-zA-Z]/.test(match.away.name) ? 'ltr' : 'rtl'}>{match.away.name}</span>
                     <input
                       type="number"
                       min="0"
