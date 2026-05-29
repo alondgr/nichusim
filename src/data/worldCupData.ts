@@ -592,14 +592,14 @@ export const UCL_MATCHES: Match[] = [
   {
     id: 'ucl_2026_final',
     sport: 'ucl',
-    home: { id: 'rmd', name: 'ריאל מדריד', flag: '🇪🇸', iso: 'es' },
-    away: { id: 'bvb', name: 'דורטמונד', flag: '🇩🇪', iso: 'de' },
+    home: { id: 'psg', name: 'פריז סן ז\'רמן', flag: '🇫🇷', iso: 'fr' },
+    away: { id: 'ars', name: 'ארסנל', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', iso: 'gb-eng' },
     stage: 'גמר',
     status: 'upcoming',
     dateStr: 'יום שבת, 30/05/2026',
-    timeStr: '22:00',
+    timeStr: '19:00',
     channel: 'ספורט 5',
-    timestamp: new Date('2026-05-30T22:00:00+03:00').getTime()
+    timestamp: new Date('2026-05-30T19:00:00+03:00').getTime()
   }
 ];
 
