@@ -173,10 +173,35 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
   const handleAutoFillAll = () => {
     const updated: PredictionsState = {};
     matches.forEach(m => {
-      if (sport === 'football') {
+      if (sport === 'football' || sport === 'ucl') {
+        const homeScore = generateRealisticScore();
+        const awayScore = generateRealisticScore();
+        
+        let propBets: Record<string, string> | undefined = undefined;
+        let selectedProp: string | undefined = undefined;
+
+        if (sport === 'ucl') {
+          if (m.prop_bets && m.prop_bets.length > 0) {
+            propBets = {};
+            m.prop_bets.forEach(bet => {
+              if (bet.options && bet.options.length > 0) {
+                const randomOption = bet.options[Math.floor(Math.random() * bet.options.length)];
+                propBets![bet.id] = randomOption;
+              } else {
+                // Free number input for cards/corners
+                propBets![bet.id] = String(Math.floor(Math.random() * 8) + 2); // Random 2-9
+              }
+            });
+          } else if (m.has_prop_bet && m.prop_options) {
+            selectedProp = m.prop_options[Math.floor(Math.random() * m.prop_options.length)];
+          }
+        }
+
         updated[m.id] = {
-          homeScore: generateRealisticScore(),
-          awayScore: generateRealisticScore()
+          homeScore,
+          awayScore,
+          propBets,
+          selectedProp
         };
       } else {
         const scores = generateTennisScore(m.bestOf || 3);
