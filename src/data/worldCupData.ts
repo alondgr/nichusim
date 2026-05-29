@@ -3,7 +3,7 @@ export interface Team {
   name: string;
   flag: string;
   iso: string;
-  group: string;
+  group?: string;
 }
 
 export interface Player {
@@ -230,13 +230,17 @@ export const TOP_SCORERS: Player[] = [
 
 export interface Match {
   id: string;
+  sport?: 'football' | 'tennis';
   home: Team;
   away: Team;
-  group: string;
+  group?: string;
+  stage?: string;
+  status?: 'upcoming' | 'live' | 'finished';
   dateStr: string;     // Hebrew date, e.g. "יום חמישי, 11/06/2026"
   timeStr: string;     // Israel time, e.g. "19:00"
   channel: string;     // Israeli channel, e.g. "כאן 11"
   timestamp: number;   // Epoch timestamp for easy chronological sorting
+  bestOf?: 3 | 5;      // Tennis sets rules
 }
 
 // Deterministic helper to retrieve the official Israel Hayom World Cup 2026 schedule info
@@ -375,4 +379,117 @@ export const getGroupMatches = (group: string, teams: Team[]): Match[] => {
   });
 };
 
+// --- Tennis Sandbox Data ---
 
+export const TENNIS_MATCHES: Match[] = [
+  {
+    id: 'rg_2026_3r_01',
+    sport: 'tennis',
+    home: { id: 'swiatek', name: 'איגה שוויונטק', flag: '🇵🇱', iso: 'pl' },
+    away: { id: 'linette', name: 'מגדה לינט', flag: '🇵🇱', iso: 'pl' },
+    stage: 'סיבוב 3',
+    status: 'upcoming',
+    dateStr: 'יום שישי, 29/05/2026',
+    timeStr: '12:00',
+    channel: 'ספורט 5',
+    timestamp: new Date('2026-05-29T12:00:00+03:00').getTime(),
+    bestOf: 3
+  },
+  {
+    id: 'rg_2026_3r_02',
+    sport: 'tennis',
+    home: { id: 'djokovic', name: 'נובאק ג\'וקוביץ\'', flag: '🇷🇸', iso: 'rs' },
+    away: { id: 'fonseca', name: 'ז\'ואאו פונסקה', flag: '🇧🇷', iso: 'br' },
+    stage: 'סיבוב 3',
+    status: 'upcoming',
+    dateStr: 'יום שישי, 29/05/2026',
+    timeStr: '14:30',
+    channel: 'ספורט 5 פלוס',
+    timestamp: new Date('2026-05-29T14:30:00+03:00').getTime(),
+    bestOf: 5
+  },
+  {
+    id: 'rg_2026_3r_03',
+    sport: 'tennis',
+    home: { id: 'zverev', name: 'אלכסנדר זברב', flag: '🇩🇪', iso: 'de' },
+    away: { id: 'halys', name: 'קוונטין אליס', flag: '🇫🇷', iso: 'fr' },
+    stage: 'סיבוב 3',
+    status: 'upcoming',
+    dateStr: 'יום שישי, 29/05/2026',
+    timeStr: '16:00',
+    channel: 'ספורט 5 לייב',
+    timestamp: new Date('2026-05-29T16:00:00+03:00').getTime(),
+    bestOf: 5
+  },
+  {
+    id: 'rg_2026_3r_04',
+    sport: 'tennis',
+    home: { id: 'ruud', name: 'קספר רוד', flag: '🇳🇴', iso: 'no' },
+    away: { id: 'paul', name: 'טומי פול', flag: '🇺🇸', iso: 'us' },
+    stage: 'סיבוב 3',
+    status: 'upcoming',
+    dateStr: 'יום שישי, 29/05/2026',
+    timeStr: '18:30',
+    channel: 'ספורט 5',
+    timestamp: new Date('2026-05-29T18:30:00+03:00').getTime(),
+    bestOf: 5
+  }
+];
+
+export const ALL_TENNIS_MATCHES = TENNIS_MATCHES.sort((a, b) => a.timestamp - b.timestamp);
+
+// --- Helpers ---
+
+export const generateTennisScore = (bestOf: 3 | 5): { home: number, away: number } => {
+  const isHomeWinner = Math.random() > 0.5;
+  if (bestOf === 3) {
+    const loserSets = Math.random() > 0.5 ? 1 : 0;
+    return {
+      home: isHomeWinner ? 2 : loserSets,
+      away: isHomeWinner ? loserSets : 2
+    };
+  } else {
+    const rand = Math.random();
+    const loserSets = rand > 0.66 ? 2 : rand > 0.33 ? 1 : 0;
+    return {
+      home: isHomeWinner ? 3 : loserSets,
+      away: isHomeWinner ? loserSets : 3
+    };
+  }
+};
+
+export function calculateMatchPoints(
+  sport: 'football' | 'tennis',
+  predictedHome: number | '',
+  predictedAway: number | '',
+  actualHome: number | '',
+  actualAway: number | ''
+): number {
+  if (predictedHome === '' || predictedAway === '' || actualHome === '' || actualAway === '') {
+    return 0;
+  }
+
+  const pHome = Number(predictedHome);
+  const pAway = Number(predictedAway);
+  const aHome = Number(actualHome);
+  const aAway = Number(actualAway);
+
+  if (sport === 'football') {
+    // Exact Score
+    if (pHome === aHome && pAway === aAway) return 3;
+    // Outcome Match
+    const predictedWinner = pHome > pAway ? 'home' : pHome < pAway ? 'away' : 'draw';
+    const actualWinner = aHome > aAway ? 'home' : aHome < aAway ? 'away' : 'draw';
+    if (predictedWinner === actualWinner) return 1;
+    return 0;
+  } else {
+    // Tennis
+    // Exact Set Score Match
+    if (pHome === aHome && pAway === aAway) return 3;
+    // Correct Winner Match (draws impossible)
+    const predictedWinner = pHome > pAway ? 'home' : 'away';
+    const actualWinner = aHome > aAway ? 'home' : 'away';
+    if (predictedWinner === actualWinner) return 1;
+    return 0;
+  }
+}

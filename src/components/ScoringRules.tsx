@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Award, Trophy, ChevronDown, Star } from 'lucide-react';
 
-export default function ScoringRules() {
+export default function ScoringRules({ sport = 'football' }: { sport?: 'football' | 'tennis' }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -48,30 +48,34 @@ export default function ScoringRules() {
             >
               <div className="p-4 space-y-3.5 text-xs sm:text-sm leading-relaxed" dir="rtl">
                 
-                {/* Major Predictions */}
-                <div className="space-y-2">
-                  <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block px-1">ניחושים ארוכי טווח</span>
-                  
-                  <div className="grid grid-cols-2 gap-2">
-                    {/* Winning Team */}
-                    <div className="bg-zinc-900/40 border border-zinc-800 p-3 rounded-xl flex flex-col items-center text-center space-y-1">
-                      <Trophy className="w-5 h-5 text-amber-500" />
-                      <span className="font-bold text-slate-200 text-xs">נבחרת אלופה</span>
-                      <span className="text-amber-400 font-black text-base mt-1">10 נק&apos;</span>
-                    </div>
+                {/* Major Predictions (Football Only) */}
+                {sport === 'football' && (
+                  <div className="space-y-2">
+                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block px-1">ניחושים ארוכי טווח</span>
+                    
+                    <div className="grid grid-cols-2 gap-2">
+                      {/* Winning Team */}
+                      <div className="bg-zinc-900/40 border border-zinc-800 p-3 rounded-xl flex flex-col items-center text-center space-y-1">
+                        <Trophy className="w-5 h-5 text-amber-500" />
+                        <span className="font-bold text-slate-200 text-xs">נבחרת אלופה</span>
+                        <span className="text-amber-400 font-black text-base mt-1">10 נק&apos;</span>
+                      </div>
 
-                    {/* Top Scorer */}
-                    <div className="bg-zinc-900/40 border border-zinc-800 p-3 rounded-xl flex flex-col items-center text-center space-y-1">
-                      <Star className="w-5 h-5 text-amber-500" />
-                      <span className="font-bold text-slate-200 text-xs">מלך השערים</span>
-                      <span className="text-amber-400 font-black text-base mt-1">10 נק&apos;</span>
+                      {/* Top Scorer */}
+                      <div className="bg-zinc-900/40 border border-zinc-800 p-3 rounded-xl flex flex-col items-center text-center space-y-1">
+                        <Star className="w-5 h-5 text-amber-500" />
+                        <span className="font-bold text-slate-200 text-xs">מלך השערים</span>
+                        <span className="text-amber-400 font-black text-base mt-1">10 נק&apos;</span>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
 
                 {/* Match Predictions */}
                 <div className="space-y-2 pt-1">
-                  <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block px-1">ניקוד לשלב הבתים</span>
+                  <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block px-1">
+                    {sport === 'football' ? 'ניקוד לשלב הבתים' : 'ניקוד למשחקי טניס'}
+                  </span>
                   
                   <div className="space-y-2">
                     {/* Exact Score */}
@@ -80,7 +84,9 @@ export default function ScoringRules() {
                         <span className="text-base select-none">🎯</span>
                         <div className="flex flex-col">
                           <span className="font-bold text-slate-200 text-xs">תוצאה בול (מדויקת)</span>
-                          <span className="text-[9px] text-zinc-500 mt-0.5">ניחוש של התוצאה המדויקת של המשחק</span>
+                          <span className="text-[9px] text-zinc-500 mt-0.5">
+                            {sport === 'football' ? 'ניחוש של התוצאה המדויקת של המשחק' : 'ניחוש מדויק של תוצאת המערכות'}
+                          </span>
                         </div>
                       </div>
                       <span className="text-emerald-400 font-black text-sm bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/10">3 נק&apos;</span>
@@ -92,7 +98,9 @@ export default function ScoringRules() {
                         <span className="text-base select-none">🧭</span>
                         <div className="flex flex-col">
                           <span className="font-bold text-slate-200 text-xs">כיוון</span>
-                          <span className="text-[9px] text-zinc-500 mt-0.5">ניחוש נכון של זהות המנצחת או תוצאת תיקו</span>
+                          <span className="text-[9px] text-zinc-500 mt-0.5">
+                            {sport === 'football' ? 'ניחוש נכון של זהות המנצחת או תוצאת תיקו' : 'ניחוש נכון של זהות המנצח/ת במשחק'}
+                          </span>
                         </div>
                       </div>
                       <span className="text-indigo-400 font-black text-sm bg-indigo-500/10 px-2.5 py-0.5 rounded-full border border-indigo-500/10">1 נק&apos;</span>
