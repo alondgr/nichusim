@@ -153,7 +153,6 @@ export default function MatchPredictionsModal({ isOpen, onClose, match, sport }:
                         </span>
                       </div>
                     )}
-                  </div>
                 </motion.div>
               ))
             )}
