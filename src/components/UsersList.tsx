@@ -12,9 +12,14 @@ interface SafeUser {
   imageUrl: string;
   username: string;
   createdAt: number;
+  predictions?: any;
 }
 
-export default function UsersList() {
+interface UsersListProps {
+  sport: 'football' | 'tennis' | 'ucl';
+}
+
+export default function UsersList({ sport }: UsersListProps) {
   const [users, setUsers] = useState<SafeUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -111,12 +116,14 @@ export default function UsersList() {
         onClose={() => setIsLeaderboardOpen(false)} 
         users={users} 
         onUserSelect={(u) => setSelectedUser(u)} 
+        sport={sport}
       />
 
       <UserProfileModal 
         isOpen={selectedUser !== null} 
         onClose={() => setSelectedUser(null)} 
         user={selectedUser} 
+        sport={sport}
       />
     </>
   );

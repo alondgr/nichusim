@@ -222,7 +222,7 @@ export default function Home() {
         />
 
         <div className="flex flex-col space-y-8 w-full max-w-xl my-12 items-center px-4">
-          <UsersList />
+          <UsersList sport={sport} />
           <ScoringRules sport={sport} />
           
           <OpeningJinxForm 

@@ -6,9 +6,10 @@ interface UserProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
   user: any;
+  sport: 'football' | 'tennis' | 'ucl';
 }
 
-export default function UserProfileModal({ isOpen, onClose, user }: UserProfileModalProps) {
+export default function UserProfileModal({ isOpen, onClose, user, sport }: UserProfileModalProps) {
   if (!isOpen || !user) return null;
 
   const uPreds = user.predictions?.uPreds || {};
@@ -156,7 +157,7 @@ export default function UserProfileModal({ isOpen, onClose, user }: UserProfileM
           <div className="overflow-y-auto p-4 custom-scrollbar">
             
             {/* UCL Matches */}
-            {UCL_MATCHES.some(m => uPreds[m.id]) && (
+            {sport === 'ucl' && UCL_MATCHES.some(m => uPreds[m.id]) && (
               <>
                 <h3 className="text-sm font-bold text-zinc-400 mb-3 flex items-center gap-1.5">
                   <CalendarClock className="w-4 h-4" />
@@ -167,7 +168,7 @@ export default function UserProfileModal({ isOpen, onClose, user }: UserProfileM
             )}
 
             {/* Tennis Matches */}
-            {TENNIS_MATCHES.some(m => tPreds[m.id]) && (
+            {sport === 'tennis' && TENNIS_MATCHES.some(m => tPreds[m.id]) && (
               <>
                 <h3 className="text-sm font-bold text-zinc-400 mt-6 mb-3 flex items-center gap-1.5">
                   <CalendarClock className="w-4 h-4" />
