@@ -16,7 +16,7 @@ interface SafeUser {
 }
 
 interface UsersListProps {
-  sport?: 'football' | 'tennis' | 'ucl';
+  sport: 'football' | 'tennis' | 'ucl';
   liveResults?: Record<string, any>;
 }
 
