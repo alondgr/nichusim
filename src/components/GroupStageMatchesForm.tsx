@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { Trophy, ShieldCheck, Sparkles, Trash2, CheckCircle2, ChevronLeft, ChevronRight, Image as ImageIcon, X } from 'lucide-react';
+import { Trophy, ShieldCheck, Sparkles, Trash2, CheckCircle2, ChevronLeft, ChevronRight, Image as ImageIcon, X, Eye } from 'lucide-react';
 import { Match, PredictionsState, generateTennisScore, calculateMatchPoints, getMatchStatus } from '@/data/worldCupData';
+import MatchPredictionsModal from './MatchPredictionsModal';
 
 const GROUP_HEBREW: Record<string, string> = {
   A: 'בית א\'', B: 'בית ב\'', C: 'בית ג\'', D: 'בית ד\'',
@@ -91,6 +92,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
   const [mounted, setMounted] = useState(false);
   const [isConfirmingClear, setIsConfirmingClear] = useState(false);
   const [now, setNow] = useState(Date.now());
+  const [selectedLiveMatch, setSelectedLiveMatch] = useState<Match | null>(null);
 
   const groups = useMemo(() => {
     if (sport === 'football') {
@@ -118,7 +120,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
 
   // Lock body scrolling when modal is open
   useEffect(() => {
-    if (isModalOpen) {
+    if (isModalOpen || selectedLiveMatch) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -126,7 +128,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isModalOpen]);
+  }, [isModalOpen, selectedLiveMatch]);
 
   const handleScoreChange = (matchId: string, side: 'home' | 'away', val: string) => {
     const numVal = val === '' ? '' : Math.min(10, Math.max(0, Number(val)));
@@ -188,13 +190,11 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                 const randomOption = bet.options[Math.floor(Math.random() * bet.options.length)];
                 propBets![bet.id] = randomOption;
               } else {
-                // Free number input for cards/corners with realistic ranges
                 if (bet.id === 'total_corners') {
-                  propBets![bet.id] = String(Math.floor(Math.random() * 9) + 6); // 6-14 corners
+                  propBets![bet.id] = String(Math.floor(Math.random() * 9) + 6);
                 } else if (bet.id === 'yellow_cards') {
-                  propBets![bet.id] = String(Math.floor(Math.random() * 6) + 2); // 2-7 yellow cards
+                  propBets![bet.id] = String(Math.floor(Math.random() * 6) + 2);
                 } else if (bet.id === 'red_cards') {
-                  // 80% chance of 0, 20% chance of 1
                   propBets![bet.id] = Math.random() < 0.8 ? '0' : '1';
                 } else {
                   propBets![bet.id] = String(Math.floor(Math.random() * 5)); 
@@ -343,7 +343,6 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
             </div>
           </div>
 
-          {/* Compact Progress Bar */}
           <div className="bg-zinc-900/40 border border-zinc-800/80 rounded-2xl p-3.5 mb-4 space-y-2">
             <div className="flex justify-between items-center text-xs font-bold">
               <span className="text-zinc-400">התקדמות הניחושים:</span>
@@ -357,7 +356,6 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
             </div>
           </div>
 
-          {/* Enter immersive wizard CTA */}
           <button
             type="button"
             onClick={() => setIsModalOpen(true)}
@@ -383,7 +381,6 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
   return (
     <div className="fixed inset-0 z-50 bg-zinc-950/98 backdrop-blur-2xl flex flex-col justify-between overflow-hidden" dir="rtl">
       
-      {/* Modal Header */}
       <div className="flex-shrink-0 px-4 pt-6 pb-4 border-b border-zinc-900 bg-zinc-950 flex items-center justify-between z-10">
         <div className="flex items-center gap-2">
           <div className={`p-1.5 rounded-lg ${sport === 'football' ? 'bg-indigo-500/10' : 'bg-orange-500/10'}`}>
@@ -395,7 +392,6 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
           </div>
         </div>
         
-        {/* Close Button */}
         <button
           type="button"
           onClick={() => setIsModalOpen(false)}
@@ -406,10 +402,8 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
         </button>
       </div>
 
-      {/* Main Content Area */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
         
-        {/* Collapsible FIFA Draw Diagram */}
         {sport === 'football' && (
           <div>
             <button
@@ -461,7 +455,6 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
           </div>
         )}
 
-        {/* Wizard Progress & Quick Actions */}
         <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-3.5 space-y-3">
           <div className="flex justify-between items-center text-xs font-bold">
             <span className="text-zinc-400">התקדמות הניחוש הכללית:</span>
