@@ -108,21 +108,51 @@ export default function MatchPredictionsModal({ isOpen, onClose, match, sport }:
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="w-full flex items-center justify-between p-3 bg-zinc-900/50 border border-zinc-800/50 rounded-2xl"
+                  className="w-full flex flex-col p-3 bg-zinc-900/50 border border-zinc-800/50 rounded-2xl"
                 >
-                  <div className="flex items-center gap-3 min-w-0 flex-1">
-                    <img
-                      src={user.imageUrl}
-                      alt={user.name}
-                      className="w-8 h-8 rounded-full bg-zinc-800 object-cover ring-2 ring-zinc-900"
-                    />
-                    <span className="font-bold text-sm text-white truncate">{user.name}</span>
-                  </div>
-                  
-                  <div className="flex-shrink-0 flex items-center justify-center bg-zinc-950 px-4 py-1.5 rounded-xl border border-zinc-800 shadow-inner w-20">
-                    <span className="text-base font-black text-indigo-400">{guess.homeScore}</span>
-                    <span className="text-zinc-600 font-bold mx-1">:</span>
-                    <span className="text-base font-black text-indigo-400">{guess.awayScore}</span>
+                  <div className="flex items-center justify-between w-full">
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
+                        <img
+                          src={user.imageUrl}
+                          alt={user.name}
+                          className="w-8 h-8 rounded-full bg-zinc-800 object-cover ring-2 ring-zinc-900"
+                        />
+                        <span className="font-bold text-sm text-white truncate">{user.name}</span>
+                      </div>
+                      
+                      <div className="flex-shrink-0 flex items-center justify-center bg-zinc-950 px-4 py-1.5 rounded-xl border border-zinc-800 shadow-inner w-20">
+                        <span className="text-base font-black text-indigo-400">{guess.homeScore}</span>
+                        <span className="text-zinc-600 font-bold mx-1">:</span>
+                        <span className="text-base font-black text-indigo-400">{guess.awayScore}</span>
+                      </div>
+                    </div>
+
+                    {/* Prop Bets Section */}
+                    {match.prop_bets && guess.propBets && Object.keys(guess.propBets).length > 0 && (
+                      <div className="mt-3 pt-3 border-t border-zinc-800/50 grid grid-cols-1 gap-2">
+                        {match.prop_bets.map((prop: any) => {
+                           if (!guess.propBets[prop.id]) return null;
+                           return (
+                             <div key={prop.id} className="flex justify-between items-center text-xs">
+                               <span className="text-zinc-500 truncate pl-2">{prop.question}</span>
+                               <span className="font-bold text-zinc-300 bg-zinc-800/50 px-2 py-1 rounded-md shrink-0">
+                                 {guess.propBets[prop.id]}
+                               </span>
+                             </div>
+                           );
+                        })}
+                      </div>
+                    )}
+
+                    {/* Legacy Single Prop Bet */}
+                    {match.has_prop_bet && guess.selectedProp && !match.prop_bets && (
+                      <div className="flex justify-between items-center text-xs mt-3 pt-3 border-t border-zinc-800/50">
+                        <span className="text-zinc-500 truncate pl-2">{match.prop_question}</span>
+                        <span className="font-bold text-zinc-300 bg-zinc-800/50 px-2 py-1 rounded-md shrink-0">
+                          {guess.selectedProp}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               ))
