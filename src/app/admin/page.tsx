@@ -106,7 +106,7 @@ export default function AdminDashboard() {
                     />
                     <span className="font-bold">{match.away.name}</span>
                   </div>
-                  <div className="text-sm text-zinc-500">{match.date}</div>
+                  <div className="text-sm text-zinc-500">{match.dateStr} - {match.timeStr}</div>
                 </div>
 
                 {match.prop_bets && (
