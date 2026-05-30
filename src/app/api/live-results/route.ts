@@ -12,10 +12,16 @@ export async function GET() {
     const adminUser = users.data.find(u => u.publicMetadata?.liveResults);
     
     if (adminUser && adminUser.publicMetadata.liveResults) {
-      return NextResponse.json({ liveResults: adminUser.publicMetadata.liveResults });
+      return NextResponse.json(
+        { liveResults: adminUser.publicMetadata.liveResults },
+        { headers: { 'Cache-Control': 'no-store, max-age=0' } }
+      );
     }
 
-    return NextResponse.json({ liveResults: {} });
+    return NextResponse.json(
+      { liveResults: {} },
+      { headers: { 'Cache-Control': 'no-store, max-age=0' } }
+    );
   } catch (error) {
     console.error('Error fetching live results:', error);
     return NextResponse.json({ liveResults: {} }, { status: 500 });

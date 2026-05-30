@@ -44,7 +44,7 @@ export default function Home() {
     
     // Poll live results every 10 seconds
     const fetchLive = () => {
-      fetch('/api/live-results')
+      fetch(`/api/live-results?t=${Date.now()}`)
         .then(res => res.json())
         .then(data => {
           if (data.liveResults) {
@@ -62,7 +62,7 @@ export default function Home() {
   useEffect(() => {
     if (isLoaded && isSignedIn) {
       // Fetch from Cloud API
-      fetch('/api/predictions')
+      fetch(`/api/predictions?t=${Date.now()}`)
         .then(res => res.json())
         .then(data => {
           if (!data.error) {

@@ -48,7 +48,10 @@ export async function GET() {
         };
       });
 
-    return NextResponse.json({ users: safeUsers });
+    return NextResponse.json(
+      { users: safeUsers },
+      { headers: { 'Cache-Control': 'no-store, max-age=0' } }
+    );
   } catch (error) {
     console.error('Error fetching users from Clerk:', error);
     return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500 });
