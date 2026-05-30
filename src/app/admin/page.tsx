@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { UCL_MATCHES, WORLD_CUP_MATCHES } from '@/data/worldCupData';
+import { UCL_MATCHES, ALL_FOOTBALL_MATCHES, ALL_TENNIS_MATCHES } from '@/data/worldCupData';
 
 export default function AdminDashboard() {
   const [liveResults, setLiveResults] = useState<Record<string, any>>({});
@@ -9,7 +9,7 @@ export default function AdminDashboard() {
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
-  const allMatches = [...UCL_MATCHES, ...WORLD_CUP_MATCHES];
+  const allMatches = [...UCL_MATCHES, ...ALL_FOOTBALL_MATCHES, ...ALL_TENNIS_MATCHES];
 
   useEffect(() => {
     fetch('/api/live-results')
