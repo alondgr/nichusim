@@ -11,7 +11,8 @@ import GoalDroughtForm from '@/components/GoalDroughtForm';
 import GroupStageMatchesForm from '@/components/GroupStageMatchesForm';
 import CustomAvatarModal from '@/components/CustomAvatarModal';
 import ChangeNameModal from '@/components/ChangeNameModal';
-import { PredictionsState, getGroupMatches, TEAMS, ALL_TENNIS_MATCHES, UCL_MATCHES } from '@/data/worldCupData';
+import { PredictionsState, getGroupMatches, TEAMS, ALL_TENNIS_MATCHES, UCL_MATCHES, calculateTotalScore } from '@/data/worldCupData';
+import { Trophy } from 'lucide-react';
 
 import LiveMatchShortcut from '@/components/LiveMatchShortcut';
 
@@ -145,6 +146,8 @@ export default function Home() {
     saveToCloud({ uSub: val });
   };
 
+  const currentUserScore = calculateTotalScore({ fPreds, tPreds, uPreds }, sport);
+
   if (!mounted) return null;
 
   return (
@@ -192,6 +195,16 @@ export default function Home() {
                 />
               </UserButton.MenuItems>
             </UserButton>
+          </div>
+          <div className="absolute right-4">
+            <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border shadow-sm font-black text-sm
+              ${sport === 'ucl' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 
+                sport === 'tennis' ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' : 
+                'bg-indigo-500/10 text-indigo-400 border-indigo-500/20'}`}
+            >
+              <Trophy className="w-4 h-4" />
+              <span>{currentUserScore}</span>
+            </div>
           </div>
           <div className="flex bg-zinc-900 rounded-full p-1 border border-zinc-800 mx-auto">
             <button
