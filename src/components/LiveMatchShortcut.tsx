@@ -7,9 +7,10 @@ import { Play, Tv } from 'lucide-react';
 interface LiveMatchShortcutProps {
   sport: 'football' | 'tennis' | 'ucl';
   matches: Match[];
+  liveResults?: Record<string, any>;
 }
 
-export default function LiveMatchShortcut({ sport, matches }: LiveMatchShortcutProps) {
+export default function LiveMatchShortcut({ sport, matches, liveResults }: LiveMatchShortcutProps) {
   const [scrollCycleIdx, setScrollCycleIdx] = useState(0);
   const [now, setNow] = useState(Date.now());
   const [mounted, setMounted] = useState(false);
@@ -58,29 +59,35 @@ export default function LiveMatchShortcut({ sport, matches }: LiveMatchShortcutP
           </span>
           
           <div className="flex gap-4 items-center text-xs font-black text-slate-200 tracking-wide truncate flex-wrap">
-            {liveMatches.map((m, idx) => (
-              <div key={m.id} className="flex items-center gap-2">
-                {idx > 0 && <span className="text-red-500/40">|</span>}
-                <span 
-                  className="hover:text-red-400 transition-colors cursor-pointer"
-                  onClick={() => {
-                    const el = document.getElementById(`match-${m.id}`);
-                    if (el) {
-                      const yOffset = -100;
-                      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                      window.scrollTo({ top: y, behavior: 'smooth' });
-                      el.classList.add('animate-flash-highlight');
-                      setTimeout(() => el.classList.remove('animate-flash-highlight'), 3000);
-                    }
-                  }}
-                >
-                  {m.home.name} {m.actualHomeScore ?? 0} - {m.actualAwayScore ?? 0} {m.away.name}
-                </span>
-                <span className="text-[9px] text-red-400 bg-red-500/5 px-1 py-0.5 rounded border border-red-500/5 font-sans">
-                  ⏱️ {m.timeStr}
-                </span>
-              </div>
-            ))}
+            {liveMatches.map((m, idx) => {
+              const live = liveResults?.[m.id] || {};
+              const aHome = live.actualHomeScore !== undefined ? live.actualHomeScore : m.actualHomeScore;
+              const aAway = live.actualAwayScore !== undefined ? live.actualAwayScore : m.actualAwayScore;
+              
+              return (
+                <div key={m.id} className="flex items-center gap-2">
+                  {idx > 0 && <span className="text-red-500/40">|</span>}
+                  <span 
+                    className="hover:text-red-400 transition-colors cursor-pointer"
+                    onClick={() => {
+                      const el = document.getElementById(`match-${m.id}`);
+                      if (el) {
+                        const yOffset = -100;
+                        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                        window.scrollTo({ top: y, behavior: 'smooth' });
+                        el.classList.add('animate-flash-highlight');
+                        setTimeout(() => el.classList.remove('animate-flash-highlight'), 3000);
+                      }
+                    }}
+                  >
+                    {m.home.name} {aHome ?? 0} - {aAway ?? 0} {m.away.name}
+                  </span>
+                  <span className="text-[9px] text-red-400 bg-red-500/5 px-1 py-0.5 rounded border border-red-500/5 font-sans">
+                    ⏱️ {m.timeStr}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
         <button

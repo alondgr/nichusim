@@ -84,9 +84,10 @@ interface GroupStageMatchesFormProps {
   savePredictions: (preds: PredictionsState) => void;
   submitted: boolean;
   setSubmitted: (val: boolean) => void;
+  liveResults?: Record<string, any>;
 }
 
-export default function GroupStageMatchesForm({ sport = 'football', matches, predictions, savePredictions, submitted, setSubmitted }: GroupStageMatchesFormProps) {
+export default function GroupStageMatchesForm({ sport = 'football', matches, predictions, savePredictions, submitted, setSubmitted, liveResults }: GroupStageMatchesFormProps) {
   const [showDiagram, setShowDiagram] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -556,18 +557,24 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                   const isStarted = m.timestamp + GRACE_PERIOD_MS <= now;
                   const isInputDisabled = submitted || isStarted;
 
+                  const live = liveResults?.[m.id] || {};
+                  const aHome = live.actualHomeScore !== undefined ? live.actualHomeScore : m.actualHomeScore;
+                  const aAway = live.actualAwayScore !== undefined ? live.actualAwayScore : m.actualAwayScore;
+                  const aProps = live.actualPropBets || m.actualPropBets || {};
+                  const hasActualScore = aHome !== undefined && aAway !== undefined;
+
                   let cardClass = "border-zinc-800/80 hover:border-zinc-700/60 bg-zinc-900/40 text-slate-100";
                   let pointsBadge = null;
 
-                  if (getMatchStatus(m, now) === 'finished' && m.actualHomeScore !== undefined && m.actualAwayScore !== undefined) {
+                  if (getMatchStatus(m, now) === 'finished' && hasActualScore) {
                     const points = calculateMatchPoints(
                       sport,
                       p.homeScore,
                       p.awayScore,
-                      m.actualHomeScore,
-                      m.actualAwayScore,
+                      aHome,
+                      aAway,
                       p.propBets || p.selectedProp,
-                      m.actualPropBets || (m as any).actualProp
+                      aProps
                     );
 
                     const maxPoints = sport === 'ucl' ? 10 : 3;

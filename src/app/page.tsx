@@ -23,6 +23,7 @@ export default function Home() {
   const [started, setStarted] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [sport, setSport] = useState<'football' | 'tennis' | 'ucl'>('ucl');
+  const [liveResults, setLiveResults] = useState<Record<string, any>>({});
 
   const { isLoaded, isSignedIn } = useAuth();
   const [dataLoaded, setDataLoaded] = useState(false);
@@ -40,6 +41,22 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true);
+    
+    // Poll live results every 10 seconds
+    const fetchLive = () => {
+      fetch('/api/live-results')
+        .then(res => res.json())
+        .then(data => {
+          if (data.liveResults) {
+            setLiveResults(data.liveResults);
+          }
+        })
+        .catch(console.error);
+    };
+    
+    fetchLive();
+    const interval = setInterval(fetchLive, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -146,7 +163,7 @@ export default function Home() {
     saveToCloud({ uSub: val });
   };
 
-  const currentUserScore = calculateTotalScore({ fPreds, tPreds, uPreds }, sport);
+  const currentUserScore = calculateTotalScore({ fPreds, tPreds, uPreds }, sport, liveResults);
 
   if (!mounted) return null;
 
@@ -232,10 +249,11 @@ export default function Home() {
         <LiveMatchShortcut
           sport={sport}
           matches={sport === 'football' ? ALL_FOOTBALL_MATCHES : sport === 'ucl' ? UCL_MATCHES : ALL_TENNIS_MATCHES}
+          liveResults={liveResults}
         />
 
         <div className="flex flex-col space-y-8 w-full max-w-xl my-12 items-center px-4">
-          <UsersList sport={sport} />
+          <UsersList sport={sport} liveResults={liveResults} />
           <ScoringRules sport={sport} />
           
           <OpeningJinxForm 
@@ -261,6 +279,7 @@ export default function Home() {
             savePredictions={sport === 'football' ? saveFPreds : sport === 'ucl' ? saveUPreds : saveTPreds}
             submitted={sport === 'football' ? fSub : sport === 'ucl' ? uSub : tSub}
             setSubmitted={sport === 'football' ? handleFSub : sport === 'ucl' ? handleUSub : handleTSub}
+            liveResults={liveResults}
           />
         </div>
         

@@ -9,15 +9,16 @@ interface LeaderboardModalProps {
   users: any[];
   onUserSelect: (user: any) => void;
   sport: 'football' | 'tennis' | 'ucl';
+  liveResults?: Record<string, any>;
 }
 
-export default function LeaderboardModal({ isOpen, onClose, users, onUserSelect, sport }: LeaderboardModalProps) {
+export default function LeaderboardModal({ isOpen, onClose, users, onUserSelect, sport, liveResults }: LeaderboardModalProps) {
   // Sort users by their calculated score
   const sortedUsers = useMemo(() => {
     return [...users]
-      .map(u => ({ ...u, score: calculateTotalScore(u.predictions, sport) }))
+      .map(u => ({ ...u, score: calculateTotalScore(u.predictions, sport, liveResults) }))
       .sort((a, b) => b.score - a.score);
-  }, [users, sport]);
+  }, [users, sport, liveResults]);
 
   if (!isOpen) return null;
 

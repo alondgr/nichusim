@@ -7,9 +7,10 @@ interface UserProfileModalProps {
   onClose: () => void;
   user: any;
   sport: 'football' | 'tennis' | 'ucl';
+  liveResults?: Record<string, any>;
 }
 
-export default function UserProfileModal({ isOpen, onClose, user, sport }: UserProfileModalProps) {
+export default function UserProfileModal({ isOpen, onClose, user, sport, liveResults }: UserProfileModalProps) {
   if (!isOpen || !user) return null;
 
   const uPreds = user.predictions?.uPreds || {};
@@ -20,13 +21,18 @@ export default function UserProfileModal({ isOpen, onClose, user, sport }: UserP
     const p = preds[match.id];
     if (!p) return null; // Don't render matches the user hasn't predicted yet
     
+    const live = liveResults?.[match.id] || {};
+    const actualHomeScore = live.actualHomeScore !== undefined ? live.actualHomeScore : match.actualHomeScore;
+    const actualAwayScore = live.actualAwayScore !== undefined ? live.actualAwayScore : match.actualAwayScore;
+    const actualPropBets = live.actualPropBets || match.actualPropBets || {};
+
     const status = getMatchStatus(match, now);
     
     const hasPredictedScore = p.homeScore !== '' && p.awayScore !== '';
-    const hasActualScore = match.actualHomeScore !== undefined && match.actualAwayScore !== undefined;
+    const hasActualScore = actualHomeScore !== undefined && actualHomeScore !== null && actualAwayScore !== undefined && actualAwayScore !== null;
 
     const points = hasPredictedScore && hasActualScore 
-      ? calculateMatchPoints(sport, p.homeScore, p.awayScore, match.actualHomeScore, match.actualAwayScore, p.propBets || p.selectedProp, match.actualPropBets || {})
+      ? calculateMatchPoints(sport, p.homeScore, p.awayScore, actualHomeScore, actualAwayScore, p.propBets || p.selectedProp, actualPropBets)
       : 0;
 
     const isUpcoming = status === 'upcoming';
@@ -66,7 +72,7 @@ export default function UserProfileModal({ isOpen, onClose, user, sport }: UserP
             </div>
             {hasActualScore && (
               <div className="text-[9px] text-zinc-500 mt-1">
-                תוצאה: {match.actualHomeScore}:{match.actualAwayScore}
+                תוצאה: {actualHomeScore}:{actualAwayScore}
               </div>
             )}
           </div>
@@ -82,7 +88,7 @@ export default function UserProfileModal({ isOpen, onClose, user, sport }: UserP
           <div className="mt-3 space-y-1 border-t border-zinc-800/50 pt-3">
             {match.prop_bets.map((prop: any) => {
               const userGuess = p.propBets[prop.id];
-              const actualAns = match.actualPropBets?.[prop.id];
+              const actualAns = actualPropBets?.[prop.id];
               if (!userGuess) return null;
               
               const isCorrect = actualAns && String(actualAns) === String(userGuess);

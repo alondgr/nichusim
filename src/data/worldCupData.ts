@@ -700,23 +700,25 @@ export function getMatchStatus(match: Match, now: number): 'upcoming' | 'live' |
   }
 }
 
-export function calculateTotalScore(predictionsData: any, targetSport?: 'football' | 'tennis' | 'ucl'): number {
+export function calculateTotalScore(predictionsData: any, targetSport?: 'football' | 'tennis' | 'ucl', liveResults?: Record<string, any>): number {
   if (!predictionsData) return 0;
   let total = 0;
+  const live = liveResults || {};
 
   // 1. UCL
   if (!targetSport || targetSport === 'ucl') {
     const uPreds = predictionsData.uPreds || {};
     UCL_MATCHES.forEach(match => {
-      if (match.actualHomeScore !== undefined && match.actualAwayScore !== undefined) {
+      const matchData = live[match.id] || match;
+      if (matchData.actualHomeScore !== undefined && matchData.actualHomeScore !== null && matchData.actualAwayScore !== undefined && matchData.actualAwayScore !== null) {
         const p = uPreds[match.id];
         if (p) {
           total += calculateMatchPoints(
             'ucl', 
             p.homeScore, p.awayScore, 
-            match.actualHomeScore, match.actualAwayScore, 
+            matchData.actualHomeScore, matchData.actualAwayScore, 
             p.propBets || p.selectedProp, 
-            match.actualPropBets || {}
+            matchData.actualPropBets || match.actualPropBets || {}
           );
         }
       }
@@ -727,13 +729,14 @@ export function calculateTotalScore(predictionsData: any, targetSport?: 'footbal
   if (!targetSport || targetSport === 'tennis') {
     const tPreds = predictionsData.tPreds || {};
     ALL_TENNIS_MATCHES.forEach(match => {
-      if (match.actualHomeScore !== undefined && match.actualAwayScore !== undefined) {
+      const matchData = live[match.id] || match;
+      if (matchData.actualHomeScore !== undefined && matchData.actualHomeScore !== null && matchData.actualAwayScore !== undefined && matchData.actualAwayScore !== null) {
         const p = tPreds[match.id];
         if (p) {
           total += calculateMatchPoints(
             'tennis', 
             p.homeScore, p.awayScore, 
-            match.actualHomeScore, match.actualAwayScore
+            matchData.actualHomeScore, matchData.actualAwayScore
           );
         }
       }
@@ -744,13 +747,14 @@ export function calculateTotalScore(predictionsData: any, targetSport?: 'footbal
   if (!targetSport || targetSport === 'football') {
     const fPreds = predictionsData.fPreds || {};
     ALL_FOOTBALL_MATCHES.forEach(match => {
-      if (match.actualHomeScore !== undefined && match.actualAwayScore !== undefined) {
+      const matchData = live[match.id] || match;
+      if (matchData.actualHomeScore !== undefined && matchData.actualHomeScore !== null && matchData.actualAwayScore !== undefined && matchData.actualAwayScore !== null) {
         const p = fPreds[match.id];
         if (p) {
           total += calculateMatchPoints(
             'football', 
             p.homeScore, p.awayScore, 
-            match.actualHomeScore, match.actualAwayScore
+            matchData.actualHomeScore, matchData.actualAwayScore
           );
         }
       }
