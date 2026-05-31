@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   try {
     const client = await clerkClient();
-    const users = await client.users.getUserList({ limit: 100 });
+    const users = await client.users.getUserList({ limit: 500 });
     
     // Merge liveResults from ALL users (deep merge to prevent empty objects from overwriting populated ones)
     const allLiveResults = users.data.reduce((acc, user) => {

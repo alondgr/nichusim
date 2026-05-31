@@ -23,9 +23,9 @@ export async function GET() {
       }
     }
 
-    // 2. Fetch up to 100 recent users from Clerk
+    // 2. Fetch up to 500 recent users from Clerk
     const response = await client.users.getUserList({
-      limit: 100,
+      limit: 500,
       orderBy: '-created_at',
     });
 
