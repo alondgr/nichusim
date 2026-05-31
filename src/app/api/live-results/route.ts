@@ -8,12 +8,18 @@ export async function GET() {
     const client = await clerkClient();
     const users = await client.users.getUserList({ limit: 100 });
     
-    // Find any user that has liveResults in their publicMetadata (Admin)
-    const adminUser = users.data.find(u => u.publicMetadata?.liveResults);
-    
-    if (adminUser && adminUser.publicMetadata.liveResults) {
+    // Merge liveResults from ALL users so we don't lose data if multiple admins updated different matches
+    const allLiveResults = users.data.reduce((acc, user) => {
+      const userLiveResults = user.publicMetadata?.liveResults as Record<string, any>;
+      if (userLiveResults && typeof userLiveResults === 'object') {
+        return { ...acc, ...userLiveResults };
+      }
+      return acc;
+    }, {} as Record<string, any>);
+
+    if (Object.keys(allLiveResults).length > 0) {
       return NextResponse.json(
-        { liveResults: adminUser.publicMetadata.liveResults },
+        { liveResults: allLiveResults },
         { headers: { 'Cache-Control': 'no-store, max-age=0' } }
       );
     }
