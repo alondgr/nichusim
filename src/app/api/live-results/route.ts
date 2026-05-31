@@ -8,11 +8,19 @@ export async function GET() {
     const client = await clerkClient();
     const users = await client.users.getUserList({ limit: 100 });
     
-    // Merge liveResults from ALL users so we don't lose data if multiple admins updated different matches
+    // Merge liveResults from ALL users (deep merge to prevent empty objects from overwriting populated ones)
     const allLiveResults = users.data.reduce((acc, user) => {
       const userLiveResults = user.publicMetadata?.liveResults as Record<string, any>;
       if (userLiveResults && typeof userLiveResults === 'object') {
-        return { ...acc, ...userLiveResults };
+        Object.keys(userLiveResults).forEach(matchId => {
+          const matchData = userLiveResults[matchId];
+          if (matchData && typeof matchData === 'object' && Object.keys(matchData).length > 0) {
+            acc[matchId] = {
+              ...(acc[matchId] || {}),
+              ...matchData
+            };
+          }
+        });
       }
       return acc;
     }, {} as Record<string, any>);
