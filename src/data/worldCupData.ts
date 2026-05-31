@@ -710,7 +710,10 @@ export function calculateTotalScore(predictionsData: any, targetSport?: 'footbal
     const uPreds = predictionsData.uPreds || {};
     UCL_MATCHES.forEach(match => {
       const matchData = live[match.id] || match;
-      if (matchData.actualHomeScore !== undefined && matchData.actualHomeScore !== null && matchData.actualAwayScore !== undefined && matchData.actualAwayScore !== null) {
+      const hasScore = matchData.actualHomeScore !== undefined && matchData.actualHomeScore !== null && matchData.actualAwayScore !== undefined && matchData.actualAwayScore !== null;
+      const hasProps = matchData.actualPropBets && Object.keys(matchData.actualPropBets).length > 0;
+      
+      if (hasScore || hasProps) {
         const p = uPreds[match.id];
         if (p) {
           total += calculateMatchPoints(

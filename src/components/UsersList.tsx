@@ -30,7 +30,7 @@ export default function UsersList({ sport, liveResults }: UsersListProps) {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const res = await fetch('/api/users');
+        const res = await fetch(`/api/users?t=${Date.now()}`, { cache: 'no-store' });
         if (!res.ok) throw new Error('Failed to fetch');
         const data = await res.json();
         if (data.users) {
