@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Trophy, Medal } from 'lucide-react';
-import { calculateTotalScore } from '@/data/worldCupData';
+import { calculateTotalScore, calculateAccuracy } from '@/data/worldCupData';
 
 interface LeaderboardModalProps {
   isOpen: boolean;
@@ -16,7 +16,11 @@ export default function LeaderboardModal({ isOpen, onClose, users, onUserSelect,
   // Sort users by their calculated score
   const sortedUsers = useMemo(() => {
     return [...users]
-      .map(u => ({ ...u, score: calculateTotalScore(u.predictions, sport, liveResults) }))
+      .map(u => ({ 
+        ...u, 
+        score: calculateTotalScore(u.predictions, sport, liveResults),
+        accuracy: calculateAccuracy(u.predictions, liveResults)
+      }))
       .sort((a, b) => b.score - a.score);
   }, [users, sport, liveResults]);
 
@@ -82,9 +86,21 @@ export default function LeaderboardModal({ isOpen, onClose, users, onUserSelect,
                   className="w-10 h-10 rounded-full bg-zinc-800 object-cover ring-2 ring-zinc-900 group-hover:ring-indigo-500 transition-all"
                 />
                 
-                <div className="mr-3 flex-1 min-w-0">
+                <div className="mr-3 flex-1 min-w-0 flex flex-col justify-center">
                   <div className="font-bold text-sm text-white truncate">{user.name}</div>
-                  <div className="text-[10px] text-zinc-500 truncate">הצטרף לאחרונה</div>
+                  
+                  {/* Accuracy Bar */}
+                  <div className="mt-1.5 flex items-center gap-2" title={`${user.accuracy.correct} ניחושים נכונים מתוך ${user.accuracy.total} משחקים`}>
+                    <div className="w-24 h-1.5 bg-zinc-800/80 rounded-full overflow-hidden flex-shrink-0">
+                      <div 
+                        className={`h-full rounded-full transition-all duration-1000 ${user.accuracy.percentage > 50 ? 'bg-indigo-500' : 'bg-zinc-500'}`}
+                        style={{ width: `${user.accuracy.percentage}%` }}
+                      />
+                    </div>
+                    <span className="text-[10px] text-zinc-400 min-w-[24px] text-right font-medium">
+                      {user.accuracy.percentage}%
+                    </span>
+                  </div>
                 </div>
                 
                 <div className="flex-shrink-0 flex flex-col items-center justify-center bg-zinc-950/50 rounded-xl px-3 py-1 border border-zinc-800">

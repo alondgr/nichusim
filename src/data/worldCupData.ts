@@ -766,3 +766,35 @@ export function calculateTotalScore(predictionsData: any, targetSport?: 'footbal
 
   return total;
 }
+
+export function calculateAccuracy(predictionsData: any, liveResults?: Record<string, any>): { correct: number, total: number, percentage: number } {
+  if (!predictionsData) return { correct: 0, total: 0, percentage: 0 };
+  const fPreds = predictionsData.fPreds || {};
+  const live = liveResults || {};
+  let correct = 0;
+  let totalFinished = 0;
+
+  ALL_FOOTBALL_MATCHES.forEach(match => {
+    const matchData = live[match.id] || match;
+    const hasScore = matchData.actualHomeScore !== undefined && matchData.actualHomeScore !== null && matchData.actualAwayScore !== undefined && matchData.actualAwayScore !== null;
+    
+    if (hasScore) {
+      totalFinished++;
+      const p = fPreds[match.id];
+      if (p && p.homeScore !== '' && p.awayScore !== '') {
+        const pHome = Number(p.homeScore);
+        const pAway = Number(p.awayScore);
+        const aHome = Number(matchData.actualHomeScore);
+        const aAway = Number(matchData.actualAwayScore);
+        
+        const predictedWinner = pHome > pAway ? 'home' : pHome < pAway ? 'away' : 'draw';
+        const actualWinner = aHome > aAway ? 'home' : aHome < aAway ? 'away' : 'draw';
+        
+        if (predictedWinner === actualWinner) correct++;
+      }
+    }
+  });
+
+  const percentage = totalFinished > 0 ? Math.round((correct / totalFinished) * 100) : 0;
+  return { correct, total: totalFinished, percentage };
+}
