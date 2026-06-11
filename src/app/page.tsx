@@ -32,6 +32,10 @@ export default function Home() {
 
   const [fPreds, setFPreds] = useState<PredictionsState>({});
   const [fSub, setFSub] = useState(false);
+  const [winnerTeam, setWinnerTeam] = useState<string>('');
+  const [winnerSub, setWinnerSub] = useState(false);
+  const [topScorer, setTopScorer] = useState<string>('');
+  const [topScorerSub, setTopScorerSub] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -73,6 +77,36 @@ export default function Home() {
               if (data.fSub) localStorage.setItem('nichusim_group_stage_submitted', 'true');
             } else {
               if (localStorage.getItem('nichusim_group_stage_submitted') === 'true') setFSub(true);
+            }
+            
+            // Winner Team (FlopTeamForm actually used for Winner)
+            if (data.winnerTeam) {
+              setWinnerTeam(data.winnerTeam);
+              localStorage.setItem('nichusim_winner_team', data.winnerTeam);
+            } else {
+              const sw = localStorage.getItem('nichusim_winner_team');
+              if (sw) setWinnerTeam(sw);
+            }
+            if (data.winnerSub !== undefined) {
+              setWinnerSub(data.winnerSub);
+              if (data.winnerSub) localStorage.setItem('nichusim_winner_submitted', 'true');
+            } else {
+              if (localStorage.getItem('nichusim_winner_submitted') === 'true') setWinnerSub(true);
+            }
+
+            // Top Scorer (Golden Shoe)
+            if (data.topScorer) {
+              setTopScorer(data.topScorer);
+              localStorage.setItem('nichusim_top_scorer', data.topScorer);
+            } else {
+              const st = localStorage.getItem('nichusim_top_scorer');
+              if (st) setTopScorer(st);
+            }
+            if (data.topScorerSub !== undefined) {
+              setTopScorerSub(data.topScorerSub);
+              if (data.topScorerSub) localStorage.setItem('nichusim_top_scorer_submitted', 'true');
+            } else {
+              if (localStorage.getItem('nichusim_top_scorer_submitted') === 'true') setTopScorerSub(true);
             }
           }
           setDataLoaded(true);
@@ -180,8 +214,20 @@ export default function Home() {
                 setSubmitted={handleFSub}
               />
               
-              <FlopTeamForm />
-              <GoalDroughtForm />
+              <FlopTeamForm 
+                winnerTeam={winnerTeam}
+                setWinnerTeam={setWinnerTeam}
+                winnerSub={winnerSub}
+                setWinnerSub={setWinnerSub}
+                saveToCloud={saveToCloud}
+              />
+              <GoalDroughtForm 
+                topScorer={topScorer}
+                setTopScorer={setTopScorer}
+                topScorerSub={topScorerSub}
+                setTopScorerSub={setTopScorerSub}
+                saveToCloud={saveToCloud}
+              />
 
               <GroupStageMatchesForm 
                 sport={sport}

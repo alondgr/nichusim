@@ -33,26 +33,23 @@ const TeamFlag = ({ iso, flag, name, size = 'large' }: { iso: string, flag: stri
   );
 };
 
-export default function FlopTeamForm() {
-  const [selectedTeam, setSelectedTeam] = useState<string>('');
+interface FlopTeamFormProps {
+  winnerTeam: string;
+  setWinnerTeam: (t: string) => void;
+  winnerSub: boolean;
+  setWinnerSub: (s: boolean) => void;
+  saveToCloud: (data: any) => void;
+}
+
+export default function FlopTeamForm({ winnerTeam, setWinnerTeam, winnerSub, setWinnerSub, saveToCloud }: FlopTeamFormProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [submitted, setSubmitted] = useState(false);
   const [mounted, setMounted] = useState(false);
   
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Load from localStorage on mount
   useEffect(() => {
     setMounted(true);
-    const savedTeam = localStorage.getItem('nichusim_winner_team');
-    if (savedTeam) {
-      setSelectedTeam(savedTeam);
-    }
-    const wasSubmitted = localStorage.getItem('nichusim_winner_submitted');
-    if (wasSubmitted === 'true') {
-      setSubmitted(true);
-    }
   }, []);
 
   // Close dropdown when clicking outside
@@ -68,14 +65,15 @@ export default function FlopTeamForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (selectedTeam) {
-      setSubmitted(true);
-      localStorage.setItem('nichusim_winner_team', selectedTeam);
+    if (winnerTeam) {
+      setWinnerSub(true);
+      localStorage.setItem('nichusim_winner_team', winnerTeam);
       localStorage.setItem('nichusim_winner_submitted', 'true');
+      saveToCloud({ winnerTeam, winnerSub: true });
     }
   };
 
-  const selectedTeamData = TEAMS.find(t => t.id === selectedTeam);
+  const selectedTeamData = TEAMS.find(t => t.id === winnerTeam);
 
   const filteredTeams = TEAMS.filter(team => 
     team.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -104,7 +102,7 @@ export default function FlopTeamForm() {
 
   if (!mounted) return null;
 
-  if (submitted && selectedTeamData) {
+  if (winnerSub && selectedTeamData) {
     return (
       <div className="w-full max-w-md p-2 sm:p-6 z-10 flex flex-col items-center justify-center space-y-6 text-center">
         <motion.div
@@ -133,8 +131,9 @@ export default function FlopTeamForm() {
           <button
             type="button"
             onClick={() => {
-              setSubmitted(false);
+              setWinnerSub(false);
               localStorage.removeItem('nichusim_winner_submitted');
+              saveToCloud({ winnerSub: false });
             }}
             className="w-full mt-2 py-2.5 px-4 bg-zinc-950 border border-zinc-800 hover:bg-amber-500/10 hover:border-amber-500/30 text-zinc-400 hover:text-amber-400 font-bold rounded-xl text-xs transition-colors"
           >
@@ -214,16 +213,17 @@ export default function FlopTeamForm() {
                     <div className="overflow-y-auto flex-1 divide-y divide-zinc-800/40">
                       {filteredTeams.length > 0 ? (
                         filteredTeams.map((team) => {
-                          const isSelected = team.id === selectedTeam;
+                          const isSelected = team.id === winnerTeam;
                           return (
                             <button
                               key={team.id}
                               type="button"
                               onClick={() => {
-                                setSelectedTeam(team.id);
+                                setWinnerTeam(team.id);
                                 setIsOpen(false);
                                 setSearchQuery('');
                                 localStorage.setItem('nichusim_winner_team', team.id);
+                                saveToCloud({ winnerTeam: team.id });
                               }}
                               className={`w-full text-right p-3.5 hover:bg-zinc-800/50 flex items-center justify-between text-slate-200 transition-colors ${isSelected ? 'bg-amber-500/10 hover:bg-amber-500/20' : ''}`}
                             >
@@ -250,7 +250,7 @@ export default function FlopTeamForm() {
           <div className="pt-2">
             <button
               type="submit"
-              disabled={!selectedTeam}
+              disabled={!winnerTeam}
               className="w-full relative group overflow-hidden rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-xl transition-all duration-300 group-hover:scale-[1.02]" />

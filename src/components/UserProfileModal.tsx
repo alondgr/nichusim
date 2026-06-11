@@ -1,6 +1,9 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Trophy, CalendarClock, Lock } from 'lucide-react';
-import { UCL_MATCHES, TENNIS_MATCHES, getMatchStatus, calculateMatchPoints } from '@/data/worldCupData';
+import { UCL_MATCHES, TENNIS_MATCHES, getMatchStatus, calculateMatchPoints, getGroupMatches, TEAMS, TOP_SCORERS } from '@/data/worldCupData';
+
+const GROUPS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
+const ALL_FOOTBALL_MATCHES = GROUPS.flatMap(g => getGroupMatches(g, TEAMS)).sort((a, b) => a.timestamp - b.timestamp);
 
 interface UserProfileModalProps {
   isOpen: boolean;
@@ -17,7 +20,18 @@ export default function UserProfileModal({ isOpen, onClose, user, sport, liveRes
   const tPreds = user.predictions?.tPreds || {};
   const now = Date.now();
 
-  const renderMatch = (sport: 'ucl' | 'tennis', match: any, preds: any) => {
+  const fPreds = user.predictions?.fPreds || {};
+  const winnerTeamId = user.predictions?.winnerTeam;
+  const topScorerId = user.predictions?.topScorer;
+
+  const firstMatch = ALL_FOOTBALL_MATCHES[0];
+  const firstMatchStatus = firstMatch ? getMatchStatus(firstMatch, now) : 'upcoming';
+  const hasFirstMatchStarted = firstMatchStatus !== 'upcoming';
+
+  const winnerTeam = TEAMS.find(t => t.id === winnerTeamId);
+  const topScorer = TOP_SCORERS.find(p => p.id === topScorerId);
+
+  const renderMatch = (sport: 'ucl' | 'tennis' | 'football', match: any, preds: any) => {
     const p = preds[match.id];
     if (!p) return null; // Don't render matches the user hasn't predicted yet
     
@@ -162,6 +176,63 @@ export default function UserProfileModal({ isOpen, onClose, user, sport, liveRes
 
           <div className="overflow-y-auto p-4 custom-scrollbar">
             
+            {/* Football section */}
+            {sport === 'football' && (
+              <>
+                <h3 className="text-sm font-bold text-zinc-400 mb-3 flex items-center gap-1.5 mt-2">
+                  <Trophy className="w-4 h-4" />
+                  <span>ניחושי הטורניר</span>
+                </h3>
+                <div className="grid grid-cols-2 gap-3 mb-6">
+                  {/* Winner */}
+                  <div className="bg-zinc-900/50 border border-zinc-800/80 rounded-2xl p-3 flex flex-col items-center justify-center text-center gap-2">
+                    <span className="text-[10px] text-zinc-500 font-bold">הנבחרת הזוכה</span>
+                    {!hasFirstMatchStarted ? (
+                      <div className="flex flex-col items-center gap-1 opacity-50">
+                        <Lock className="w-6 h-6 text-zinc-500" />
+                        <span className="text-xs font-bold text-zinc-500">חסוי</span>
+                      </div>
+                    ) : winnerTeam ? (
+                      <div className="flex flex-col items-center gap-1">
+                        <img src={`https://flagcdn.com/w40/${winnerTeam.iso}.png`} alt={winnerTeam.name} className="w-8 h-6 object-cover rounded shadow-md border border-zinc-800 bg-zinc-900" />
+                        <span className="text-xs font-bold text-slate-200">{winnerTeam.name}</span>
+                      </div>
+                    ) : (
+                      <span className="text-xs font-bold text-zinc-600">לא נבחר</span>
+                    )}
+                  </div>
+
+                  {/* Top Scorer */}
+                  <div className="bg-zinc-900/50 border border-zinc-800/80 rounded-2xl p-3 flex flex-col items-center justify-center text-center gap-2">
+                    <span className="text-[10px] text-zinc-500 font-bold">נעל הזהב</span>
+                    {!hasFirstMatchStarted ? (
+                      <div className="flex flex-col items-center gap-1 opacity-50">
+                        <Lock className="w-6 h-6 text-zinc-500" />
+                        <span className="text-xs font-bold text-zinc-500">חסוי</span>
+                      </div>
+                    ) : topScorer ? (
+                      <div className="flex flex-col items-center gap-1">
+                        <span className="text-xs font-bold text-slate-200">{topScorer.name}</span>
+                        <span className="text-[9px] text-zinc-500">{topScorer.team}</span>
+                      </div>
+                    ) : (
+                      <span className="text-xs font-bold text-zinc-600">לא נבחר</span>
+                    )}
+                  </div>
+                </div>
+
+                {ALL_FOOTBALL_MATCHES.some(m => fPreds[m.id]) && (
+                  <>
+                    <h3 className="text-sm font-bold text-zinc-400 mb-3 flex items-center gap-1.5 mt-2">
+                      <CalendarClock className="w-4 h-4" />
+                      <span>שלב הבתים</span>
+                    </h3>
+                    {ALL_FOOTBALL_MATCHES.map(m => renderMatch('football', m, fPreds))}
+                  </>
+                )}
+              </>
+            )}
+
             {/* UCL Matches */}
             {sport === 'ucl' && UCL_MATCHES.some(m => uPreds[m.id]) && (
               <>

@@ -82,26 +82,23 @@ function PlayerAvatar({ player, size = 'md' }: AvatarProps) {
   );
 }
 
-export default function GoalDroughtForm() {
-  const [selectedPlayer, setSelectedPlayer] = useState<string>('');
+interface GoalDroughtFormProps {
+  topScorer: string;
+  setTopScorer: (t: string) => void;
+  topScorerSub: boolean;
+  setTopScorerSub: (s: boolean) => void;
+  saveToCloud: (data: any) => void;
+}
+
+export default function GoalDroughtForm({ topScorer, setTopScorer, topScorerSub, setTopScorerSub, saveToCloud }: GoalDroughtFormProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [submitted, setSubmitted] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Load from localStorage on mount
   useEffect(() => {
     setMounted(true);
-    const savedPlayer = localStorage.getItem('nichusim_top_scorer');
-    if (savedPlayer) {
-      setSelectedPlayer(savedPlayer);
-    }
-    const wasSubmitted = localStorage.getItem('nichusim_top_scorer_submitted');
-    if (wasSubmitted === 'true') {
-      setSubmitted(true);
-    }
   }, []);
 
   // Close dropdown when clicking outside
@@ -117,14 +114,15 @@ export default function GoalDroughtForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (selectedPlayer) {
-      setSubmitted(true);
-      localStorage.setItem('nichusim_top_scorer', selectedPlayer);
+    if (topScorer) {
+      setTopScorerSub(true);
+      localStorage.setItem('nichusim_top_scorer', topScorer);
       localStorage.setItem('nichusim_top_scorer_submitted', 'true');
+      saveToCloud({ topScorer, topScorerSub: true });
     }
   };
 
-  const player = TOP_SCORERS.find(p => p.id === selectedPlayer);
+  const player = TOP_SCORERS.find(p => p.id === topScorer);
 
   const filteredPlayers = TOP_SCORERS.filter(p => 
     p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -154,7 +152,7 @@ export default function GoalDroughtForm() {
 
   if (!mounted) return null;
 
-  if (submitted && player) {
+  if (topScorerSub && player) {
     return (
       <div className="w-full max-w-md p-2 sm:p-6 z-10 flex flex-col items-center justify-center space-y-6 text-center">
         <motion.div
@@ -180,8 +178,9 @@ export default function GoalDroughtForm() {
           <button
             type="button"
             onClick={() => {
-              setSubmitted(false);
+              setTopScorerSub(false);
               localStorage.removeItem('nichusim_top_scorer_submitted');
+              saveToCloud({ topScorerSub: false });
             }}
             className="w-full mt-2 py-2.5 px-4 bg-zinc-950 border border-zinc-800 hover:bg-amber-500/10 hover:border-amber-500/30 text-zinc-400 hover:text-amber-400 font-bold rounded-xl text-xs transition-colors"
           >
@@ -264,16 +263,17 @@ export default function GoalDroughtForm() {
                     <div className="overflow-y-auto flex-1 divide-y divide-zinc-800/40">
                       {filteredPlayers.length > 0 ? (
                         filteredPlayers.map((pOption) => {
-                          const isSelected = pOption.id === selectedPlayer;
+                          const isSelected = pOption.id === topScorer;
                           return (
                             <button
                               key={pOption.id}
                               type="button"
                               onClick={() => {
-                                setSelectedPlayer(pOption.id);
+                                setTopScorer(pOption.id);
                                 setIsOpen(false);
                                 setSearchQuery('');
                                 localStorage.setItem('nichusim_top_scorer', pOption.id);
+                                saveToCloud({ topScorer: pOption.id });
                               }}
                               className={`w-full text-right p-3 hover:bg-zinc-800/50 flex items-center justify-between text-slate-200 transition-colors ${isSelected ? 'bg-amber-500/10 hover:bg-amber-500/20' : ''}`}
                             >
@@ -329,7 +329,7 @@ export default function GoalDroughtForm() {
           <div className="pt-2">
             <button
               type="submit"
-              disabled={!selectedPlayer}
+              disabled={!topScorer}
               className="w-full relative group overflow-hidden rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-xl transition-all duration-300 group-hover:scale-[1.02]" />
