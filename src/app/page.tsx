@@ -252,11 +252,11 @@ export default function Home() {
               liveResults={liveResults}
             />
 
+            <TriviaFooter />
+
             <div className="flex flex-col space-y-8 w-full max-w-xl my-12 items-center px-4">
               <UsersList sport={sport} liveResults={liveResults} />
               <ScoringRules sport={sport} />
-              
-              <TriviaFooter />
               
               <OpeningJinxForm 
                 sport={sport}
