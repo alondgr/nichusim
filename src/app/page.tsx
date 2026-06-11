@@ -11,6 +11,7 @@ import GoalDroughtForm from '@/components/GoalDroughtForm';
 import GroupStageMatchesForm from '@/components/GroupStageMatchesForm';
 import CustomAvatarModal from '@/components/CustomAvatarModal';
 import ChangeNameModal from '@/components/ChangeNameModal';
+import TriviaFooter from '@/components/TriviaFooter';
 import { PredictionsState, getGroupMatches, TEAMS, calculateTotalScore, getMatchStatus, TOP_SCORERS } from '@/data/worldCupData';
 import { Trophy } from 'lucide-react';
 
@@ -254,6 +255,8 @@ export default function Home() {
             <div className="flex flex-col space-y-8 w-full max-w-xl my-12 items-center px-4">
               <UsersList sport={sport} liveResults={liveResults} />
               <ScoringRules sport={sport} />
+              
+              <TriviaFooter />
               
               <OpeningJinxForm 
                 sport={sport}
