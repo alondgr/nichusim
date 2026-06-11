@@ -39,9 +39,10 @@ interface FlopTeamFormProps {
   winnerSub: boolean;
   setWinnerSub: (s: boolean) => void;
   saveToCloud: (data: any) => void;
+  isTournamentStarted: boolean;
 }
 
-export default function FlopTeamForm({ winnerTeam, setWinnerTeam, winnerSub, setWinnerSub, saveToCloud }: FlopTeamFormProps) {
+export default function FlopTeamForm({ winnerTeam, setWinnerTeam, winnerSub, setWinnerSub, saveToCloud, isTournamentStarted }: FlopTeamFormProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [mounted, setMounted] = useState(false);
@@ -65,7 +66,7 @@ export default function FlopTeamForm({ winnerTeam, setWinnerTeam, winnerSub, set
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (winnerTeam) {
+    if (winnerTeam && !isTournamentStarted) {
       setWinnerSub(true);
       localStorage.setItem('nichusim_winner_team', winnerTeam);
       localStorage.setItem('nichusim_winner_submitted', 'true');
@@ -128,17 +129,19 @@ export default function FlopTeamForm({ winnerTeam, setWinnerTeam, winnerSub, set
             הניחוש שלך ש-**{selectedTeamData.name}** תניף את גביע העולם במונדיאל 2026 נשמר וננעל בהצלחה! 🥇👑
           </p>
 
-          <button
-            type="button"
-            onClick={() => {
-              setWinnerSub(false);
-              localStorage.removeItem('nichusim_winner_submitted');
-              saveToCloud({ winnerSub: false });
-            }}
-            className="w-full mt-2 py-2.5 px-4 bg-zinc-950 border border-zinc-800 hover:bg-amber-500/10 hover:border-amber-500/30 text-zinc-400 hover:text-amber-400 font-bold rounded-xl text-xs transition-colors"
-          >
-            ערוך ניחוש זוכה 🔓
-          </button>
+          {!isTournamentStarted && (
+            <button
+              type="button"
+              onClick={() => {
+                setWinnerSub(false);
+                localStorage.removeItem('nichusim_winner_submitted');
+                saveToCloud({ winnerSub: false });
+              }}
+              className="w-full mt-2 py-2.5 px-4 bg-zinc-950 border border-zinc-800 hover:bg-amber-500/10 hover:border-amber-500/30 text-zinc-400 hover:text-amber-400 font-bold rounded-xl text-xs transition-colors"
+            >
+              ערוך ניחוש זוכה 🔓
+            </button>
+          )}
         </div>
       </div>
     );
@@ -172,8 +175,9 @@ export default function FlopTeamForm({ winnerTeam, setWinnerTeam, winnerSub, set
             <div className="relative">
               <button
                 type="button"
-                onClick={() => setIsOpen(!isOpen)}
-                className="w-full bg-zinc-950 border border-zinc-700 text-slate-100 rounded-xl p-4 pl-12 pr-4 flex items-center justify-between text-right outline-none focus:ring-2 focus:ring-amber-500 transition-all text-lg font-medium"
+                onClick={() => !isTournamentStarted && setIsOpen(!isOpen)}
+                className={`w-full bg-zinc-950 border border-zinc-700 text-slate-100 rounded-xl p-4 pl-12 pr-4 flex items-center justify-between text-right outline-none transition-all text-lg font-medium ${isTournamentStarted ? 'opacity-50 cursor-not-allowed' : 'focus:ring-2 focus:ring-amber-500'}`}
+                disabled={isTournamentStarted}
               >
                 {selectedTeamData ? (
                   <div className="flex items-center space-x-3 space-x-reverse">
@@ -250,13 +254,13 @@ export default function FlopTeamForm({ winnerTeam, setWinnerTeam, winnerSub, set
           <div className="pt-2">
             <button
               type="submit"
-              disabled={!winnerTeam}
+              disabled={!winnerTeam || isTournamentStarted}
               className="w-full relative group overflow-hidden rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-xl transition-all duration-300 group-hover:scale-[1.02]" />
               <div className="absolute -inset-1 bg-amber-500/50 blur-lg opacity-40 group-hover:opacity-100 transition duration-300" />
               <div className="relative flex items-center justify-center py-3.5 text-lg font-bold text-white bg-transparent gap-1.5">
-                נעל נבחרת זוכה 🔒
+                {isTournamentStarted ? 'המונדיאל התחיל - זמן הניחושים נגמר' : 'נעל נבחרת זוכה 🔒'}
               </div>
             </button>
           </div>

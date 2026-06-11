@@ -11,7 +11,7 @@ import GoalDroughtForm from '@/components/GoalDroughtForm';
 import GroupStageMatchesForm from '@/components/GroupStageMatchesForm';
 import CustomAvatarModal from '@/components/CustomAvatarModal';
 import ChangeNameModal from '@/components/ChangeNameModal';
-import { PredictionsState, getGroupMatches, TEAMS, calculateTotalScore } from '@/data/worldCupData';
+import { PredictionsState, getGroupMatches, TEAMS, calculateTotalScore, getMatchStatus } from '@/data/worldCupData';
 import { Trophy } from 'lucide-react';
 
 import LiveMatchShortcut from '@/components/LiveMatchShortcut';
@@ -141,6 +141,9 @@ export default function Home() {
 
   const currentUserScore = calculateTotalScore({ fPreds }, sport, liveResults);
 
+  const firstMatch = ALL_FOOTBALL_MATCHES[0];
+  const isTournamentStarted = firstMatch ? getMatchStatus(firstMatch, Date.now()) !== 'upcoming' : false;
+
   if (!mounted) return null;
 
   return (
@@ -220,6 +223,7 @@ export default function Home() {
                 winnerSub={winnerSub}
                 setWinnerSub={setWinnerSub}
                 saveToCloud={saveToCloud}
+                isTournamentStarted={isTournamentStarted}
               />
               <GoalDroughtForm 
                 topScorer={topScorer}
@@ -227,6 +231,7 @@ export default function Home() {
                 topScorerSub={topScorerSub}
                 setTopScorerSub={setTopScorerSub}
                 saveToCloud={saveToCloud}
+                isTournamentStarted={isTournamentStarted}
               />
 
               <GroupStageMatchesForm 
