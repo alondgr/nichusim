@@ -56,8 +56,16 @@ export default function UserProfileModal({ isOpen, onClose, user, sport, liveRes
     return (
       <div key={match.id} className="bg-zinc-900/50 border border-zinc-800/80 rounded-2xl p-4 mb-3">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-400">
-            {status === 'finished' ? 'הסתיים' : status === 'live' ? 'חי' : 'מתקרב'}
+          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${status === 'live' ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-zinc-800 text-zinc-400'}`}>
+            {status === 'finished' ? 'הסתיים' : status === 'live' ? (
+              <span className="flex items-center gap-1">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500"></span>
+                </span>
+                LIVE{live.period || live.minute ? ` • ${live.period || ''} ${live.minute ? live.minute + "'" : ''}` : ''}
+              </span>
+            ) : 'מתקרב'}
           </span>
           {status === 'finished' && hasActualScore && (
             <span className="text-xs font-black text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/20">
@@ -85,8 +93,8 @@ export default function UserProfileModal({ isOpen, onClose, user, sport, liveRes
               <span className={`text-lg font-black ${isUpcoming ? 'text-zinc-500' : 'text-white'}`}>{displayAwayScore}</span>
             </div>
             {hasActualScore && (
-              <div className="text-[9px] text-zinc-500 mt-1">
-                תוצאה: {actualHomeScore}:{actualAwayScore}
+              <div className="text-[9px] text-zinc-500 mt-1 font-bold bg-zinc-900/80 px-2 py-0.5 rounded border border-zinc-800/50">
+                {status === 'live' ? 'תוצאה חיה' : 'תוצאת סיום'}: {actualHomeScore}:{actualAwayScore}
               </div>
             )}
           </div>

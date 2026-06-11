@@ -602,6 +602,20 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                         </span>
                       );
                     }
+                  } else if (getMatchStatus(m, now) === 'live') {
+                    cardClass = "border-red-500/50 bg-red-950/10 text-red-400";
+                    pointsBadge = (
+                      <div className="flex items-center gap-1.5 bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded-md">
+                        <span className="relative flex h-1.5 w-1.5 flex-shrink-0">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500"></span>
+                        </span>
+                        <span className="text-[10px] font-black text-red-400 whitespace-nowrap">
+                          {aHome ?? 0} - {aAway ?? 0}
+                          {live.period || live.minute ? ` • ${live.period || ''} ${live.minute ? live.minute + "'" : ''}` : ''}
+                        </span>
+                      </div>
+                    );
                   }
 
                   return (

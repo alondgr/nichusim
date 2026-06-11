@@ -82,8 +82,12 @@ export default function LiveMatchShortcut({ sport, matches, liveResults }: LiveM
                   >
                     {m.home.name} {aHome ?? 0} - {aAway ?? 0} {m.away.name}
                   </span>
-                  <span className="text-[9px] text-red-400 bg-red-500/5 px-1 py-0.5 rounded border border-red-500/5 font-sans">
-                    ⏱️ {m.timeStr}
+                  <span className="text-[9px] text-red-400 bg-red-500/5 px-1 py-0.5 rounded border border-red-500/5 font-sans whitespace-nowrap">
+                    {live.period || live.minute ? (
+                      <>⏱️ {live.period && `${live.period}`} {live.minute && `${live.minute}'`}</>
+                    ) : (
+                      <>⏱️ {m.timeStr}</>
+                    )}
                   </span>
                 </div>
               );
