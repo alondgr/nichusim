@@ -11,7 +11,7 @@ import GoalDroughtForm from '@/components/GoalDroughtForm';
 import GroupStageMatchesForm from '@/components/GroupStageMatchesForm';
 import CustomAvatarModal from '@/components/CustomAvatarModal';
 import ChangeNameModal from '@/components/ChangeNameModal';
-import { PredictionsState, getGroupMatches, TEAMS, calculateTotalScore, getMatchStatus } from '@/data/worldCupData';
+import { PredictionsState, getGroupMatches, TEAMS, calculateTotalScore, getMatchStatus, TOP_SCORERS } from '@/data/worldCupData';
 import { Trophy } from 'lucide-react';
 
 import LiveMatchShortcut from '@/components/LiveMatchShortcut';
@@ -64,49 +64,96 @@ export default function Home() {
         .then(res => res.json())
         .then(data => {
           if (!data.error) {
-            if (data.fPreds && Object.keys(data.fPreds).length > 0) {
-              setFPreds(data.fPreds);
-              localStorage.setItem('nichusim_group_stage_predictions', JSON.stringify(data.fPreds));
-            } else {
-              // Fallback to local if cloud is empty (first migration)
+            let currentFPreds = data.fPreds && Object.keys(data.fPreds).length > 0 ? data.fPreds : null;
+            if (!currentFPreds) {
               const sf = localStorage.getItem('nichusim_group_stage_predictions');
-              if (sf) try { setFPreds(JSON.parse(sf)); } catch (e) {}
-            }
-            if (data.fSub !== undefined) {
-              setFSub(data.fSub);
-              if (data.fSub) localStorage.setItem('nichusim_group_stage_submitted', 'true');
-            } else {
-              if (localStorage.getItem('nichusim_group_stage_submitted') === 'true') setFSub(true);
-            }
-            
-            // Winner Team (FlopTeamForm actually used for Winner)
-            if (data.winnerTeam) {
-              setWinnerTeam(data.winnerTeam);
-              localStorage.setItem('nichusim_winner_team', data.winnerTeam);
-            } else {
-              const sw = localStorage.getItem('nichusim_winner_team');
-              if (sw) setWinnerTeam(sw);
-            }
-            if (data.winnerSub !== undefined) {
-              setWinnerSub(data.winnerSub);
-              if (data.winnerSub) localStorage.setItem('nichusim_winner_submitted', 'true');
-            } else {
-              if (localStorage.getItem('nichusim_winner_submitted') === 'true') setWinnerSub(true);
+              if (sf) try { currentFPreds = JSON.parse(sf); } catch (e) {}
+              if (!currentFPreds) currentFPreds = {};
             }
 
-            // Top Scorer (Golden Shoe)
-            if (data.topScorer) {
-              setTopScorer(data.topScorer);
-              localStorage.setItem('nichusim_top_scorer', data.topScorer);
-            } else {
-              const st = localStorage.getItem('nichusim_top_scorer');
-              if (st) setTopScorer(st);
+            let currentFSub = data.fSub !== undefined ? data.fSub : (localStorage.getItem('nichusim_group_stage_submitted') === 'true');
+            let currentWinnerTeam = data.winnerTeam || localStorage.getItem('nichusim_winner_team') || '';
+            let currentWinnerSub = data.winnerSub !== undefined ? data.winnerSub : (localStorage.getItem('nichusim_winner_submitted') === 'true');
+            let currentTopScorer = data.topScorer || localStorage.getItem('nichusim_top_scorer') || '';
+            let currentTopScorerSub = data.topScorerSub !== undefined ? data.topScorerSub : (localStorage.getItem('nichusim_top_scorer_submitted') === 'true');
+
+            // --- AUTO FILL LOGIC ---
+            let needsSave = false;
+            const payloadToSave: any = {};
+            const now = Date.now();
+
+            if (!currentWinnerSub) {
+              if (!currentWinnerTeam) {
+                currentWinnerTeam = TEAMS[Math.floor(Math.random() * TEAMS.length)].id;
+              }
+              currentWinnerSub = true;
+              payloadToSave.winnerTeam = currentWinnerTeam;
+              payloadToSave.winnerSub = true;
+              needsSave = true;
             }
-            if (data.topScorerSub !== undefined) {
-              setTopScorerSub(data.topScorerSub);
-              if (data.topScorerSub) localStorage.setItem('nichusim_top_scorer_submitted', 'true');
-            } else {
-              if (localStorage.getItem('nichusim_top_scorer_submitted') === 'true') setTopScorerSub(true);
+
+            if (!currentTopScorerSub) {
+              if (!currentTopScorer) {
+                currentTopScorer = TOP_SCORERS[Math.floor(Math.random() * TOP_SCORERS.length)].id;
+              }
+              currentTopScorerSub = true;
+              payloadToSave.topScorer = currentTopScorer;
+              payloadToSave.topScorerSub = true;
+              needsSave = true;
+            }
+
+            if (!currentFSub) {
+              let matchesUpdated = false;
+              ALL_FOOTBALL_MATCHES.forEach(m => {
+                const p = currentFPreds[m.id];
+                const GRACE_PERIOD_MS = 15 * 60 * 1000;
+                const isStarted = m.timestamp + GRACE_PERIOD_MS <= now;
+                
+                if (!isStarted) {
+                  if (!p || p.homeScore === '' || p.awayScore === '') {
+                    currentFPreds[m.id] = {
+                      ...(p || {}),
+                      homeScore: Math.floor(Math.random() * 4), // 0 to 3
+                      awayScore: Math.floor(Math.random() * 4),
+                    };
+                    matchesUpdated = true;
+                  }
+                }
+              });
+
+              if (matchesUpdated) {
+                currentFSub = true;
+                payloadToSave.fPreds = currentFPreds;
+                payloadToSave.fSub = true;
+                needsSave = true;
+              }
+            }
+
+            // Apply to state
+            setFPreds(currentFPreds);
+            if (Object.keys(currentFPreds).length > 0) localStorage.setItem('nichusim_group_stage_predictions', JSON.stringify(currentFPreds));
+            
+            setFSub(currentFSub);
+            if (currentFSub) localStorage.setItem('nichusim_group_stage_submitted', 'true');
+
+            setWinnerTeam(currentWinnerTeam);
+            if (currentWinnerTeam) localStorage.setItem('nichusim_winner_team', currentWinnerTeam);
+            
+            setWinnerSub(currentWinnerSub);
+            if (currentWinnerSub) localStorage.setItem('nichusim_winner_submitted', 'true');
+
+            setTopScorer(currentTopScorer);
+            if (currentTopScorer) localStorage.setItem('nichusim_top_scorer', currentTopScorer);
+            
+            setTopScorerSub(currentTopScorerSub);
+            if (currentTopScorerSub) localStorage.setItem('nichusim_top_scorer_submitted', 'true');
+
+            if (needsSave) {
+              fetch('/api/predictions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payloadToSave)
+              }).catch(e => console.error("Auto-fill cloud save error", e));
             }
           }
           setDataLoaded(true);
