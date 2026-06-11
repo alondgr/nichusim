@@ -1,13 +1,35 @@
 'use client';
 
-import { motion, Variants } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion, Variants, AnimatePresence } from 'framer-motion';
 import { Trophy, Flame, Medal } from 'lucide-react';
 
 interface Props {
   onStart: () => void;
 }
 
+const TRIVIA = [
+  '"כדורגל משחקים 90 דקות ובסוף הגרמנים מנצחים." - גארי ליניקר',
+  '"הייתי אומר שפלה היה שחקן נהדר, אבל מרדונה היה פשוט אלוהי." - זינדין זידאן',
+  'הידעת? מונדיאל 2026 יהיה הראשון אי פעם שיארח 48 נבחרות!',
+  '"אני לא אלוהים, אני רק כדורגלן." - דייגו ארמנדו מרדונה',
+  'הידעת? ז\'יסט פונטיין הצרפתי מחזיק בשיא הכיבושים למונדיאל בודד - 13 שערים ב-1958!',
+  'הידעת? ברזיל היא הנבחרת היחידה שהשתתפה בכל מונדיאל אי פעם, והיא גם שיאנית הזכיות (5).',
+  'הידעת? גביע העולם המקורי ("ז\'יל רימה") נגנב ב-1983 בברזיל ומעולם לא נמצא!',
+  '"כדורגל הוא לא עניין של חיים ומוות, הוא הרבה יותר מזה." - ביל שאנקלי',
+  '"בכדורגל, הכל מסובך כשיש לך את הכדור." - יוהאן קרויף',
+  'הידעת? מונדיאל 2026 נערך ב-16 ערים שונות על פני שלוש מדינות: ארה"ב, מקסיקו וקנדה.',
+];
+
 export default function JinxIntroHome({ onStart }: Props) {
+  const [triviaIndex, setTriviaIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTriviaIndex((prev) => (prev + 1) % TRIVIA.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, []);
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
     show: {
@@ -104,6 +126,28 @@ export default function JinxIntroHome({ onStart }: Props) {
               <span className="text-xl sm:text-2xl group-hover:scale-125 transition-transform">🔮</span>
             </div>
           </button>
+        </motion.div>
+
+        {/* Trivia Footer */}
+        <motion.div variants={itemVariants} className="mt-8 pt-4 border-t border-zinc-800/50">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <span className="text-amber-400">💡</span>
+            <span className="text-[10px] font-bold text-amber-500/80 tracking-wider">הידעת? / ציטוטים מפורסמים</span>
+          </div>
+          <div className="h-20 flex items-center justify-center text-center px-4">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={triviaIndex}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.5 }}
+                className="text-sm sm:text-base text-zinc-400 font-medium italic"
+              >
+                {TRIVIA[triviaIndex]}
+              </motion.p>
+            </AnimatePresence>
+          </div>
         </motion.div>
       </motion.div>
     </div>
