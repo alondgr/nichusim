@@ -173,7 +173,7 @@ export default function GoalDroughtForm({ topScorer, setTopScorer, topScorerSub,
           </div>
 
           <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
-            הניחוש שלך ש-**{player.name}** מנבחרת **{player.team}** יזכה בתואר מלך השערים של מונדיאל 2026 נשמר וננעל בהצלחה! 👑⚽
+            הניחוש שלך ש-<strong className="text-slate-200">{player.name}</strong> מנבחרת <strong className="text-slate-200">{player.team}</strong> יזכה בתואר מלך השערים של מונדיאל 2026 נשמר וננעל בהצלחה! 👑⚽
           </p>
 
           {!isTournamentStarted && (

@@ -126,7 +126,7 @@ export default function FlopTeamForm({ winnerTeam, setWinnerTeam, winnerSub, set
           </div>
 
           <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
-            הניחוש שלך ש-**{selectedTeamData.name}** תניף את גביע העולם במונדיאל 2026 נשמר וננעל בהצלחה! 🥇👑
+            הניחוש שלך ש-<strong className="text-slate-200">{selectedTeamData.name}</strong> תניף את גביע העולם במונדיאל 2026 נשמר וננעל בהצלחה! 🥇👑
           </p>
 
           {!isTournamentStarted && (
