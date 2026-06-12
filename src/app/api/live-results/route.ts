@@ -88,87 +88,69 @@ export async function GET() {
             }
           };
         }
+    try {
+      const espnRes = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard', { next: { revalidate: 30 } });
+      if (espnRes.ok) {
+        const d = await espnRes.json();
+        
+        if (d.events && Array.isArray(d.events)) {
+          d.events.forEach((event: any) => {
+            const comp = event.competitions?.[0];
+            if (!comp) return;
+
+            const homeCmp = comp.competitors.find((c: any) => c.homeAway === 'home');
+            const awayCmp = comp.competitors.find((c: any) => c.homeAway === 'away');
+            
+            if (!homeCmp || !awayCmp) return;
+
+            const espnHomeId = homeCmp.team.abbreviation?.toLowerCase();
+            const espnAwayId = awayCmp.team.abbreviation?.toLowerCase();
+            const espnHomeScore = parseInt(homeCmp.score, 10);
+            const espnAwayScore = parseInt(awayCmp.score, 10);
+            
+            let statusName = event.status?.type?.name;
+            let period = event.status?.period?.toString() || '';
+            let minuteStr = event.status?.displayClock || '';
+
+            if (statusName === 'STATUS_HALFTIME') {
+              period = 'HT';
+              minuteStr = 'מחצית';
+            } else if (statusName === 'STATUS_FULL_TIME') {
+              period = 'FT';
+              minuteStr = 'סיום';
+            } else if (period === '1') {
+              period = '1H';
+              minuteStr = minuteStr + "'";
+            } else if (period === '2') {
+              period = '2H';
+              minuteStr = minuteStr + "'";
+            }
+
+            // Find matching match in ALL_FOOTBALL_MATCHES
+            const matchedMatch = ALL_FOOTBALL_MATCHES.find(m => 
+              (m.home.id.toLowerCase() === espnHomeId && m.away.id.toLowerCase() === espnAwayId) ||
+              (m.home.id.toLowerCase() === espnAwayId && m.away.id.toLowerCase() === espnHomeId)
+            );
+
+            if (matchedMatch && statusName !== 'STATUS_SCHEDULED') {
+              const isReversed = matchedMatch.home.id.toLowerCase() === espnAwayId;
+              const actualHomeScore = isReversed ? espnAwayScore : espnHomeScore;
+              const actualAwayScore = isReversed ? espnHomeScore : espnAwayScore;
+
+              allLiveResults[matchedMatch.id] = {
+                ...(allLiveResults[matchedMatch.id] || {}),
+                actualHomeScore,
+                actualAwayScore,
+                period,
+                minute: minuteStr
+              };
+            }
+          });
+        }
       }
     } catch (e) {
       console.error("ESPN Sync Error", e);
     }
-
-    // SIMULATED AUTOMATIC LIVE SCORES FOR WORLD CUP
-    const now = Date.now();
-    ALL_FOOTBALL_MATCHES.forEach(match => {
-      if (now >= match.timestamp) {
-        const elapsedMs = now - match.timestamp;
-        const elapsedMinutes = Math.floor(elapsedMs / 60000);
-        
-        let period = '';
-        let minuteStr = '';
-        let status = 'live';
-
-        if (elapsedMinutes < 45) {
-          period = '1H';
-          minuteStr = elapsedMinutes + "'";
-        } else if (elapsedMinutes >= 45 && elapsedMinutes < 60) {
-          period = 'HT';
-          minuteStr = 'מחצית';
-        } else if (elapsedMinutes >= 60 && elapsedMinutes < 105) {
-          period = '2H';
-          minuteStr = (elapsedMinutes - 15) + "'";
-        } else {
-          period = 'FT';
-          minuteStr = 'סיום';
-          status = 'finished';
-        }
-
-        // Deterministic scores
-        let finalHome = 0;
-        let finalAway = 0;
-        
-        if (match.id === 'A-1' || match.id === 'A-2') {
-          finalHome = 2;
-          finalAway = 1;
-        } else {
-          let hash = 0;
-          for (let i = 0; i < match.id.length; i++) hash = match.id.charCodeAt(i) + ((hash << 5) - hash);
-          finalHome = Math.abs(hash) % 4;
-          finalAway = Math.abs(hash >> 2) % 4;
-        }
-
-        // Pseudo-random seeded function for realistic goal minutes
-        const getSeededRandom = (seed: number) => {
-          let t = seed += 0x6D2B79F5;
-          t = Math.imul(t ^ (t >>> 15), t | 1);
-          t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-        };
-
-        let currentHome = 0;
-        let currentAway = 0;
-
-        if (status === 'finished') {
-          currentHome = finalHome;
-          currentAway = finalAway;
-        } else {
-          // Distribute finalHome goals across the 90 minutes
-          for (let i = 0; i < finalHome; i++) {
-            const goalMinute = Math.floor(getSeededRandom(match.id.charCodeAt(0) + i * 10) * 90) + 1;
-            if (elapsedMinutes >= goalMinute) currentHome++;
-          }
-          // Distribute finalAway goals across the 90 minutes
-          for (let i = 0; i < finalAway; i++) {
-            const goalMinute = Math.floor(getSeededRandom(match.id.charCodeAt(1) + i * 10) * 90) + 1;
-            if (elapsedMinutes >= goalMinute) currentAway++;
-          }
-        }
-
-        allLiveResults[match.id] = {
-          ...(allLiveResults[match.id] || {}),
-          actualHomeScore: currentHome,
-          actualAwayScore: currentAway,
-          period,
-          minute: minuteStr
-        };
-      }
-    });
 
     if (Object.keys(allLiveResults).length > 0) {
       return NextResponse.json(
