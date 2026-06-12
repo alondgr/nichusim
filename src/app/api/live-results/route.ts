@@ -88,6 +88,11 @@ export async function GET() {
             }
           };
         }
+      }
+    } catch (e) {
+      console.error("Champions League Sync Error", e);
+    }
+    
     try {
       const espnRes = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard', { next: { revalidate: 30 } });
       if (espnRes.ok) {
