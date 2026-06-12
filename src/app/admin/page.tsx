@@ -84,6 +84,8 @@ export default function AdminDashboard() {
             const currentMatch = liveResults[match.id] || {};
             const homeScore = currentMatch.actualHomeScore !== undefined ? currentMatch.actualHomeScore : match.actualHomeScore;
             const awayScore = currentMatch.actualAwayScore !== undefined ? currentMatch.actualAwayScore : match.actualAwayScore;
+            const period = currentMatch.period || '';
+            const minute = currentMatch.minute || '';
             const propBets = currentMatch.actualPropBets || match.actualPropBets || {};
             
             return (
@@ -106,7 +108,29 @@ export default function AdminDashboard() {
                     />
                     <span className="font-bold">{match.away.name}</span>
                   </div>
-                  <div className="text-sm text-zinc-500">{match.dateStr} - {match.timeStr}</div>
+                  <div className="flex flex-col items-end gap-2">
+                    <div className="text-sm text-zinc-500">{match.dateStr} - {match.timeStr}</div>
+                    <div className="flex gap-2">
+                      <input 
+                        type="text" 
+                        placeholder="דקה (למשל 45')" 
+                        value={minute} 
+                        onChange={(e) => handleUpdate(match.id, 'minute', e.target.value)}
+                        className="w-20 bg-zinc-950 border border-zinc-700 rounded-lg p-1 text-sm text-center"
+                      />
+                      <select 
+                        value={period} 
+                        onChange={(e) => handleUpdate(match.id, 'period', e.target.value)}
+                        className="bg-zinc-950 border border-zinc-700 rounded-lg p-1 text-sm"
+                      >
+                        <option value="">ללא / לא התחיל</option>
+                        <option value="1H">מחצית 1</option>
+                        <option value="HT">הפסקה</option>
+                        <option value="2H">מחצית 2</option>
+                        <option value="FT">סיום משחק (FT)</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
 
                 {match.prop_bets && (
