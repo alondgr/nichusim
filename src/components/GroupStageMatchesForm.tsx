@@ -671,7 +671,7 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                                 </div>
                               )}
                               
-                              <div className="flex items-center justify-center gap-4 w-full">
+                              <div className="flex items-center justify-center gap-4 w-full" dir="ltr">
                                 <span className="text-4xl sm:text-5xl font-black text-white w-10 sm:w-14 text-center">{aHome ?? 0}</span>
                                 <div className="flex items-center justify-center relative">
                                   <span className="text-2xl text-zinc-600">-</span>
