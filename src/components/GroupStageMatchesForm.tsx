@@ -581,39 +581,32 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                     const directionPoints = sport === 'ucl' ? 5 : 1;
 
                     if (points === maxPoints) {
-                      cardClass = "border-green-500 bg-green-950/20 text-green-400";
+                      cardClass = "border-green-500/40 bg-green-950/10 shadow-[0_0_15px_rgba(34,197,94,0.1)]";
                       pointsBadge = (
-                        <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded-md bg-green-500/10 border border-green-500/20 text-green-400">
-                          +{maxPoints} PTS
-                        </span>
+                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-green-500/20 text-green-400 font-black text-xs border border-green-500/30">
+                          נקודות: +{maxPoints}
+                        </div>
                       );
                     } else if (points === directionPoints) {
-                      cardClass = "border-blue-500 bg-blue-950/20 text-blue-400";
+                      cardClass = "border-blue-500/40 bg-blue-950/10 shadow-[0_0_15px_rgba(59,130,246,0.1)]";
                       pointsBadge = (
-                        <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-400">
-                          +{directionPoints} PTS
-                        </span>
+                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-500/20 text-blue-400 font-black text-xs border border-blue-500/30">
+                          נקודות: +{directionPoints}
+                        </div>
                       );
                     } else {
-                      cardClass = "border-red-500 bg-red-950/20 text-red-400";
+                      cardClass = "border-red-500/30 bg-red-950/10";
                       pointsBadge = (
-                        <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded-md bg-red-500/10 border border-red-500/20 text-red-400">
-                          0 PTS
-                        </span>
+                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-500/10 text-red-400 font-black text-xs border border-red-500/20">
+                          נקודות: +0
+                        </div>
                       );
                     }
                   } else if (getMatchStatus(m, now) === 'live') {
-                    cardClass = "border-red-500/50 bg-red-950/10 text-red-400";
+                    cardClass = "border-zinc-700 bg-zinc-900/80 shadow-lg";
                     pointsBadge = (
-                      <div className="flex items-center gap-1.5 bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded-md">
-                        <span className="relative flex h-1.5 w-1.5 flex-shrink-0">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500"></span>
-                        </span>
-                        <span className="text-[10px] font-black text-red-400 whitespace-nowrap">
-                          {aHome ?? 0} - {aAway ?? 0}
-                          {live.period || live.minute ? ` • ${live.period || ''} ${live.minute ? live.minute + "'" : ''}` : ''}
-                        </span>
+                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-500/10 text-red-400 font-black text-xs border border-red-500/20">
+                        נקודות: +0
                       </div>
                     );
                   }
@@ -622,67 +615,142 @@ export default function GroupStageMatchesForm({ sport = 'football', matches, pre
                     <div 
                       key={m.id}
                       id={`match-${m.id}`}
-                      className={`flex flex-col gap-1 w-full border rounded-xl p-2.5 transition-all duration-300 ${cardClass}`}
+                      className={`relative flex flex-col w-full rounded-3xl p-4 sm:p-5 transition-all duration-300 border ${cardClass}`}
+                      dir="rtl"
                     >
-                      {pointsBadge && (
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="text-[9px] font-black tracking-wide text-slate-400 uppercase select-none">
-                            {sport === 'ucl' ? 'Champions League Final' : m.group ? `Group ${m.group}` : m.stage}
-                          </span>
-                          {pointsBadge}
-                        </div>
-                      )}
-                      <div className="flex items-center justify-between w-full">
-                        {/* Home Team */}
-                        <div className="flex items-center gap-1.5 min-w-0 flex-1 justify-start">
-                          <TeamFlag iso={m.home.iso} flag={m.home.flag} name={m.home.name} logo={m.home.logo} size="small" />
-                          <span className={`text-xs font-bold whitespace-normal break-words leading-tight ${getMatchStatus(m, now) === 'finished' ? '' : 'text-slate-200'}`} dir={/^[a-zA-Z]/.test(m.home.name) ? 'ltr' : 'rtl'}>{m.home.name}</span>
+                      {/* Top Header */}
+                      <div className="flex items-center justify-between w-full mb-5">
+                        {/* Right: Trophy/Icon */}
+                        <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
+                          {sport === 'ucl' ? <Trophy className="w-6 h-6 text-yellow-500" /> : <span className="text-2xl">🏆</span>}
                         </div>
 
-                        {/* Scores inputs */}
-                        <div className="flex items-center justify-center gap-1 flex-shrink-0 mx-1">
-                          <input
-                            type="number"
-                            inputMode="numeric"
-                            pattern="[0-9]*"
-                            min="0"
-                            max={sport === 'tennis' ? (m.bestOf === 3 ? 2 : 3) : 10}
-                            required
-                            disabled={isInputDisabled}
-                            placeholder="-"
-                            value={p.homeScore}
-                            onChange={(e) => handleScoreChange(m.id, 'home', e.target.value)}
-                            className={`w-8 h-8 text-center text-xs font-black bg-zinc-950 border rounded-md focus:ring-1 outline-none text-slate-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none disabled:opacity-90 disabled:border-opacity-30 border-zinc-800 ${sport === 'ucl' ? 'focus:border-blue-500 focus:ring-blue-500 disabled:text-blue-400' : sport === 'tennis' ? 'focus:border-orange-500 focus:ring-orange-500 disabled:text-orange-400' : 'focus:border-indigo-500 focus:ring-indigo-500 disabled:text-indigo-400'}`}
-                            dir="ltr"
-                          />
-                          <span className={`font-extrabold text-xs ${sport === 'ucl' ? 'text-blue-600/50' : sport === 'tennis' ? 'text-orange-600/50' : 'text-zinc-600'}`}>-</span>
-                          <input
-                            type="number"
-                            inputMode="numeric"
-                            pattern="[0-9]*"
-                            min="0"
-                            max={sport === 'tennis' ? (m.bestOf === 3 ? 2 : 3) : 10}
-                            required
-                            disabled={isInputDisabled}
-                            placeholder="-"
-                            value={p.awayScore}
-                            onChange={(e) => handleScoreChange(m.id, 'away', e.target.value)}
-                            className={`w-8 h-8 text-center text-xs font-black bg-zinc-950 border rounded-md focus:ring-1 outline-none text-slate-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none disabled:opacity-90 disabled:border-opacity-30 border-zinc-800 ${sport === 'ucl' ? 'focus:border-blue-500 focus:ring-blue-500 disabled:text-blue-400' : sport === 'tennis' ? 'focus:border-orange-500 focus:ring-orange-500 disabled:text-orange-400' : 'focus:border-indigo-500 focus:ring-indigo-500 disabled:text-indigo-400'}`}
-                            dir="ltr"
-                          />
+                        {/* Center: Title & Time */}
+                        <div className="flex flex-col items-center justify-center flex-1 text-center">
+                          <span className="text-[13px] sm:text-[14px] font-black text-white tracking-wide">
+                            {sport === 'ucl' ? 'ליגת האלופות' : 'מונדיאל'}
+                          </span>
+                          <span className="text-[10px] sm:text-[11px] text-zinc-400 mt-0.5">
+                            {sport === 'football' ? `שלב הבתים | בית ${m.group}` : m.stage} • {m.timeStr} , {m.dateStr.replace('2026', '26')}
+                          </span>
                         </div>
 
-                        {/* Away Team */}
-                        <div className="flex items-center gap-1.5 min-w-0 flex-1 justify-end text-left">
-                          <span className={`text-xs font-bold whitespace-normal break-words leading-tight order-2 sm:order-1 ${getMatchStatus(m, now) === 'finished' ? '' : 'text-slate-200'}`} dir={/^[a-zA-Z]/.test(m.away.name) ? 'ltr' : 'rtl'}>{m.away.name}</span>
-                          <span className="order-1 sm:order-2 ml-1.5 flex items-center">
-                            <TeamFlag iso={m.away.iso} flag={m.away.flag} name={m.away.name} logo={m.away.logo} size="small" />
-                          </span>
+                        {/* Left: Action Icons */}
+                        <div className="flex-shrink-0 flex items-center gap-2">
+                          {getMatchStatus(m, now) === 'live' && (
+                            <span className="text-yellow-500">
+                              <svg className="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"></path></svg>
+                            </span>
+                          )}
+                          <div className="w-6 h-6 flex items-center justify-center bg-zinc-800 rounded-full text-zinc-400">
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path></svg>
+                          </div>
                         </div>
                       </div>
 
+                      {/* Center Content: Teams & Live Score / Inputs */}
+                      <div className="flex items-center justify-between w-full mb-2">
+                        
+                        {/* Home Team (Right Side in RTL) */}
+                        <div className="flex flex-col items-center gap-2 w-[85px] sm:w-[100px] text-center">
+                          <TeamFlag iso={m.home.iso} flag={m.home.flag} name={m.home.name} logo={m.home.logo} size="large" />
+                          <span className="text-[12px] sm:text-[13px] font-bold text-slate-200 leading-tight whitespace-normal break-words">{m.home.name}</span>
+                        </div>
+
+                        {/* Center Area: Score or Inputs */}
+                        <div className="flex flex-col items-center justify-center flex-1 px-1">
+                          {(getMatchStatus(m, now) === 'live' || getMatchStatus(m, now) === 'finished') ? (
+                            <div className="flex flex-col items-center justify-center h-full min-h-[60px]">
+                              {getMatchStatus(m, now) === 'live' ? (
+                                <div className="text-[13px] font-black text-slate-300 mb-1 flex items-center gap-1.5">
+                                  {live.minute ? live.minute + (live.minute.includes("'") ? "" : "'") : "LIVE"}
+                                </div>
+                              ) : (
+                                <div className="text-[11px] font-black text-zinc-500 mb-1">
+                                  סיום (FT)
+                                </div>
+                              )}
+                              
+                              <div className="flex items-center justify-center gap-4 w-full">
+                                <span className="text-4xl sm:text-5xl font-black text-white w-10 sm:w-14 text-center">{aHome ?? 0}</span>
+                                <div className="flex items-center justify-center relative">
+                                  <span className="text-2xl text-zinc-600">-</span>
+                                  {getMatchStatus(m, now) === 'live' && (
+                                    <span className="absolute flex h-2.5 w-2.5">
+                                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                                    </span>
+                                  )}
+                                </div>
+                                <span className="text-4xl sm:text-5xl font-black text-white w-10 sm:w-14 text-center">{aAway ?? 0}</span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex flex-col items-center h-full min-h-[60px] justify-center mt-2">
+                              <div className="flex items-center justify-center gap-3">
+                                <input
+                                  type="number"
+                                  inputMode="numeric"
+                                  pattern="[0-9]*"
+                                  min="0"
+                                  max={sport === 'tennis' ? (m.bestOf === 3 ? 2 : 3) : 10}
+                                  required
+                                  disabled={isInputDisabled}
+                                  placeholder="-"
+                                  value={p.homeScore}
+                                  onChange={(e) => handleScoreChange(m.id, 'home', e.target.value)}
+                                  className={`w-12 h-14 sm:w-14 sm:h-16 text-center text-xl sm:text-2xl font-black bg-emerald-950/20 border-2 rounded-2xl focus:ring-2 outline-none text-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none transition-all ${
+                                    p.homeScore !== '' ? 'border-emerald-500/50 bg-emerald-900/30 shadow-[0_0_15px_rgba(16,185,129,0.15)]' : 'border-zinc-800 focus:border-emerald-500'
+                                  }`}
+                                  dir="ltr"
+                                />
+                                <span className="text-zinc-700 font-black text-xl">-</span>
+                                <input
+                                  type="number"
+                                  inputMode="numeric"
+                                  pattern="[0-9]*"
+                                  min="0"
+                                  max={sport === 'tennis' ? (m.bestOf === 3 ? 2 : 3) : 10}
+                                  required
+                                  disabled={isInputDisabled}
+                                  placeholder="-"
+                                  value={p.awayScore}
+                                  onChange={(e) => handleScoreChange(m.id, 'away', e.target.value)}
+                                  className={`w-12 h-14 sm:w-14 sm:h-16 text-center text-xl sm:text-2xl font-black bg-emerald-950/20 border-2 rounded-2xl focus:ring-2 outline-none text-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none transition-all ${
+                                    p.awayScore !== '' ? 'border-emerald-500/50 bg-emerald-900/30 shadow-[0_0_15px_rgba(16,185,129,0.15)]' : 'border-zinc-800 focus:border-emerald-500'
+                                  }`}
+                                  dir="ltr"
+                                />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Away Team (Left Side in RTL) */}
+                        <div className="flex flex-col items-center gap-2 w-[85px] sm:w-[100px] text-center">
+                          <TeamFlag iso={m.away.iso} flag={m.away.flag} name={m.away.name} logo={m.away.logo} size="large" />
+                          <span className="text-[12px] sm:text-[13px] font-bold text-slate-200 leading-tight whitespace-normal break-words">{m.away.name}</span>
+                        </div>
+                      </div>
+
+                      {/* Locked Prediction Pill (Bottom) */}
+                      {isInputDisabled && (
+                        <div className="flex items-center justify-center w-full mt-4">
+                          <div className="flex items-center bg-zinc-800/60 rounded-xl border border-zinc-700/50 overflow-hidden shadow-sm">
+                            {pointsBadge}
+                            <div className="flex items-center gap-2 px-4 py-1.5 border-r border-zinc-700/50 bg-zinc-900/50">
+                              <span className="text-[14px] font-black tracking-widest text-slate-200" dir="ltr">
+                                {p.homeScore !== '' ? p.homeScore : '-'} <span className="text-zinc-500">-</span> {p.awayScore !== '' ? p.awayScore : '-'}
+                              </span>
+                              <svg className="w-3.5 h-3.5 text-zinc-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"></path></svg>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Prop Bets */}
                       {m.prop_bets && m.prop_bets.length > 0 ? (
-                        <div className="mt-2.5 pt-2 border-t border-zinc-800/80 w-full space-y-3" dir="rtl">
+                        <div className="mt-5 pt-3 border-t border-zinc-800/80 w-full space-y-3" dir="rtl">
                           <label className="block text-[9px] font-black text-blue-400 uppercase tracking-wider text-right mb-0.5">
                             🔥 שאלות בונוס (Prop Bets)
                           </label>
