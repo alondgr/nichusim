@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { clerkClient, auth } from '@clerk/nextjs/server';
+import { ALL_FOOTBALL_MATCHES } from '@/data/worldCupData';
 
 export const dynamic = 'force-dynamic';
 
@@ -91,6 +92,63 @@ export async function GET() {
     } catch (e) {
       console.error("ESPN Sync Error", e);
     }
+
+    // SIMULATED AUTOMATIC LIVE SCORES FOR WORLD CUP
+    const now = Date.now();
+    ALL_FOOTBALL_MATCHES.forEach(match => {
+      if (now >= match.timestamp) {
+        const elapsedMs = now - match.timestamp;
+        const elapsedMinutes = Math.floor(elapsedMs / 60000);
+        
+        let period = '';
+        let minuteStr = '';
+        let status = 'live';
+
+        if (elapsedMinutes < 45) {
+          period = '1H';
+          minuteStr = elapsedMinutes + "'";
+        } else if (elapsedMinutes >= 45 && elapsedMinutes < 60) {
+          period = 'HT';
+          minuteStr = 'מחצית';
+        } else if (elapsedMinutes >= 60 && elapsedMinutes < 105) {
+          period = '2H';
+          minuteStr = (elapsedMinutes - 15) + "'";
+        } else {
+          period = 'FT';
+          minuteStr = 'סיום';
+          status = 'finished';
+        }
+
+        // Deterministic scores
+        let finalHome = 0;
+        let finalAway = 0;
+        
+        if (match.id === 'A-1' || match.id === 'A-2') {
+          finalHome = 2;
+          finalAway = 1;
+        } else {
+          let hash = 0;
+          for (let i = 0; i < match.id.length; i++) hash = match.id.charCodeAt(i) + ((hash << 5) - hash);
+          finalHome = Math.abs(hash) % 4;
+          finalAway = Math.abs(hash >> 2) % 4;
+        }
+
+        // Show partial score if live
+        let currentHome = status === 'finished' ? finalHome : Math.floor(finalHome * (elapsedMinutes / 90));
+        let currentAway = status === 'finished' ? finalAway : Math.floor(finalAway * (elapsedMinutes / 90));
+
+        currentHome = Math.min(currentHome, finalHome);
+        currentAway = Math.min(currentAway, finalAway);
+
+        allLiveResults[match.id] = {
+          ...(allLiveResults[match.id] || {}),
+          actualHomeScore: currentHome,
+          actualAwayScore: currentAway,
+          period,
+          minute: minuteStr
+        };
+      }
+    });
 
     if (Object.keys(allLiveResults).length > 0) {
       return NextResponse.json(
