@@ -133,12 +133,32 @@ export async function GET() {
           finalAway = Math.abs(hash >> 2) % 4;
         }
 
-        // Show partial score if live
-        let currentHome = status === 'finished' ? finalHome : Math.floor(finalHome * (elapsedMinutes / 90));
-        let currentAway = status === 'finished' ? finalAway : Math.floor(finalAway * (elapsedMinutes / 90));
+        // Pseudo-random seeded function for realistic goal minutes
+        const getSeededRandom = (seed: number) => {
+          let t = seed += 0x6D2B79F5;
+          t = Math.imul(t ^ (t >>> 15), t | 1);
+          t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
 
-        currentHome = Math.min(currentHome, finalHome);
-        currentAway = Math.min(currentAway, finalAway);
+        let currentHome = 0;
+        let currentAway = 0;
+
+        if (status === 'finished') {
+          currentHome = finalHome;
+          currentAway = finalAway;
+        } else {
+          // Distribute finalHome goals across the 90 minutes
+          for (let i = 0; i < finalHome; i++) {
+            const goalMinute = Math.floor(getSeededRandom(match.id.charCodeAt(0) + i * 10) * 90) + 1;
+            if (elapsedMinutes >= goalMinute) currentHome++;
+          }
+          // Distribute finalAway goals across the 90 minutes
+          for (let i = 0; i < finalAway; i++) {
+            const goalMinute = Math.floor(getSeededRandom(match.id.charCodeAt(1) + i * 10) * 90) + 1;
+            if (elapsedMinutes >= goalMinute) currentAway++;
+          }
+        }
 
         allLiveResults[match.id] = {
           ...(allLiveResults[match.id] || {}),
